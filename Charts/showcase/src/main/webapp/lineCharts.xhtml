@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ic="http://www.ism.org/charts"
+      >
+    <h:head>
+        <title>ISM - Charts</title>
+    </h:head>
+    <h:body>
+
+
+        <h2>Basic Line Chart</h2>
+        <ic:chart id="basic" 
+                  style="min-width: 310px; height: 400px; margin: 0 auto"
+                  model="#{line.basicLineModel}"
+                  debug="true"
+                  exporting="true" enabledJQuery="true"
+                  />
+       <hr/>
+        <h2>Line chart With Label</h2>
+        <ic:chart id="widthDataLabel" 
+                  style="min-width: 310px; height: 400px; margin: 0 auto"
+                  model="#{line.withDataLabel}"
+                  debug="true"
+                  exporting="true" enabledJQuery="true"
+                  />
+
+
+    </h:body>
+</html>
+

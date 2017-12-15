@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<facelet-taglib xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd"
+                version="2.0">
+              
+    <namespace>http://www.ism.org/charts</namespace>
+
+    <!-- Component Tags -->
+    <tag>
+        <tag-name>chart</tag-name>
+        <component>
+            <component-type>org.ism.component.Chart</component-type>
+            <renderer-type>org.ism.renderKit.Chart</renderer-type>
+            <handler-class>org.ism.charts.lib.tags.ChartHandler</handler-class>
+        </component>
+        
+        <description>
+            <![CDATA[
+            <h3>chart component</h3>
+            <p>
+            Define the chart markedup which allow to renderer a component chart. <br >
+            The component chart can be define in two different ways : 
+            <ul>
+                <li>One is to specify each attributes
+                <li>The other is to give the chart model attribute
+            </ul>
+            Note : When concurent attributes are define in specific attribute and
+            in the chart model, the priority goes to the specific attribute.
+            </p>
+            <p>The component chart is entierly base Highchart which will process
+            chart rendering based on similar classes.
+            <a> http://api.highcharts.com/highcharts/ </a>
+            ]]>
+        </description>
+        
+        <!-- chart extend attributes -->
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>Convenient attribute only useful while programming. It allow
+                to printout renderer mecanisme for the component. It has not 
+                effect on component while reducing processing time.
+                ]]>
+            </description>
+            <name>debug</name>
+            <type>boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>Convenient property which enable to specify if the component
+                has to load is own jQuery library or not. Default value is flase
+                this means it is not loaded.
+                </p>
+                ]]>
+            </description>
+            <name>enabledJQuery</name>
+            <type>boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[]]></description>
+            <name>exporting</name>
+            <type>boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>Chart model attribute is based on a model definition which 
+                will be responsible of chart datas. It allow to design easily 
+                the chart in POJO and then renderer it definition.<br>
+                Note : chart model has not priority to specific attribute : so
+                carreful while using specify attribut in combination with model.
+                ]]>
+            </description>
+            <name>model</name>
+            <type>org.ism.charts.lib.model.ChartModel</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>
+                <p>Deprecated : no effect on the component </p>
+                </p>
+                ]]>
+            </description>
+            <name>responsive</name>
+            <type>boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>Style property allow to directly insert css markeup to the 
+                current component which will override existing one.
+                </p>
+                ]]>
+            </description>
+            <name>style</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>styleClass property allow to append your own class to the 
+                current component which will be associate to the existing one.
+                </p>
+                ]]>
+            </description>
+            <name>styleClass</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <p>Type indicate which kind of chart as to be renderer. It is a
+                specific attribute thus grant priority to the chart model. <br>
+                Possible value for chart are actually :
+                <ul>
+                    <li>Line, 
+                    <li>Pie,
+                </ul>
+                </p>
+                ]]>
+            </description>
+            <name>type</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[Deprecated : not working]]>
+            </description>
+            <name>widgetVar</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+
+        <!-- chart UIComponentBase -->
+        <attribute>
+            <description>
+                <![CDATA[
+                Get a string which uniquely identifies this UIComponent within the 
+                scope of the nearest ancestor NamingContainer component. The id is 
+                not necessarily unique across all components in the current view.
+                ]]>
+            </description>
+            <name>id</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                A boolean value that indicates whether this component should be 
+                rendered. Default value: true.
+                ]]>
+            </description>
+            <name>rendered</name>
+            <type>boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                Identifies a backing bean property (of type UIComponent or 
+                appropriate subclass) to bind to this component instance. This 
+                value must be an EL expression.
+                ]]>
+            </description>
+            <name>binding</name>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        
+    </tag>
+
+    <!-- Converter tags -->
+
+    <!-- Validator tags -->
+
+    <!-- Behavior tags -->
+    
+    <!-- Single Tags -->
+
+    <!-- Facelet Tags -->
+</facelet-taglib>

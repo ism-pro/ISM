@@ -1,0 +1,9 @@
+
+
+1. La création de rapport doit obligatoirement se faire via JDBC JNDI dans crystal report
+2. Il faut placer le fichier 
+
+
+
+
+
