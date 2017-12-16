@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.StaffSetupTitleMySetup}" /></h1>
+
+            <h:form id="bodyForm">
+
+                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                             >
+
+                    <p:outputLabel value="#{ism.StaffSetupField_stsTimeOutSession}" for="ststimeOutSession" />
+                    <p:spinner id="ststimeOutSession" 
+                               value="#{staffController.maxInactiveIntervalMinute}" 
+                               title="#{ism.StaffSetupFieldInfo_stsTimeOutSession}" 
+                               required="true" 
+                               requiredMessage="#{ism.StaffSetupRequiredMsg_stsTimeOutSession}"
+                               min="1"
+                               max="60"
+                               />
+
+                </p:panelGrid>
+                <p:commandButton id="btnSetupUpdate"
+                                 value="#{ism.Change}" 
+                                 action="./Setup.xhtml"
+                                 actionListener="#{staffController.updateMaxInactiveInterval()}"
+                                 update="mainForm:centerLayout,:growl" 
+                                 styleClass="ui-button-std"
+                                 style="margin-top: 10px;"
+                                 ajax="#{viewRibbon.resetReminingTimeSession()}"
+                                 />
+
+            </h:form>
+
+
+        </ui:define>
+
+        <ui:define name="west">
+
+        </ui:define>
+    </ui:composition>
+</html>

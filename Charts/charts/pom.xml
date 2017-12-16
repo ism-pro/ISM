@@ -7,6 +7,8 @@
         <version>1712.15</version>
     </parent>
     
+    
+    <groupId>org.ism.charts</groupId>
     <artifactId>charts</artifactId>
     <packaging>jar</packaging>
     <name>charts-lib</name>
@@ -55,5 +57,4 @@
             </plugin>
         </plugins>
     </build>
-    <groupId>org.ism.charts</groupId>
 </project>

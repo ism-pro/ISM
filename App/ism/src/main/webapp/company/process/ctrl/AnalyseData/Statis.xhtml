@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ic="http://www.ism.org/charts" 
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+
+
+            <h:form id="bodyForm" >
+                <div>
+                    <p:progressBar widgetVar="w_progress" ajax="true" 
+                                   value="#{viewAnalyseChart.modelProgress}" 
+                                   interval="1500"
+                                   labelTemplate="{value}%" styleClass="animated" global="false">
+                        <p:ajax event="complete" update="bodyForm" oncomplete="PF('btnSearchRequest').enable()"/>
+                    </p:progressBar>
+
+                </div>
+
+                <h3>#{ism.Statistics}</h3>
+
+                <ul class="nav nav-pills">
+                    <li >
+                        <h:link outcome="Request" value="#{ism.Criteria}"/>
+                    </li>
+                    <li class="active"><a href="#">#{ism.Statistics}</a></li>
+                </ul>
+
+
+                <h:panelGroup style="width: 100%"
+                              rendered="#{viewAnalyseChart.models!=null?true:false}"
+                              >  
+                    <c:forEach var="model" items="#{viewAnalyseChart.models}" varStatus="count" >
+                        <ic:chart  id="statisticsChart_#{count.index}" type="line"
+                                   model="#{model}"
+                                   style="min-width: 310px; height: 400px; margin: 0 auto"
+                                   exporting="true" debug="true"
+                                   />
+
+                        <hr />
+                    </c:forEach>
+                </h:panelGroup>
+
+                <p:outputLabel value="Pas de données dans le model..." rendered="#{viewAnalyseChart.models!=null?false:true}" />
+
+
+                <script>
+
+                </script>
+
+
+            </h:form>
+
+
+
+
+        </ui:define>
+
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+
+            </h:panelGroup>
+
+
+
+        </ui:define>
+
+
+    </ui:composition>
+
+</html>

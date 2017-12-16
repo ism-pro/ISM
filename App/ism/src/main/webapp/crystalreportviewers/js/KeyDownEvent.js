@@ -1,0 +1,1 @@
+function keydownfn(e,evntHdlrName,formName){var nav4;var keyPressed;var nav4=window.Event?true:false;keyPressed=nav4?e.which:e.keyCode;if(keyPressed==13){if(evntHdlrName!=""){if(evntHdlrName.substr(evntHdlrName.length-1)!=")"){evntHdlrName+="()"}eval(evntHdlrName)}else{if(formName==""){formName=0}document.forms[formName].submit()}}return true};

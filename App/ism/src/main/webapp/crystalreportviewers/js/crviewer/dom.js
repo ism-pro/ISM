@@ -1,0 +1,1 @@
+if(typeof(bobj.dom)=="undefined"){bobj.dom={}};

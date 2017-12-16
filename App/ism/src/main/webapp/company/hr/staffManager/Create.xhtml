@@ -1,0 +1,379 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.StaffTitleCreate}"/></h1>
+
+            <h:form id="bodyForm">
+
+
+
+                <p:wizard backLabel="#{ism.Previous}" nextLabel="#{ism.Next}"
+                          showNavBar="false" showStepStatus="true" 
+                          widgetVar="wizard" flowListener="#{staffManagerView.handleWizardFlow}"
+                          >
+
+                    <p:tab id="flowStaff" title="#{ism.StaffManagerTabPersonnal}">
+
+                        <p:panelGrid id="panelForm" 
+                                     columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                     rendered="true">
+
+                            <p:outputLabel value="#{ism.StaffField_stStaff}" for="stStaff" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:inputText id="stStaff" 
+                                             value="#{staffManagerView.selected.stStaff}" 
+                                             title="#{ism.StaffFieldInfo_stStaff}" 
+                                             required="true" 
+                                             requiredMessage="#{ism.StaffRequiredMsg_stStaff}"
+                                             validator="#{staffCodeValidator.validate}"
+                                             validatorMessage="#{ism.StaffDuplicationDetail_stStaff}"
+                                             >
+                                    <p:ajax event="change" update="bodyForm, :growl"  />
+                                </p:inputText>
+                                <p:message for="stStaff" />
+                            </h:panelGrid>
+
+
+
+
+                            <p:outputLabel value="#{ism.StaffField_stPassword}" for="stPassword" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:password id="stPassword" 
+                                            value="#{staffManagerView.selected.stPassword}" 
+                                            title="#{ism.StaffFieldInfo_stPassword}" 
+                                            redisplay="false" feedback="true"
+                                            required="true" requiredMessage="#{ism.StaffRequiredMsg_stPassword}"
+                                            promptLabel="#{ism.StaffField_stPasswordPromptLabel}"
+                                            weakLabel="#{ism.StaffField_stPasswordWeakLabel}"
+                                            goodLabel="#{ism.StaffField_stPasswordGoodLabel}"
+                                            strongLabel="#{ism.StaffField_stPasswordStrongLabel}"
+                                            match="stPasswordConf"
+                                            placeholder="#{ism.PasswordYour}"
+                                            validatorMessage="#{ism.PasswordMatch}"
+                                            >
+                                    <p:ajax event="change" update="stStaffOutPwd" listener="#{staffManagerView.handleStaffPwdEdit}" />
+                                </p:password>
+                                <p:message for="stPassword" />
+                            </h:panelGrid>
+
+                            <p:outputLabel value="#{ism.StaffField_stPasswordConf}" for="stPasswordConf" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:password id="stPasswordConf" 
+                                            value="#{staffManagerView.selected.stPassword}" 
+                                            title="#{ism.StaffFieldInfo_stPasswordConf}" 
+                                            redisplay="false" required="true" 
+                                            requiredMessage="#{ism.StaffRequiredMsg_stPasswordConf}"
+                                            placeholder="#{ism.PasswordConfirm}"
+                                            validatorMessage="#{ism.PasswordMatch}">
+                                    <p:ajax event="change" update="stStaffOutPwd" listener="#{staffManagerView.handleStaffPwdEdit()}" />
+                                </p:password>
+                                <p:message id="stStaffOutPwd" for="stPasswordConf" />
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stLastname}" for="stLastname" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:inputText id="stLastname" 
+                                             value="#{staffManagerView.selected.stLastname}" 
+                                             title="#{ism.StaffFieldInfo_stLastname}" 
+                                             required="true"
+                                             requiredMessage="#{ism.StaffRequiredMsg_stLastname}"
+                                             />
+                                <p:message for="stLastname"/>
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stFirstname}" for="stFirstname" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:inputText id="stFirstname" 
+                                             value="#{staffManagerView.selected.stFirstname}" 
+                                             title="#{ism.StaffFieldInfo_stFirstname}" 
+                                             required="true"
+                                             requiredMessage="#{ism.StaffRequiredMsg_stFirstname}"/>
+                                <p:message for="stFirstname"/>
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stMiddlename}" for="stMiddlename" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:inputText id="stMiddlename" 
+                                             value="#{staffManagerView.selected.stMiddlename}" 
+                                             title="#{ism.StaffFieldInfo_stMiddlename}" />
+                                <h:panelGroup />
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stBorned}" for="stBorned" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:calendar id="stBorned" pattern="#{ism.DatePatternU}" 
+                                            value="#{staffManagerView.selected.stBorned}" 
+                                            title="#{ism.StaffFieldInfo_stBorned}" 
+                                            mode="popup"  placeholder="#{ism.DatePatternU}"
+                                            locale="fr" navigator="true"
+                                            showButtonPanel="true"
+                                            effect="slideDown"
+                                            mindate="01/01/1930" maxdate="#{viewUtil.maintenant}"
+                                            required="true"
+                                            requiredMessage="#{ism.StaffRequiredMsg_stBorned}"/>
+                                <p:message for="stBorned"/>
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stGenre}" for="stGenre" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:selectOneMenu id="stGenre" 
+                                                 value="#{staffManagerView.selected.stGenre}"
+                                                 converter="#{ismGenreConverter}">
+                                    <f:selectItems value="#{ismGenreController.itemsAvailableSelectOne}"
+                                                   var="stGenreItem"
+                                                   itemLabel="#{stGenreItem.genre} - #{stGenreItem.genrename}"
+                                                   itemValue="#{stGenreItem}"
+                                                   />
+                                </p:selectOneMenu>
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stMaillist}" for="stMaillist" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:inputText id="stMaillist" 
+                                             value="#{staffManagerView.selected.stMaillist}" 
+                                             title="#{ism.StaffFieldInfo_stMaillist}" 
+                                             validator="#{staffMaillistValidator.validate}"
+                                             required="false"
+                                             requiredMessage="#{ism.StaffRequiredMsg_stMaillist}"/>
+
+                                <p:message for="stMaillist"/>
+                            </h:panelGrid>
+
+
+                            <p:outputLabel value="#{ism.StaffField_stActivated}" for="stActivated" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:selectBooleanCheckbox id="stActivated" 
+                                                         value="#{staffManagerView.selected.stActivated}" 
+                                                         required="true" 
+                                                         requiredMessage="#{ism.StaffRequiredMsg_stActivated}"/>
+                                <h:panelGroup />
+                            </h:panelGrid>
+
+                        </p:panelGrid>
+
+
+                        <div style="padding-top: 10px;">
+                            <p:commandButton value="#{ism.Next}" icon="ui-btn-Next"
+                                             style="float:right;"
+                                             onclick="PF('wizard').next()" 
+                                             update="bodyForm, :growl"/>
+                        </div>
+
+                    </p:tab>
+
+
+
+
+
+                    <p:tab id="flowISM" title="#{ism.StaffManagerTabISM}">
+
+                        <p:panelGrid columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                     rendered="true">
+
+
+                            <p:outputLabel value="#{ism.DocExplorerField_Processus}" for="dcProcessus" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:selectOneMenu id="dcProcessus" 
+                                                 filter="true" filterMatchMode="contains"
+                                                 value="#{staffManagerView.selected.stProcessus}"
+                                                 title="#{ism.DocExplorerFieldInfo_Processus}" 
+                                                 converter="#{processusConverter}"
+                                                 required="true" requiredMessage="#{ism.DocExplorerRequiredMsg_Processus}"
+                                                 >
+                                    <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
+                                    <f:selectItems value="#{processusController.itemsAvailableSelectOne}"
+                                                   var="dcProcessusItem"
+                                                   itemLabel="#{dcProcessusItem.PProcessus} - #{dcProcessusItem.PDesignation}"
+                                                   itemValue="#{dcProcessusItem}"/>
+                                </p:selectOneMenu>
+                                <p:message for="dcProcessus" />
+                            </h:panelGrid>
+
+                            <p:outputLabel  value="#{ism.StaffCompaniesField_stcCompany}" for="access" />
+                            <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                <p:tree    id="access"
+                                           value="#{staffManagerView.access}" 
+                                           var="access"  selection="#{staffManagerView.accessChecked}"
+                                           selectionMode="checkbox"
+                                           required="true"
+                                           requiredMessage="#{ism.StaffRequiredMsg_access}"
+                                           >
+                                    <p:treeNode > 
+                                        <h:outputText value="#{access}" />
+                                    </p:treeNode>
+
+                                </p:tree>
+                                <p:message for="access" />
+                            </h:panelGrid>
+
+                        </p:panelGrid>
+
+                        <div style="padding-top: 10px;">
+                            <p:commandButton value="#{ism.Previous}" icon="ui-btn-Previous"
+                                             style="float:left;"
+                                             onclick="PF('wizard').back()" 
+                                             update="bodyForm, :growl"/>
+                            <p:commandButton value="#{ism.Next}" icon="ui-btn-Next"
+                                             style="float:right;"
+                                             onclick="PF('wizard').next()" 
+                                             update="bodyForm, :growl"/>
+                        </div>
+                    </p:tab>
+
+
+
+                    <p:tab id="flowConfirm" title="#{ism.StaffManagerTabConfirm}">
+                        <p:panel header="Confirmation">
+                            <h3>#{ism.StaffField_stStaff}</h3>
+                            <hr />
+                            <p:panelGrid columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                         rendered="true">
+
+                                <h:outputText value="#{ism.StaffField_stStaff}"/>
+                                <h:outputText value="#{staffManagerView.selected.stStaff}" 
+                                              title="#{ism.StaffFieldInfo_stStaff}"/>
+
+                                <h:outputText value="#{ism.StaffField_stPassword}" rendered="false"/>
+                                <h:outputText value="#{staffManagerView.selected.stPassword}" 
+                                              title="#{ism.StaffFieldInfo_stPassword}" rendered="false" />
+
+                                <h:outputText value="#{ism.StaffField_stLastname}"/>
+                                <h:outputText value="#{staffManagerView.selected.stLastname}" 
+                                              title="#{ism.StaffFieldInfo_stLastname}"/>
+
+                                <h:outputText value="#{ism.StaffField_stFirstname}"/>
+                                <h:outputText value="#{staffManagerView.selected.stFirstname}" 
+                                              title="#{ism.StaffFieldInfo_stFirstname}"/>
+
+                                <h:outputText value="#{ism.StaffField_stMiddlename}"/>
+                                <h:outputText value="#{staffManagerView.selected.stMiddlename}" 
+                                              title="#{ism.StaffFieldInfo_stMiddlename}"/>
+
+                                <h:outputText value="#{ism.StaffField_stBorned}"/>
+                                <h:outputText value="#{staffManagerView.selected.stBorned}" 
+                                              title="#{ism.StaffFieldInfo_stBorned}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy" />
+                                </h:outputText>
+
+                                <h:outputText value="#{ism.StaffField_stGenre}"/>
+                                <h:outputText value="#{staffManagerView.selected.stGenre.genre} - #{staffManagerView.selected.stGenre.genrename}" 
+                                              title="#{ism.StaffFieldInfo_stGenre}"/>
+
+                                <h:outputText value="#{ism.StaffField_stActivated}"/>
+                                <p:selectBooleanCheckbox 
+                                    value="#{staffManagerView.selected.stActivated}" 
+                                    disabled="true" />
+
+                                <h:outputText  value="#{ism.DocExplorerField_Processus}"/>
+                                <h:outputText value="#{staffManagerView.selected.stProcessus.PProcessus} - #{staffManagerView.selected.stProcessus.PDesignation}" 
+                                              />
+                            </p:panelGrid>
+
+                            <h3>#{ism.StaffGroupDefRoleField_stgdrRole}</h3>
+                            <hr />
+                            <p:panelGrid columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                         rendered="true">
+                                <p:outputLabel  value="#{ism.StaffCompaniesField_stcCompany}" for="selectedAccessTree" />
+                                <p:tree    id="selectedAccessTree"
+                                           value="#{staffManagerView.access}" 
+                                           var="accessChecked" 
+                                           selection="#{staffManagerView.accessChecked}"
+
+                                           >
+
+                                    <p:treeNode>
+                                        <h:outputText value="#{accessChecked.name}" />
+                                    </p:treeNode>
+
+                                </p:tree>
+
+
+                            </p:panelGrid>
+
+
+
+                        </p:panel>
+                        <div style="padding-top: 10px;">
+                            <p:commandButton value="#{ism.Previous}" icon="ui-btn-Previous"
+                                             style="float:left;"
+                                             onclick="PF('wizard').back()" 
+                                             update="bodyForm, :growl"/>
+                            <p:commandButton value="#{ism.Save}"  icon="ui-btn-Save"
+                                             style="float:left;"
+                                             action="/company/hr/staffManager/List.xhtml?faces-redirect=true"
+                                             actionListener="#{staffManagerView.create}" 
+                                             />
+                        </div>
+                    </p:tab>
+
+                </p:wizard>
+
+
+
+            </h:form>
+
+
+        </ui:define>
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:outputLabel value="Wizard : #{staffManagerView.wizardStep}" />
+                <p:commandButton icon="ui-btn-Previous"
+                                 styleClass="options-btn"
+                                 style="float:left;"
+                                 value="#{ism.Previous}" 
+                                 onclick="PF('wizard').back()" 
+                                 update="bodyForm, :westGroup, :growl"
+                                 form="bodyForm"
+                                 disabled="#{staffManagerView.wizardStep==0?true:false}"
+                                 />
+                <p:commandButton icon="ui-btn-Next"
+                                 styleClass="options-btn"
+                                 style="float:left;"
+                                 value="#{ism.Next}" 
+                                 onclick="PF('wizard').next()" 
+                                 update="bodyForm, :westGroup, :growl"
+                                 form="bodyForm"
+                                 disabled="#{staffManagerView.wizardStep==2?true:false}"
+                                 />
+                <p:commandButton icon="ui-btn-Save"
+                                 styleClass="options-btn"
+                                 value="#{ism.Save}" 
+                                 actionListener="#{staffManagerView.create}" 
+                                 action="List.xhtml?faces-redirect=true"
+                                 update=":bodyForm, westGroup,:growl" 
+                                 form="bodyForm"
+                                 disabled="#{staffManagerView.wizardStep!=2?true:false}"
+                                 />
+                <p:commandButton icon="ui-btn-Cancel"
+                                 styleClass="options-btn"
+                                 value="#{ism.Cancel}" 
+                                 update=":bodyForm,:growl"
+                                 actionListener="#{staffManagerView.prepareCreate()}"
+                                 action="./List.xhtml?faces-redirect=true"
+                                 immediate="true"
+                                 />
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.NonConformiteNatureTitleCreate}"/></h1>
+
+            <h:form id="bodyForm">
+
+                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                             rendered="#{nonConformiteNatureController.selected != null}">
+
+                    <p:outputLabel value="#{ism.NonConformiteNatureField_ncnId}" rendered="true" for="ncnId" />
+                    <p:outputLabel id="ncnId" rendered="true"
+                                   value="#{nonConformiteNatureController.selected.ncnId}" 
+                                   title="#{ism.NonConformiteNatureFieldInfo_ncnId}" />
+
+
+
+                       <p:outputLabel value="#{ism.NonConformiteNatureField_ncnNature}" for="ncnNature" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:inputText id="ncnNature" 
+                                     value="#{nonConformiteNatureController.selected.ncnNature}" 
+                                     title="#{ism.NonConformiteNatureFieldInfo_ncnNature}" 
+                                     validator="#{nonConformiteNatureCodeValidator.validate}"
+                                     required="true" requiredMessage="#{ism.NonConformiteNatureRequiredMsg_ncnNature}"/>
+                        <p:message for="ncnNature" />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.NonConformiteNatureField_ncnDesignation}" for="ncnDesignation" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:inputText id="ncnDesignation" 
+                                     value="#{nonConformiteNatureController.selected.ncnDesignation}"
+                                     title="#{ism.NonConformiteNatureFieldInfo_ncnDesignation}" 
+                                     validator="#{nonConformiteNatureDesignationValidator.validate}"
+                                     required="true" requiredMessage="#{ism.NonConformiteNatureRequiredMsg_ncnDesignation}"/>
+                        <p:message for="ncnDesignation"   />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.NonConformiteNatureField_ncnDeleted}" for="ncnDeleted" />
+                    <p:selectBooleanCheckbox id="ncnDeleted" 
+                                             value="#{nonConformiteNatureController.selected.ncnDeleted}" 
+                                             required="true" 
+                                             requiredMessage="#{ism.NonConformiteNatureRequiredMsg_ncnDeleted}"/>
+
+
+                    <p:outputLabel value="#{ism.NonConformiteNatureField_ncnCreated}" 
+                                   rendered="false" for="ncnCreated" />
+                    <p:calendar id="ncnCreated" pattern="dd/MM/yyyy HH:mm:ss" rendered="false"
+                                value="#{nonConformiteNatureController.selected.ncnCreated}" 
+                                title="#{ism.NonConformiteNatureFieldInfo_ncnCreated}" 
+                                required="true" 
+                                requiredMessage="#{ism.NonConformiteNatureRequiredMsg_ncnCreated}" 
+                                showOn="button"/>
+
+
+
+                    <p:outputLabel value="#{ism.NonConformiteNatureField_ncnChanged}" 
+                                   rendered="false" for="ncnChanged" />
+                    <p:calendar id="ncnChanged" pattern="dd/MM/yyyy HH:mm:ss" rendered="false"
+                                value="#{nonConformiteNatureController.selected.ncnChanged}" 
+                                title="#{ism.NonConformiteNatureFieldInfo_ncnChanged}" 
+                                required="true" 
+                                requiredMessage="#{ism.NonConformiteNatureRequiredMsg_ncnChanged}" 
+                                showOn="button"/>
+
+
+                    <p:outputLabel value="#{ism.NonConformiteNatureField_ncnCompany}" for="ncnCompany" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:inputText id="ncnCompany" widgetVar="ncnCompany"
+                                     value="#{nonConformiteNatureController.selected.ncnCompany = staffAuthController.company}" 
+                                     style="display: none" 
+                                     required="true" disabled="true" 
+                                     requiredMessage="#{ism.NonConformiteNatureRequiredMsg_ncnCompany}"/>
+                        <p:outputLabel style="margin-left: 5px;"
+                                       value="#{staffAuthController.company.CCompany} - #{staffAuthController.company.CDesignation}" />
+                    </h:panelGrid>
+                </p:panelGrid>
+
+
+
+
+
+
+
+
+                <h:panelGroup id="btn-crud-zone_id"  >
+                    <p:commandButton icon="ui-btn-Save"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Change}" 
+                                     actionListener="#{nonConformiteNatureController.update}" 
+                                     update=":bodyForm,:growl"
+                                     action="List.xhtml?faces-redirect=true"
+                                     />
+                    <p:commandButton icon="ui-btn-Cancel"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Cancel}" 
+                                     update=":bodyForm,:growl"
+                                     actionListener="#{nonConformiteNatureController.prepareCreate()}"
+                                     action="./List.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     />
+
+                </h:panelGroup>
+
+                <p:messages showDetail="true" showSummary="false"
+                            escape="false"/>
+
+
+            </h:form>
+
+        </ui:define>
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton icon="ui-btn-Save"
+                                 styleClass="options-btn"
+                                 value="#{ism.Change}" 
+                                 actionListener="#{nonConformiteNatureController.update}" 
+                                 update=":bodyForm,:growl"
+                                 action="List.xhtml?faces-redirect=true"
+                                 form="bodyForm"
+                                 />
+                <p:commandButton icon="ui-btn-Cancel"
+                                 styleClass="options-btn"
+                                 value="#{ism.Cancel}" 
+                                 action="./List.xhtml?faces-redirect=true"
+                                 update=":bodyForm,:growl"
+                                 immediate="true"
+                                 />
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

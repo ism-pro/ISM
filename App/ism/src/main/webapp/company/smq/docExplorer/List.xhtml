@@ -1,0 +1,459 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      >
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.DocExplorerTitleList}"/></h1>
+
+            <h:form id="bodyForm">
+                <p:contextMenu id="contextMenu" for="datalist" >
+                    <p:menuitem icon="ui-btn-Create"
+                                styleClass="options-btn"
+                                value="#{ism.Create}" 
+                                actionListener="#{docExplorerController.prepareCreate()}"
+                                action="Create.xhtml?faces-redirect=true"
+                                title="Permet de créer un nouveau document"
+                                rendered="#{request.isUserInRole('S_EXPLORER_C')}"
+                                />
+                    <p:separator />
+                    <p:menuitem icon="ui-btn-View" iconPos="left"
+                                styleClass="options-btn"
+                                value="#{ism.View}"
+                                action="View.xhtml?faces-redirect=true"
+                                title="Permet de visualiser un document sélectionné."
+                                disabled="#{empty docExplorerController.selected }"
+                                rendered="#{request.isUserInRole('S_EXPLORER_V')}"
+                                />
+                    <p:menuitem icon="ui-btn-Edit"
+                                styleClass="options-btn"
+                                value="#{ism.Edit}"
+                                action="Edit.xhtml?faces-redirect=true"
+                                title="Permet d'editer le document sélectionné."
+                                disabled="#{empty docExplorerController.selected }"
+                                rendered="#{request.isUserInRole('S_EXPLORER_E')}"
+                                />
+                    <p:menuitem icon="ui-btn-FileAccess"
+                                styleClass="options-btn"
+                                value="#{ism.WriteOn}"
+                                action="CreateAccess.xhtml?faces-redirect=true"
+                                title="Permet de définir des droits d'accès sur le document."
+                                disabled="#{empty docExplorerController.selected 
+                                            or empty docExplorerController.selected.dcId}"
+                                rendered="#{request.isUserInRole('S_EXPLORER_CA')}"
+                                >
+                        <f:setPropertyActionListener target="#{processAccessController.selected.paDocexplorer}" value="#{docExplorerController.selected}" />
+                        <f:setPropertyActionListener target="#{processAccessController.selected.paCompany}" value="#{staffAuthController.company}" />
+                    </p:menuitem>
+                    <p:menuitem icon="ui-btn-Delete"
+                                styleClass="options-btn"
+                                value="#{ism.Delete}"
+                                title="Permet de supprimer le document sélectionné !"
+                                actionListener="#{docExplorerController.destroy()}"
+                                update=":bodyForm:datalist, westGroup,:growl"
+                                onstart=";
+                                #{viewConfirmDialog.dlg.setHeader(ism.DocExplorerDlgHeader)};
+                                #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                #{viewConfirmDialog.dlg.setMessage(ism.DocExplorerDlgMessage)};
+                                PF('mainConfirmDialog').show();"
+                                disabled="#{empty docExplorerController.selected}"
+                                rendered="#{request.isUserInRole('S_EXPLORER_E')}"
+                                >
+                        <p:confirm  />
+                    </p:menuitem>
+                    <p:menuitem icon="ui-btn-Refresh"
+                                styleClass="options-btn"
+                                value="#{ism.Refresh}"
+                                title="Permet de rafraichir la table des document "
+                                actionListener="#{docExplorerController.releaseSelected()}"
+                                update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
+                                disabled="#{empty docExplorerController.selected }"
+                                />
+                </p:contextMenu>
+
+
+
+
+
+                <p:dataTable id="datalist" widgetVar="datalist"
+                             value="#{docExplorerController.lazyModel}" var="item"
+                             
+                             selectionMode="single"
+                             selection="#{docExplorerController.selected}"
+                             
+                             rowIndexVar="_rowIndex"
+                             rowKey="#{item.dcId}"
+                             rows="#{docExplorerController.tableSet.rows}" 
+                             rowsPerPageTemplate="#{docExplorerController.tableSet.rowsPerPageTemplate}"
+                             
+                             
+                             paginator="#{docExplorerController.tableSet.paginator}" 
+                             paginatorTemplate="#{docExplorerController.tableSet.paginatorTemplate}"
+                             currentPageReportTemplate="#{docExplorerController.tableSet.currentPageReportTemplate}"
+
+                             resizableColumns="#{docExplorerController.tableSet.resizableColumns}"
+                             draggableColumns="#{docExplorerController.tableSet.draggableColumns}"
+                             liveResize="#{docExplorerController.tableSet.liveResize}"
+                             reflow="#{docExplorerController.tableSet.reflow}"
+
+                             multiViewState="#{docExplorerController.tableSet.multiViewState}"
+                             sortMode="#{docExplorerController.tableSet.sortMode}"
+
+                             filterDelay="#{docExplorerController.tableSet.filterDelayMs}"
+                             filteredValue="#{docExplorerController.lazyModel.filtredValue}"
+                             lazy="#{docExplorerController.tableSet.lazy}"
+                             emptyMessage="#{ism.EmptyList}"
+                             
+                             >
+
+
+
+
+
+                    <f:facet name="{Exporters}">
+                        <div style="float:right" >
+                            <p:commandButton ajax="false" 
+                                             icon="fa fa-file-excel-o"
+                                             onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+                                <p:dataExporter type="xls" target="datalist" fileName="#{ism.DocExplorerTitleList}_#{viewUtil.maintenant}"  
+                                                postProcessor="#{tableView.handlePostProcessXLS}"
+                                                pageOnly="true"
+                                                />
+                            </p:commandButton>
+                            <p:commandButton ajax="false" 
+                                             icon="fa fa-file-pdf-o"
+                                             onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+                                <p:dataExporter type="pdf" target="datalist" fileName="#{ism.DocExplorerTitleList}_#{viewUtil.maintenant}" 
+                                                postProcessor="#{docExplorerController.handlePostProcessPDF}"
+                                                preProcessor="#{docExplorerController.handlePreProcessPDF}"
+                                                pageOnly="true"
+                                                />
+                            </p:commandButton>
+                        </div>
+                    </f:facet>
+
+                    <f:facet name="header">
+                        <p:commandButton id="toggler" type="button" value="Columns" 
+                                         style="float:left;" icon="ui-icon-calculator" 
+                                         />
+                        <p:commandButton type="button" icon="ui-icon-print" style="float:left;">
+                            <p:printer target="datalist"  />
+                        </p:commandButton>
+
+                        <p:columnToggler id="tableColToggler" datasource="datalist" trigger="toggler" >
+                            <p:ajax event="toggle" update=":growl"
+                                    listener="#{docExplorerController.handleColumnToggle}" />
+                        </p:columnToggler>
+
+                    </f:facet>
+
+
+
+
+
+
+                    <p:ajax event="rowSelect" update="westGroup bodyForm"/>
+                    <p:ajax event="rowUnselect" update="westGroup bodyForm"/>
+                    <p:ajax event="rowDblselect" listener="#{tableView.handleRowDoubleClick}"   />
+                    <p:ajax event="colReorder" update="datalist,tableColToggler,:growl" listener="#{docExplorerController.handleColumnReorder}" />
+
+
+
+
+
+
+                    <p:column headerText="#{ism.CtrlShort}" style="width:36px;text-align: center"
+                              exportable="false"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.CtrlShort)}" >
+                        <p:commandButton icon="ui-btn-View" style="width: 22px; height: 16px;"
+                                         title="#{ism.View}" action="View.xhtml?faces-redirect=true">
+                            <f:setPropertyActionListener value="#{item}" target="#{docExplorerController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Id}"
+                              style="width: 24px;" 
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Id)}"
+                              sortBy="#{item.dcId}" 
+                              filterBy="#{item.dcId}" filterMatchMode="contains">
+                        <h:outputText value="#{item.dcId}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Processus}"  style="width:250px;"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Processus)}"
+                              sortBy="#{item.dcProcessus.PProcessus} - #{item.dcProcessus.PDesignation}"
+                              filterBy="#{item.dcProcessus}">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('datalist').filter()" >
+                                <f:selectItem itemLabel="#{ism.SelectList}" 
+                                              itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{processusController.itemsAvailableSelectOne}" 
+                                               var="vProcessus"
+                                               itemLabel="#{vProcessus.PProcessus} - #{vProcessus.PDesignation}"
+                                               itemValue="#{vProcessus}"
+                                               />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{item.dcProcessus.PProcessus} - #{item.dcProcessus.PDesignation}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_DocType}"  style="width:170px;"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_DocType)}"
+                              sortBy="#{item.dcType.dctType} - #{item.dcType.dctDesignation}"
+                              filterBy="#{item.dcType}">
+                        <f:facet name="filter">
+                            <p:selectOneMenu onchange="PF('datalist').filter()" >
+                                <f:selectItem itemLabel="#{ism.SelectList}" 
+                                              itemValue="#{null}" noSelectionOption="true" />
+                                <f:selectItems value="#{docTypeController.itemsAvailableSelectOne}" 
+                                               var="vDocType"
+                                               itemLabel="#{vDocType.dctType} - #{vDocType.dctDesignation}"
+                                               itemValue="#{vDocType}"
+                                               />
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <h:outputText value="#{item.dcType.dctType} - #{item.dcType.dctDesignation}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Name}"  style="width:300px;"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Name)}"
+                              sortBy="#{item.dcDesignation}" 
+                              filterBy="#{item.dcDesignation}" filterMatchMode="contains">
+                        <h:outputText value="#{item.dcDesignation}" escape="false" style="white-space:pre-line;width:50px;"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Version}"  style="width:200px;"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Version)}"
+                              sortBy="#{item.dcVersion}" 
+                              filterBy="#{item.dcVersion}" filterMatchMode="contains">
+                        <h:outputText value="#{item.dcVersion}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Commentaire}"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Commentaire)}"
+                              sortBy="#{item.dcComment}" 
+                              filterBy="#{item.dcComment}" filterMatchMode="contains">
+                        <h:outputText value="#{item.dcComment}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Link}" style="width: 36px;" exportable="true"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Link)}">
+                        <p:commandLink    target="_blank"
+                                          title="#{item.dcLink}"
+                                          action="#{fileController.downloadPDF(item.dcLink)}"
+                                          ajax="false" immediate="false"  
+                                          style="margin: 0px; padding: 0px;"
+                                          disabled="#{!processAccessController
+                                                      .isUserDocumentAllowed(item, staffAuthController.staff,
+                                                      staffGroupsController.getItemsByStaff(staffAuthController.staff))}"
+                                          >
+                            <h:graphicImage library="img" name="ism/std/ExtPDF.png" width="28px" height="32px" style="margin: 0px; padding: 0px;" />
+                        </p:commandLink>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_DateApprouved}" 
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_DateApprouved)}"
+                              sortBy="#{item.dcApprouved}" filterBy="#{item.dcApprouved}"
+                              filterFunction="#{docExplorerController.handleFilterDateRange}"
+                              >
+                        <f:facet name="filter">
+                            <p:inputText id="filterApprouved" style="width: 100px!important;"
+                                         onmouseover="$(this).daterangepicker();" >
+                                <p:ajax event="change" oncomplete="PF('datalist').filter()" />
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{item.dcApprouved}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{ism.DocExplorerField_Activated}"
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Activated)}"
+                              sortBy="#{item.dcActivated}" filterBy="#{item.dcActivated}" filterMatchMode="equals" >
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="" itemValue="" />
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <f:selectItem itemLabel="" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <p:selectBooleanCheckbox value="#{item.dcActivated}" disabled="true"/>
+                    </p:column>                 
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Created}" 
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Created)}"
+                              sortBy="#{item.dcCreated}" filterBy="#{item.dcCreated}"
+                              filterFunction="#{docExplorerController.handleFilterDateRange}"
+                              >
+                        <f:facet name="filter">
+                            <p:inputText id="filterCreated" style="width: 100px!important;"
+                                         onmouseover="$(this).daterangepicker();" >
+                                <p:ajax event="change" oncomplete="PF('datalist').filter()" />
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{item.dcCreated}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Timestamp}" 
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Timestamp)}"
+                              sortBy="#{item.dcChanged}" filterBy="#{item.dcChanged}"
+                              filterFunction="#{docExplorerController.handleFilterDateRange}"
+                              >
+                        <f:facet name="filter">
+                            <p:inputText id="filterChanged" style="width: 100px!important;"
+                                         onmouseover="$(this).daterangepicker();" >
+                                <p:ajax event="change" oncomplete="PF('datalist').filter()" />
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{item.dcChanged}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.DocExplorerField_Company}" 
+                              visible="#{docExplorerController.getIsVisibleColKey(ism.DocExplorerField_Company)}"
+                              sortBy="#{item.dcCompany.CCompany} - #{item.dcCompany.CDesignation}" 
+                              filterBy="#{item.dcCompany.CCompany} - #{item.dcCompany.CDesignation}" filterMatchMode="contains">
+                        <h:outputText value="#{item.dcCompany.CCompany} - #{item.dcCompany.CDesignation}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </ui:define>
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton id="createButton" 
+                                 icon="ui-btn-Create"
+                                 styleClass="options-btn"
+                                 value="#{ism.Create}" 
+                                 actionListener="#{docExplorerController.prepareCreate()}"
+                                 action="Create.xhtml?faces-redirect=true"
+                                 title="Permet de créer un nouveau document"
+                                 disabled="#{!request.isUserInRole('S_EXPLORER_C')}"
+                                 />
+                <br />
+                <p:commandButton id="viewButton"
+                                 icon="ui-btn-View"
+                                 styleClass="options-btn"
+                                 value="#{ism.View}"
+                                 action="View.xhtml?faces-redirect=true"
+                                 title="Permet de visualiser le document sélectionné."
+                                 disabled="#{empty docExplorerController.selected 
+                                             or empty docExplorerController.selected.dcId
+                                             or !request.isUserInRole('S_EXPLORER_V')}"
+                                 />
+                <br />
+                <p:commandButton id="editButton"
+                                 icon="ui-btn-Edit"
+                                 styleClass="options-btn"
+                                 value="#{ism.Edit}"
+                                 action="Edit.xhtml?faces-redirect=true"
+                                 title="Permet d'editer le document sélectionné."
+                                 disabled="#{empty docExplorerController.selected 
+                                             or empty docExplorerController.selected.dcId
+                                             or !request.isUserInRole('S_EXPLORER_E')}"
+                                 />
+                <p:commandButton id="fileAccessButton"
+                                 icon="ui-btn-FileAccess"
+                                 styleClass="options-btn"
+                                 value="#{ism.WriteOn}"
+                                 action="CreateAccess.xhtml?faces-redirect=true"
+                                 actionListener="#{processAccessController.prepareCreate()}"
+                                 title="Permet de définir des droits d'accès sur le document."
+                                 disabled="#{empty docExplorerController.selected 
+                                             or empty docExplorerController.selected.dcId}"
+                                 rendered="#{request.isUserInRole('S_EXPLORER_CA')}"
+                                 >
+                    <f:setPropertyActionListener target="#{processAccessController.selected.paDocexplorer}" value="#{docExplorerController.selected}" />
+                    <f:setPropertyActionListener target="#{processAccessController.selected.paCompany}" value="#{staffAuthController.company}" />
+                </p:commandButton>
+                <br/>
+                <p:commandButton id="manageAccessrightButton" 
+                                 icon="fa fa-share-alt"
+                                 styleClass="options-btn"
+                                 value="#{ism.WriteManagement}"
+                                 action="ManageAccess.xhtml?faces-redirect=true"
+                                 title="Permet de définir des droits d'accès sur le document."
+                                 disabled="#{!request.isUserInRole('S_EXPLORER_CA')}"
+                                 >
+                    <f:setPropertyActionListener target="#{processAccessController.selected.paDocexplorer}" value="#{docExplorerController.selected}" />
+                    <f:setPropertyActionListener target="#{processAccessController.selected.paCompany}" value="#{staffAuthController.company}" />
+                </p:commandButton>
+                <br />
+                <p:commandButton id="deleteButton"
+                                 icon="ui-btn-Delete"
+                                 styleClass="options-btn"
+                                 value="#{ism.Delete}"
+                                 title="Permet de supprimer le document sélectionné !"
+                                 actionListener="#{docExplorerController.destroy()}"
+                                 update=":bodyForm:datalist,westGroup,:growl"
+                                 onstart=";
+                                 #{viewConfirmDialog.dlg.setHeader(ism.DocExplorerDlgHeader)};
+                                 #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                 #{viewConfirmDialog.dlg.setMessage(ism.DocExplorerDlgMessage)}
+                                 PF('mainConfirmDialog').show()"
+                                 disabled="#{empty docExplorerController.selected 
+                                             or empty docExplorerController.selected.dcId
+                                             or !request.isUserInRole('S_EXPLORER_E')}"
+                                 >
+                    <p:confirm  />
+                </p:commandButton>
+                <p:commandButton id="refreshButton"
+                                 icon="ui-btn-Refresh"
+                                 styleClass="options-btn"
+                                 value="#{ism.Refresh}"
+                                 title="Permet de rafraichir la table des document"
+                                 actionListener="#{docExplorerController.releaseSelected()}"
+                                 update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
+                                 disabled="#{empty docExplorerController.selected 
+                                             or empty docExplorerController.selected.dcId}"
+                                 />
+                <p:commandButton id="reportButton"
+                                 icon="fa fa-balance-scale"
+                                 styleClass="options-btn"
+                                 value="#{ism.Report}"
+                                 title="Permet d'editer un rapport"
+                                 onstart="#{crystalController.handleCSReportViewerClose();crystalController.handleClearSet()}"
+                                 onclick="#{csDialogView.prepareReport('SMQ-DOC-001 : Liste des documents par processus',
+                                            '/crystal/smq/DocumentationsList.rpt', 
+                                            null)}"
+                                 oncomplete="PF('ReportDlg').show()"
+                                 disabled="#{!request.isUserInRole('S_EXPLORER_E')}"
+                                 />
+            </h:panelGroup>
+
+
+
+        </ui:define>
+        <p:blockUI block="body" trigger="createButton, viewButton, editButton, fileAccessButton, manageAccessrightButton,  deleteButton" >
+            <p:graphicImage width="48px" height="48px" library="img" name="ism/std/Onload.gif"/>
+        </p:blockUI>
+
+    </ui:composition>
+
+</html>

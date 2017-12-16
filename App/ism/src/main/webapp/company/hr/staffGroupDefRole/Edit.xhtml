@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.StaffGroupDefRoleTitleEdit}"/></h1>
+
+            <h:form id="bodyForm">
+
+                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                             rendered="#{staffGroupDefRoleController.selected != null}">
+
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrId}" rendered="true" for="stgdrId" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:inputText id="stgdrId" rendered="false"
+                                     value="#{staffGroupDefRoleController.selected.stgdrId}" 
+                                     title="#{ism.StaffGroupDefRoleFieldInfo_stgdrId}" 
+                                     required="true" 
+                                     requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrId}"/>
+                        <p:outputLabel style="margin-left: 5px;"
+                                       value="#{staffGroupDefRoleController.selected.stgdrId}" />
+                    </h:panelGrid>
+
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrGroupDef}" for="stgdrGroupDef" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:selectOneMenu id="stgdrGroupDef"  widgetVar="stgdrGroupDef"
+                                         filter="true" filterMatchMode="contains"
+                                         value="#{staffGroupDefRoleController.selected.stgdrGroupDef}"
+                                         title="#{ism.StaffGroupDefRoleFieldInfo_stgdrGroupDef}" 
+                                         converter="#{staffGroupDefConverter}"
+                                         required="true" requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrGroupDef}"
+                                         >
+                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
+                            <f:selectItems value="#{staffGroupDefController.itemsAvailableSelectOne}"
+                                           var="stgdrGroupDefItem"
+                                           itemLabel="#{stgdrGroupDefItem.stgdGroupDef} - #{stgdrGroupDefItem.stgdDesignation}"
+                                           itemValue="#{stgdrGroupDefItem}"/>
+                        </p:selectOneMenu>
+                        <p:message for="stgdrGroupDef" />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrRole}" for="stgdrRole" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:selectOneMenu id="stgdrRole" 
+                                         filter="true" filterMatchMode="contains"
+                                         value="#{staffGroupDefRoleController.selected.stgdrRole}"
+                                         title="#{ism.StaffGroupDefRoleFieldInfo_stgdrRole}" 
+                                         converter="#{ismRoleConverter}"
+                                         validator="#{staffGroupDefRoleOnGroupDefRoleValidator.validate}"
+                                         required="true" requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrRole}"
+                                         >
+                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
+                            <f:selectItems value="#{ismRoleController.itemsAvailableSelectOne}"
+                                           var="stgdrRoleItem"
+                                           itemLabel="#{stgdrRoleItem.role} - #{stgdrRoleItem.rolename}"
+                                           itemValue="#{stgdrRoleItem}"/>
+                        </p:selectOneMenu>
+                        <p:message for="stgdrRole" />
+                    </h:panelGrid>
+
+
+
+
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrActivated}" for="stgdrActivated" />
+                    <p:selectBooleanCheckbox id="stgdrActivated" 
+                                             value="#{staffGroupDefRoleController.selected.stgdrActivated}" 
+                                             required="true" 
+                                             requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrActivated}"/>
+
+
+
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrChanged}" 
+                                   rendered="false" for="stgdrChanged" />
+                    <p:calendar id="stgdrChanged"  rendered="false"
+                                pattern="dd/MM/yyyy HH:mm:ss" 
+                                value="#{staffGroupDefRoleController.selected.stgdrChanged}" 
+                                title="#{ism.StaffGroupDefRoleFieldInfo_stgdrChanged}" 
+                                required="true" 
+                                requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrChanged}" 
+                                showOn="button"
+                                disabled="true"/>
+
+                    
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrCreated}" 
+                                   rendered="false" for="stgdrCreated" />
+                    <p:calendar id="stgdrCreated" pattern="dd/MM/yyyy HH:mm:ss" rendered="false"
+                                value="#{staffGroupDefRoleController.selected.stgdrCreated}" 
+                                title="#{ism.StaffGroupDefRoleFieldInfo_stgdrCreated}" 
+                                required="true" 
+                                requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrCreated}" 
+                                showOn="button"
+                                disabled="true"/>
+
+
+                    
+                    <p:outputLabel value="#{ism.StaffGroupDefRoleField_stgdrCompany}" for="stgdrCompany" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                        <p:inputText id="stgdrCompany" widgetVar="stgdrCompany"
+                                     value="#{staffGroupDefRoleController.selected.stgdrCompany = staffAuthController.company}" 
+                                     style="display: none" 
+                                     required="true" disabled="true" 
+                                     requiredMessage="#{ism.StaffGroupDefRoleRequiredMsg_stgdrCompany}"/>
+                        <p:outputLabel style="margin-left: 5px;"
+                                       value="#{staffAuthController.company.CCompany} - #{staffAuthController.company.CDesignation}" />
+                    </h:panelGrid>
+                </p:panelGrid>
+
+
+
+
+
+
+                <h:panelGroup id="btn-crud-zone_id"  >
+                    <p:commandButton icon="ui-btn-Save"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Change}" 
+                                     actionListener="#{staffGroupDefRoleController.update}" 
+                                     update=":bodyForm,:growl"
+                                     action="List.xhtml?faces-redirect=true"
+                                     />
+                    <p:commandButton icon="ui-btn-Cancel"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Cancel}" 
+                                     update=":bodyForm,:growl"
+                                     actionListener="#{staffGroupDefRoleController.prepareCreate()}"
+                                     action="./List.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     />
+                </h:panelGroup>
+
+                <p:messages showDetail="true" showSummary="false"
+                            escape="false"/>
+
+
+            </h:form>
+
+        </ui:define>
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton icon="ui-btn-Save"
+                                 styleClass="options-btn"
+                                 value="#{ism.Change}" 
+                                 actionListener="#{staffGroupDefRoleController.update}" 
+                                 update=":bodyForm,:growl"
+                                 action="List.xhtml?faces-redirect=true"
+                                 form="bodyForm"
+                                 />
+                <p:commandButton icon="ui-btn-Cancel"
+                                 styleClass="options-btn"
+                                 value="#{ism.Cancel}" 
+                                 action="./List.xhtml?faces-redirect=true"
+                                 update=":bodyForm,:growl"
+                                 immediate="true"
+                                 />
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

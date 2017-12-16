@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.UniteTitleEdit}"/></h1>
+
+            <h:form id="bodyForm">
+
+                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                             rendered="#{uniteController.selected != null}">
+
+
+                    <p:outputLabel value="#{ism.UniteField_UId}" rendered="true" for="UId" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" rendered="true">                
+                        <p:outputLabel id="UId"
+                                       style="margin-left: 5px;"
+                                       value="#{uniteController.selected.UId}"  />
+                        <p:message for="UId" rendered="false" />
+                    </h:panelGrid>
+
+
+                   
+                    <p:outputLabel value="#{ism.UniteField_UUnite}"  for="UUnite" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:inputText id="UUnite" 
+                                     value="#{uniteController.selected.UUnite}" 
+                                     title="#{ism.UniteFieldInfo_UUnite}" 
+                                     validator="#{uniteCodeValidator.validate}"
+                                     required="true" requiredMessage="#{ism.UniteRequiredMsg_UUnite}" 
+                                     />
+                        <p:message for="UUnite" />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.UniteField_UDesignation}"  for="UDesignation" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:inputText id="UDesignation" 
+                                     value="#{uniteController.selected.UDesignation}" 
+                                     title="#{ism.UniteFieldInfo_UDesignation}" 
+                                     validator="#{uniteDesignationValidator.validate}"
+                                     required="true" requiredMessage="#{ism.UniteRequiredMsg_UDesignation}" 
+                                     />
+                        <p:message for="UDesignation" />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.UniteField_UDeleted}"  for="UDeleted" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:selectBooleanCheckbox id="UDeleted"
+                                                 value="#{uniteController.selected.UDeleted}" 
+                                                 required="true" 
+                                                 requiredMessage="#{ism.UniteRequiredMsg_UDeleted}" 
+                                                 />
+                        <p:message for="UDeleted"  />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.UniteField_UCompany}"  for="UCompany" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:inputText id="UCompany" widgetVar="UCompany"
+                                     value="#{uniteController.selected.UCompany = staffAuthController.company}}"  
+                                     style="display: none" 
+                                     required="true" disabled="true" 
+                                     requiredMessage="#{ism.UniteRequiredMsg_UCompany}" />
+                        <p:outputLabel style="margin-left: 5px;"
+                                       value="#{staffAuthController.company.CCompany} - #{staffAuthController.company.CDesignation}" />
+                        <p:message for="UCompany"  />
+                    </h:panelGrid>
+
+
+                </p:panelGrid>
+
+
+
+
+
+
+
+
+                <h:panelGroup id="btn-crud-zone_id"  >
+                    <p:commandButton icon="ui-btn-Save"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Change}" 
+                                     actionListener="#{uniteController.update}" 
+                                     onstart="#{p:widgetVar('bodyForm:UCompany')}.enable();"
+                                     update=":bodyForm,:growl" 
+                                     action="List.xhtml?faces-redirect=true"
+                                     />
+                    <p:commandButton icon="ui-btn-Cancel"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Cancel}" 
+                                     update=":bodyForm,:growl"
+                                     actionListener="#{uniteController.prepareCreate()}"
+                                     action="./List.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     />
+
+                </h:panelGroup>
+
+                <p:messages showDetail="true" showSummary="false"
+                            escape="false"/>
+
+
+            </h:form>
+
+        </ui:define>
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton icon="ui-btn-Save"
+                                 styleClass="options-btn"
+                                 value="#{ism.Change}" 
+                                 actionListener="#{uniteController.update}" 
+                                 update=":bodyForm,:growl"
+                                 action="List.xhtml?faces-redirect=true"
+                                 form="bodyForm"
+                                 />
+                <p:commandButton icon="ui-btn-Cancel"
+                                 styleClass="options-btn"
+                                 value="#{ism.Cancel}" 
+                                 actionListener="#{uniteController.prepareCreate()}"
+                                 action="./List.xhtml?faces-redirect=true"
+                                 update=":bodyForm,:growl"
+                                 immediate="true"
+                                 />
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

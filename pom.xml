@@ -6,8 +6,9 @@
     <version>1712.15</version>
     <packaging>pom</packaging>
     <modules>
-        <module>ism</module>
+        
         <module>Charts</module>
+        <module>App</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

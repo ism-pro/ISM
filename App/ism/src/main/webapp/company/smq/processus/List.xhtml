@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.ProcessusTitleList}"/></h1>
+
+            <h:form id="bodyForm">
+                <p:contextMenu id="contextMenu" for="datalist" >
+                    <p:menuitem icon="ui-btn-Create"
+                                styleClass="options-btn"
+                                value="#{ism.Create}" 
+                                actionListener="#{processusController.prepareCreate()}"
+                                action="Create.xhtml?faces-redirect=true"
+                                title="Permet de créer un nouveau processus"
+                                />
+                    <p:separator />
+                    <p:menuitem icon="ui-btn-View" iconPos="left"
+                                styleClass="options-btn"
+                                value="#{ism.View}"
+                                action="View.xhtml?faces-redirect=true"
+                                title="Permet de visualiser le processus sélectionné."
+                                disabled="#{empty processusController.selected }"
+                                onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)"
+                                />
+                    <p:menuitem icon="ui-btn-Edit"
+                                styleClass="options-btn"
+                                value="#{ism.Edit}"
+                                action="Edit.xhtml?faces-redirect=true"
+                                title="Permet d'editer le processus sélectionné."
+                                disabled="#{empty processusController.selected }"
+                                />
+                    <p:menuitem icon="ui-btn-Delete"
+                                styleClass="options-btn"
+                                value="#{ism.Delete}"
+                                title="Permet de supprimer le processus sélectionné !"
+                                actionListener="#{viewTabManager.handleDestroy('processus')}"
+                                update=":bodyForm:datalist, westGroup,:growl"
+                                onstart=";
+                                #{viewConfirmDialog.dlg.setHeader(ism.ProcessusDlgHeader)};
+                                #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                #{viewConfirmDialog.dlg.setMessage(ism.ProcessusDlgMessage)};
+                                PF('mainConfirmDialog').show();"
+                                disabled="#{empty processusController.selected}"
+                                >
+                        <p:confirm  />
+                    </p:menuitem>
+                    <p:menuitem icon="ui-btn-Refresh"
+                                styleClass="options-btn"
+                                value="#{ism.Refresh}"
+                                title="Permet de rafraichir la table des processus "
+                                actionListener="#{processusController.releaseSelected()}"
+                                update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
+                                disabled="#{empty processusController.selected }"
+                                />
+                </p:contextMenu>
+
+
+
+
+
+
+                <p:dataTable id="datalist" widgetVar="datalist"
+                             value="#{viewTabManager.processus}" var="item"
+                             filteredValue="#{viewTabManager.processusFiltered}"
+
+                             selectionMode="single" selection="#{processusController.selected}"
+                             rowIndexVar="_rowIndex"
+                             rowKey="#{item.PId}"
+                             paginator="#{tableView.paginator}"
+                             rows="#{tableView.rows}"
+                             resizableColumns="#{tableView.resizableColumns}"
+                             rowsPerPageTemplate="#{tableView.rowsPerPageTemplate}"
+                             paginatorTemplate="#{tableView.paginatorTemplate}"
+                             currentPageReportTemplate="#{tableView.currentPageReportTemplate}"
+                             liveResize="#{tableView.liveResize}"
+                             reflow="#{tableView.reflow}"
+                             draggableColumns="#{tableView.draggableColumns}"
+                             sortMode="#{tableView.sortMode}"
+                             emptyMessage="#{ism.EmptyList}"
+                             multiViewState="true"
+                             >
+
+
+
+
+
+                    <f:facet name="{Exporters}">
+                        <div style="float:right" >
+                            <p:commandLink ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+                                <p:graphicImage library="img" name="ism/std/ExtXLS.png" width="24" height="24"/>
+                                <p:dataExporter type="xls" target="datalist" fileName="#{ism.ProcessusTitleList}_#{viewUtil.maintenant}" 
+                                                postProcessor="#{tableView.handlePostProcessXLS}"/>
+                            </p:commandLink>
+                            <p:commandLink ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+                                <p:graphicImage library="img" name="ism/std/ExtPDF.png" width="24" height="24"/>
+                                <p:dataExporter type="pdf" target="datalist" fileName="#{ism.ProcessusTitleList}_#{viewUtil.maintenant}"  />
+                            </p:commandLink>
+                        </div>
+                    </f:facet>
+
+                    <f:facet name="header">
+                        <p:commandButton id="toggler" type="button" value="Columns" 
+                                         style="float:left;" icon="ui-icon-calculator" 
+                                         />
+                        <p:commandButton type="button" icon="ui-icon-print" style="float:left;">
+                            <p:printer target="datalist"  />
+                        </p:commandButton>
+
+                        <p:columnToggler id="tableColToggler" datasource="datalist" trigger="toggler" >
+                            <p:ajax event="toggle" update=":growl"
+                                    listener="#{processusController.handleColumnToggle}" />
+                        </p:columnToggler>
+
+                        <p:outputPanel style="float:right;">
+                            <h:outputText value="#{ism.Search}"  />
+                            <p:inputText id="globalFilter" onkeyup="PF('datalist').filter()" 
+                                         style="width:150px;" placeholder="#{ism.EnterKeyWord}" />
+                        </p:outputPanel>
+
+                    </f:facet>
+
+
+
+
+
+
+                    <p:ajax event="rowSelect" update="westGroup bodyForm"  />
+                    <p:ajax event="rowUnselect" update="westGroup bodyForm" />
+                    <p:ajax event="rowDblselect" listener="#{tableView.handleRowDoubleClick}" />
+                    <p:ajax event="colReorder" update="datalist,tableColToggler,:growl" listener="#{processusController.handleColumnReorder}"  />
+
+
+
+
+
+
+                    <p:column headerText="#{ism.CtrlShort}" style="width:32px;text-align: center"
+                              exportable="false"
+                              visible="#{processusController.getIsVisibleColKey(ism.CtrlShort)}" >
+                        <p:commandButton icon="ui-btn-View" style="width: 22px; height: 16px;"
+                                         title="#{ism.View}" action="View.xhtml?faces-redirect=true">
+                            <f:setPropertyActionListener value="#{item}" target="#{processusController.selected}" />
+                        </p:commandButton>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.ProcessusField_pId}"
+                              style="width: 24px;" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pId)}"
+                              sortBy="#{item.PId}" 
+                              filterBy="#{item.PId}" filterMatchMode="contains">
+                        <h:outputText value="#{item.PId}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.ProcessusField_pProcessus}" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pProcessus)}"
+                              sortBy="#{item.PProcessus}" 
+                              filterBy="#{item.PProcessus}" filterMatchMode="contains">
+                        <h:outputText value="#{item.PProcessus}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.ProcessusField_pDesignation}" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pDesignation)}"
+                              sortBy="#{item.PDesignation}" 
+                              filterBy="#{item.PDesignation}" filterMatchMode="contains">
+                        <h:outputText value="#{item.PDesignation}"/>
+                    </p:column>
+
+
+                    <p:column headerText="#{ism.ProcessusField_pStaffManager}" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pStaffManager)}"
+                              sortBy="#{item.PStaffmanager.stFirstname} #{item.PStaffmanager.stLastname} [#{item.PStaffmanager.stStaff}]" 
+                              filterBy="#{item.PStaffmanager.stFirstname} #{item.PStaffmanager.stLastname} [#{item.PStaffmanager.stStaff}]" 
+                              filterMatchMode="contains">
+                        <h:outputText value="#{item.PStaffmanager.stFirstname} #{item.PStaffmanager.stLastname} [#{item.PStaffmanager.stStaff}]"/>
+                    </p:column>
+
+                    <p:column headerText="#{ism.ProcessusField_pDeleted}"
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pDeleted)}"
+                              sortBy="#{item.PDeleted}" filterBy="#{item.PDeleted}" filterMatchMode="equals" >
+                        <f:facet name="filter">
+                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
+                                <f:converter converterId="javax.faces.Boolean" />
+                                <f:selectItem itemLabel="" itemValue="" />
+                                <f:selectItem itemLabel="" itemValue="true" />
+                                <f:selectItem itemLabel="" itemValue="false" />
+                            </p:selectOneButton>
+                        </f:facet>
+                        <p:selectBooleanCheckbox value="#{item.PDeleted}" disabled="true"/>
+                    </p:column>
+
+                    <p:column headerText="#{ism.ProcessusField_pCreated}" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pCreated)}"
+                              sortBy="#{item.PCreated}" filterBy="#{item.PCreated}"
+                              filterFunction="#{viewTabManager.handleDateRangeFilters}"
+                              >
+                        <f:facet name="filter">
+                            <p:inputText id="filterCreated" 
+                                         onclick="$(this).daterangepicker({datepickerOptions: {initialText: 'Période...', applyButtonText: 'Ok', clearButtonText: 'Reset', cancelButtonText: 'Annuler', numberOfMonths: 2}})" 
+                                         style="width: 100px!important;" >
+                                <p:ajax event="change" oncomplete="PF('datalist').filter()" update="datalist"/>
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{item.PCreated}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{ism.ProcessusField_pChanged}" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pChanged)}"
+                              sortBy="#{item.PChanged}" filterBy="#{item.PChanged}"
+                              filterFunction="#{viewTabManager.handleDateRangeFilters}"
+                              >
+                        <f:facet name="filter">
+                            <p:inputText id="filterChanged" 
+                                         onclick="$(this).daterangepicker({datepickerOptions: {initialText: 'Période...', applyButtonText: 'Ok', clearButtonText: 'Reset', cancelButtonText: 'Annuler', numberOfMonths: 2}})" 
+                                         style="width: 100px!important;" >
+                                <p:ajax event="change" oncomplete="PF('datalist').filter()" update="datalist"/>
+                            </p:inputText>
+                        </f:facet>
+                        <h:outputText value="#{item.PChanged}">
+                            <f:convertDateTime pattern="dd/MM/yyyy" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="#{ism.ProcessusField_pCompany}" 
+                              visible="#{processusController.getIsVisibleColKey(ism.ProcessusField_pCompany)}"
+                              sortBy="#{item.PCompany.CCompany} - #{item.PCompany.CDesignation}" 
+                              filterBy="#{item.PCompany.CCompany} - #{item.PCompany.CDesignation}" filterMatchMode="contains">
+                        <h:outputText value="#{item.PCompany.CCompany} - #{item.PCompany.CDesignation}"/>
+                    </p:column>
+
+                </p:dataTable>
+            </h:form>
+
+        </ui:define>
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton id="createButton" 
+                                 icon="ui-btn-Create"
+                                 styleClass="options-btn"
+                                 value="#{ism.Create}" 
+                                 actionListener="#{processusController.prepareCreate()}"
+                                 action="Create.xhtml?faces-redirect=true"
+                                 title="Permet de créer un nouveau processus"
+                                 />
+                <br />
+                <p:commandButton id="viewButton"
+                                 icon="ui-btn-View"
+                                 styleClass="options-btn"
+                                 value="#{ism.View}"
+                                 action="View.xhtml?faces-redirect=true"
+                                 title="Permet de visualiser le processus sélectionné."
+                                 disabled="#{empty processusController.selected 
+                                             or empty processusController.selected.PId}"
+                                 />
+                <br />
+                <p:commandButton id="editButton"
+                                 icon="ui-btn-Edit"
+                                 styleClass="options-btn"
+                                 value="#{ism.Edit}"
+                                 action="Edit.xhtml?faces-redirect=true"
+                                 title="Permet d'editer le processus sélectionné."
+                                 disabled="#{empty processusController.selected 
+                                             or empty processusController.selected.PId}"
+                                 />
+                <p:commandButton id="deleteButton"
+                                 icon="ui-btn-Delete"
+                                 styleClass="options-btn"
+                                 value="#{ism.Delete}"
+                                 title="Permet de supprimer le processus sélectionné !"
+                                 actionListener="#{viewTabManager.handleDestroy('processus')}"
+                                 update=":bodyForm:datalist,westGroup,:growl"
+                                 onstart=";
+                                 #{viewConfirmDialog.dlg.setHeader(ism.ProcessusDlgHeader)};
+                                 #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                 #{viewConfirmDialog.dlg.setMessage(ism.ProcessusDlgMessage)}
+                                 PF('mainConfirmDialog').show()"
+                                 disabled="#{empty processusController.selected 
+                                             or empty processusController.selected.PId}"
+                                 >
+                    <p:confirm  />
+                </p:commandButton>
+                <p:commandButton id="refreshButton"
+                                 icon="ui-btn-Refresh"
+                                 styleClass="options-btn"
+                                 value="#{ism.Refresh}"
+                                 title="Permet de rafraichir la table des processus "
+                                 actionListener="#{processusController.releaseSelected()}"
+                                 update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
+                                 disabled="#{empty processusController.selected 
+                                             or empty processusController.selected.PId}"
+                                 />
+                <p:commandButton id="reportButton"
+                                 icon="fa fa-balance-scale"
+                                 styleClass="options-btn"
+                                 value="#{ism.Report}"
+                                 title="Permet d'editer un rapport"
+                                 onstart="#{crystalController.handleCSReportViewerClose();crystalController.handleClearSet()}"
+                                 onclick="#{csDialogView.prepareReport('SMQ-PROC-001 : Liste des processus',
+                                            '/crystal/smq/ProcessusLists.rpt', 
+                                            null)}"
+                                 oncomplete="PF('ReportDlg').show()"
+                                 disabled="#{!request.isUserInRole('S_EXPLORER_E')}"
+                                 />
+
+            </h:panelGroup>
+
+
+
+
+        </ui:define>
+        <p:blockUI block="body" trigger="createButton, viewButton, editButton, deleteButton" >
+            <p:graphicImage width="48px" height="48px" library="img" name="ism/std/Onload.gif"/>
+        </p:blockUI>
+
+
+    </ui:composition>
+
+</html>
