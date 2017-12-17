@@ -5,9 +5,6 @@
  */
 package org.ism.services.admin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -15,15 +12,14 @@ import java.util.logging.Logger;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.faces.application.ResourceHandler;
-import javax.faces.context.FacesContext;
 import javax.mail.BodyPart;
 import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
-import org.ism.jsf.util.JsfUtil;
 import org.ism.services.Util;
+import org.ism.entities.smq.nc.NonConformiteRequest;
+import org.ism.util.DateUtil;
 
 /**
  * Mail class provide the way to save informations of email to be send.<br>
@@ -326,183 +322,241 @@ public class Mail {
         return null;
     }
 
+    public static MimeMultipart createMessage(String title, String content) {
+        try {
+            // This mail has 2 part, the BODY and the embedded image
+            MimeMultipart multipart = new MimeMultipart("related");
+
+            // first part (the html)
+            BodyPart messageBodyPart = new MimeBodyPart();
+            String htmlText = msgStandard();
+            htmlText = htmlText.replace("%Title%", title)
+                    .replace("%Content%", content);
+            messageBodyPart.setContent(htmlText, "text/html");
+            // add it
+            multipart.addBodyPart(messageBodyPart);
+
+            messageBodyPart = new MimeBodyPart();
+            DataSource fds = new FileDataSource(Util.writeResourceToFileSystem("img/ism/ism.png"));
+            messageBodyPart.setDataHandler(new DataHandler(fds));
+            messageBodyPart.setHeader("Content-ID", "<image>");
+
+            // add image to the multipart
+            multipart.addBodyPart(messageBodyPart);
+
+            return multipart;
+        } catch (MessagingException ex) {
+            Logger.getLogger(Mail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
+    public static MimeMultipart createMessageNC(String title, NonConformiteRequest nc) {
+        try {
+            // This mail has 2 part, the BODY and the embedded image
+            MimeMultipart multipart = new MimeMultipart("related");
+
+            // first part (the html)
+            BodyPart messageBodyPart = new MimeBodyPart();
+            String htmlText = msgNonConformite(nc.getNcrState().getId());
+            htmlText = htmlText.replace("%Title%", title)
+                    .replace("%nc_refusDesc%", (nc.getNcrapprouvedDesc()== null ? "" : nc.getNcrapprouvedDesc()))
+                    .replace("%nc_id%", nc.getNcrId().toString()).replace("%nc_company%", nc.getNcrCompany().toString())
+                    .replace("%nc_Processus", nc.getNcrProcessus().toString()).replace("%nc_nature%", nc.getNcrNature().toString())
+                    .replace("%nc_gravity%", nc.getNcrGravity().toString()).replace("%nc_frequency%", nc.getNcrFrequency().toString())
+                    .replace("%nc_occured%", DateUtil.format("dd/MM/yyyy hh:mm:ss", nc.getNcrOccured())).replace("%nc_product%", (nc.getNcrProduct() == null ? "" : nc.getNcrProduct()))
+                    .replace("%nc_trace%", (nc.getNcrTrace() == null ? "" : nc.getNcrTrace())).replace("%nc_quantity%", (nc.getNcrQuantity() == null ? "" : nc.getNcrQuantity().toString()))
+                    .replace("%nc_unit%", (nc.getNcrUnite() == null ? "" : nc.getNcrUnite().toString()))
+                    .replace("%nc_clientname%", (nc.getNcrClientname() == null ? "" : nc.getNcrClientname())).replace("%nc_clientaddress%", (nc.getNcrClientaddress() == null ? "" : nc.getNcrClientaddress()))
+                    .replace("%nc_clientphone%", (nc.getNcrClientphone() == null ? "" : nc.getNcrClientphone())).replace("%nc_clientmail%", (nc.getNcrClientemail() == null ? "" : nc.getNcrClientemail()))
+                    .replace("%nc_clienttype%", (nc.getNcrClienttype() == null ? "" : nc.getNcrClienttype()))
+                    .replace("%nc_emettor", nc.getNcrStaff().toString()).replace("%nc_created%", DateUtil.format("dd/MM/yyyy hh:mm:ss", nc.getNcrCreated()))
+                    .replace("%nc_description%", nc.getNcrDescription()).replace("%nc_image%", (nc.getNcrLink() == null ? "" : nc.getNcrLink()));
+            messageBodyPart.setContent(htmlText, "text/html");
+            // add it
+            multipart.addBodyPart(messageBodyPart);
+
+            messageBodyPart = new MimeBodyPart();
+            DataSource fds = new FileDataSource(Util.writeResourceToFileSystem("img/ism/ism.png"));
+            messageBodyPart.setDataHandler(new DataHandler(fds));
+            messageBodyPart.setHeader("Content-ID", "<image>");
+
+            // add image to the multipart
+            multipart.addBodyPart(messageBodyPart);
+
+            return multipart;
+        } catch (MessagingException ex) {
+            Logger.getLogger(Mail.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+
     public static String msgStandard() {
-        return "<head>\n"
-                + "<!-- Copyright 2005 Macromedia, Inc. All rights reserved. -->\n"
-                + "<title>Text</title>\n"
+        return ""
+                + "<head>\n"
+                + "<title>ISM MESSAGER</title>\n"
                 + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
                 + "<style>\n"
-                + "/* Global Styles */\n"
-                + "\n"
-                + "body {\n"
-                + "	margin:0px;\n"
-                + "	}\n"
-                + "	\n"
-                + "td {\n"
+                + "	.bodyText {\n"
                 + "	font:11px Verdana, Arial, Helvetica, sans-serif;\n"
                 + "	color:#003366;\n"
+                + "	line-height:20px;\n"
+                + "	margin-top:0px;\n"
                 + "	}\n"
-                + "	\n"
-                + "a {\n"
-                + "	color: #FF6600;\n"
-                + "	font-weight:bold;\n"
-                + "	}\n"
-                + "	\n"
-                + "a:hover {\n"
+                + "	.pageName{\n"
+                + "	font: 18px Verdana, Arial, Helvetica, sans-serif;\n"
                 + "	color: #3366CC;\n"
+                + "	line-height:24px;\n"
+                + "	letter-spacing:.2em;\n"
                 + "	}\n"
-                + "\n"
-                + "/* ID Styles */\n"
-                + "\n"
-                + "#navigation td {\n"
-                + "	border-bottom: 2px solid #C0DFFD;\n"
-                + "	}\n"
-                + "	\n"
-                + "#navigation a {\n"
-                + "	font: 11px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #003366;\n"
-                + "	line-height:16px;\n"
-                + "	letter-spacing:.1em;\n"
-                + "	text-decoration: none;\n"
-                + "	display:block;\n"
-                + "	padding:8px 6px 10px 26px;\n"
-                + "	background: url(\"mm_arrow.gif\") 14px 45% no-repeat;\n"
-                + "	}\n"
-                + "	\n"
-                + "#navigation a:hover {\n"
-                + "	background: #ffffff url(\"mm_arrow.gif\") 14px 45% no-repeat;\n"
-                + "	color:#FF6600;\n"
-                + "	}\n"
-                + "	\n"
-                + "#logo 	{\n"
+                + "	.signature{ margin-top: 30px; }\n"
+                + "	.sign_table{ border-top: 1px solid #BD2B11; border-bottom: 1px solid #BD2B11; }\n"
+                + "	.sign_name	{\n"
                 + "	font:24px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #CCFF99;\n"
+                + "	color: #3366CC;\n"
                 + "	letter-spacing:.2em;\n"
                 + "	line-height:30px;\n"
                 + "	}\n"
-                + "\n"
-                + "#tagline 	{	\n"
+                + "	.sign_complement{\n"
                 + "	font:12px Verdana, Arial, Helvetica, sans-serif;\n"
                 + "	color: #FF9933;\n"
                 + "	letter-spacing:.4em;\n"
                 + "	line-height:18px;\n"
                 + "	}\n"
                 + "\n"
-                + "#monthformat {\n"
-                + "	border-bottom: 2px solid #E6F3FF;\n"
-                + "		}\n"
-                + "		\n"
-                + "#dateformat {\n"
-                + "	font:11px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #003366;\n"
-                + "	letter-spacing:.2em;\n"
-                + "	}\n"
-                + "	\n"
-                + "#dateformat a {\n"
-                + "	font:11px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #003366;\n"
-                + "	font-weight:bold;\n"
-                + "	letter-spacing:.1em;\n"
-                + "	}\n"
-                + "	\n"
-                + "#dateformat a:hover {\n"
-                + "	color: #FF6600;\n"
-                + "	letter-spacing:.1em;\n"
-                + "	}\n"
-                + "	\n"
-                + "/* Class Styles */\n"
-                + "	\n"
-                + ".bodyText {\n"
+                + "</style>\n"
+                + "</head>\n"
+                + "<body >\n"
+                + "	<h1 class=\"pageName\" >%Title%</h1>\n"
+                + "    \n"
+                + "    <div class=\"bodyText\">%Content%</div>\n"
+                + "    \n"
+                + "    <div class=\"signature\">\n"
+                + "    	<table width=\"510\" class=\"sign_table\">\n"
+                + "        <tr><td width=\"179\" rowspan=\"3\"><img src=\"cid:image\" alt=\"Header image\" width=\"179\" height=\"68\" border=\"0\" /></td>\n"
+                + "        <td width=\"329\" class=\"sign_name\">ISM MESSAGER</td>\n"
+                + "        </tr>         <tr><td class=\"sign_complement\">RESTER INFORMER</td></tr>\n"
+                + "        <tr><td class=\"sign_complement\">Industrial System Manager</td></tr>\n"
+                + "        </table>\n"
+                + "</div>\n"
+                + "</body>";
+    }
+
+    /**
+     * Allow to create a message for non conformite
+     *
+     * @param code <br>
+     * <br> 1	A	Créée
+     * <br>2	B	En attente de solution
+     * <br>3	C	En cours
+     * <br>4	D	Terminé
+     * <br>5	E	Annulé
+     *
+     * @return
+     */
+    public static String msgNonConformite(Integer code) {
+        String state = "";
+        switch (code) {
+            case 1:
+                state = "créée, merci de la traiter...";
+                break;
+            case 5:
+                state = "refusée !";
+                break;
+            case 2:
+                state = "validée, merci d'approter une actions...";
+                break;
+            case 3:
+                state = "en cours";
+                break;
+            default:
+                state = "???";
+                break;
+        }
+        return ""
+                + "<head>\n"
+                + "<title>ISM MESSAGER</title>\n"
+                + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
+                + "<style>\n"
+                + "	.bodyText {\n"
                 + "	font:11px Verdana, Arial, Helvetica, sans-serif;\n"
                 + "	color:#003366;\n"
                 + "	line-height:20px;\n"
                 + "	margin-top:0px;\n"
                 + "	}\n"
-                + "	\n"
-                + ".pageName{\n"
+                + "	.pageName{\n"
                 + "	font: 18px Verdana, Arial, Helvetica, sans-serif;\n"
                 + "	color: #3366CC;\n"
                 + "	line-height:24px;\n"
                 + "	letter-spacing:.2em;\n"
                 + "	}\n"
-                + "	\n"
-                + ".subHeader {\n"
-                + "	font:bold 10px Verdana, Arial, Helvetica, sans-serif;\n"
+                + "	.signature{ margin-top: 30px; }\n"
+                + "	.sign_table{ border-top: 1px solid #BD2B11; border-bottom: 1px solid #BD2B11; }\n"
+                + "	.sign_name	{\n"
+                + "	font:24px Verdana, Arial, Helvetica, sans-serif;\n"
                 + "	color: #3366CC;\n"
-                + "	line-height:16px;\n"
                 + "	letter-spacing:.2em;\n"
-                + "	}\n"
-                + "\n"
-                + ".quote {\n"
-                + "	font: 20px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #759DA1;\n"
                 + "	line-height:30px;\n"
                 + "	}\n"
-                + "	\n"
-                + ".smallText {\n"
-                + "	font: 10px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #003366;\n"
+                + "	.sign_complement{\n"
+                + "	font:12px Verdana, Arial, Helvetica, sans-serif;\n"
+                + "	color: #FF9933;\n"
+                + "	letter-spacing:.4em;\n"
+                + "	line-height:18px;\n"
                 + "	}\n"
-                + "	\n"
-                + ".navText {\n"
-                + "	font: 11px Verdana, Arial, Helvetica, sans-serif;\n"
-                + "	color: #003366;\n"
-                + "	line-height:16px;\n"
-                + "	letter-spacing:.1em;\n"
-                + "	text-decoration: none;\n"
-                + "	}\n"
-                + "	\n"
                 + "\n"
+                + "	.nc_table {  width: 100%;  border-collapse:collapse; font:11px Verdana, Arial, Helvetica, sans-serif; color:#003366;}\n"
+                + "	.nc_table td  { border: 1px solid #EEEEEE; }\n"
+                + "	.nc_table_field { width : 75px; }\n"
                 + "</style>\n"
                 + "</head>\n"
-                + "<body bgcolor=\"#C0DFFD\">\n"
-                + "\n"
-                + "<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\">\n"
-                + "  <tr bgcolor=\"#3366CC\">\n"
-                + "    <td colspan=\"2\" rowspan=\"2\" nowrap=\"nowrap\"><img src=\"cid:image\" alt=\"Header image\" width=\"382\" height=\"127\" border=\"0\" /></td>\n"
-                + "    <td width=\"262\" height=\"63\" id=\"logo\" valign=\"bottom\" align=\"center\" nowrap=\"nowrap\">ISM MESSAGER</td>\n"
-                + "    <td width=\"854\">&nbsp;</td>\n"
-                + "  </tr>\n"
-                + "  <tr bgcolor=\"#3366CC\">\n"
-                + "    <td height=\"64\" id=\"tagline\" valign=\"top\" align=\"center\">RESTER INFORMER</td>\n"
-                + "	<td width=\"854\">&nbsp;</td>\n"
-                + "  </tr>\n"
-                + "  <tr>\n"
-                + "    <td colspan=\"4\" bgcolor=\"#003366\"><img src=\"mm_spacer.gif\" alt=\"\" width=\"1\" height=\"1\" border=\"0\" /></td>\n"
-                + "  </tr>\n"
-                + "\n"
-                + "  <tr bgcolor=\"#CCFF99\">\n"
-                + "  	<td>&nbsp;</td>\n"
-                + "  	<td colspan=\"3\" id=\"dateformat\" height=\"25\"><a href=\"javascript:;\">Rapport </a> :</td>\n"
-                + "  </tr>\n"
-                + " <tr>\n"
-                + "    <td colspan=\"4\" bgcolor=\"#003366\"><img src=\"mm_spacer.gif\" alt=\"\" width=\"1\" height=\"1\" border=\"0\" /></td>\n"
-                + "  </tr>\n"
-                + " <tr>\n"
-                + "    <td width=\"21\">&nbsp;</td>\n"
-                + "    <td colspan=\"2\" valign=\"top\">&nbsp;<br />\n"
-                + "    &nbsp;<br />\n"
-                + "    <table border=\"0\" cellspacing=\"0\" cellpadding=\"2\" width=\"573\">\n"
-                + "        <tr>\n"
-                + "          <td width=\"569\" class=\"pageName\">%Title%</td>\n"
-                + "        </tr>\n"
-                + "        <tr>\n"
-                + "          <td class=\"bodyText\"><p>%Content%</p>			</td>\n"
-                + "		</tr>\n"
-                + "      </table>	  </td>\n"
-                + "	<td width=\"854\">&nbsp;</td>\n"
-                + "  </tr>\n"
-                + "\n"
-                + " <tr>\n"
-                + "    <td width=\"21\">&nbsp;</td>\n"
-                + "    <td width=\"361\">&nbsp;</td>\n"
-                + "    <td width=\"262\">&nbsp;</td>\n"
-                + "	<td width=\"854\">&nbsp;</td>\n"
-                + "  </tr>\n"
-                + "</table>\n"
-                + "\n"
+                + "<body >\n"
+                + "	<h1 class=\"pageName\" >%Title%</h1>\n"
+                + "    \n"
+                + "    <div class=\"bodyText\">\n"
+                + "      <p>Bonjour,</p>\n"
+                + "      <p>Cette non-conformité vient d'être <span style=\"color: #FF6600; font-weight:bold;\">" + state + "</span> <br/>Prennez en connaissance ci-dessous :      </p>\n"
+                + "      <div style=\"width: 100%; color: red;border: 1px dashed red;margin: 10px;padding: 10px;  " + (code != 5 ? "display:none;" : "") + "\"><p>%nc_refusDesc%</p></div>"
+                + "      <h3>Informations</h3>\n"
+                + "   	  <table border=\"0\" cellpadding=\"0\"  cellspacing=\"0\" class=\"nc_table\">\n"
+                + "        <tr><td class=\"nc_table_field\">N°</td><td>%nc_id%</td></tr>\n"
+                + "        <tr><td>Société</td><td>%nc_company%</td></tr>\n"
+                + "        <tr><td>Processus</td><td>%nc_processus%</td></tr>\n"
+                + "        <tr><td>Nature</td><td>%nc_nature%</td></tr>\n"
+                + "        <tr><td>Gravité</td><td>%nc_gravity%</td></tr>\n"
+                + "        <tr><td>Fréquence</td><td>%nc_frequency%</td></tr>\n"
+                + "        <tr><td>Apparution</td><td>%nc_occured%</td></tr>\n"
+                + "        <tr><td>Produit</td><td>%nc_product%</td></tr>\n"
+                + "        <tr><td>Traçabilité</td><td>%nc%trace%</td></tr>\n"
+                + "        <tr><td>Quantité</td><td>%nc_quantity%</td></tr>\n"
+                + "        <tr><td>Unité</td><td>%nc_unit%</td></tr>\n"
+                + "        </table>\n"
+                + "        <h3>Infos Client</h3>\n"
+                + "        <table class=\"nc_table\">\n"
+                + "        <tr><td class=\"nc_table_field\">Nom</td><td>%nc_clientname%</td></tr>\n"
+                + "        <tr><td>Adresse</td><td>%nc_clientaddress%</td></tr>\n"
+                + "        <tr><td>Téléphone</td><td>%nc_clientphone%</td></tr>\n"
+                + "        <tr><td>E-mail</td><td>%nc_clientmail%</td></tr>\n"
+                + "        <tr><td>Type</td><td>%nc_clienttype%</td></tr>\n"
+                + "        </table>\n"
+                + "        <h3>Description</h3>\n"
+                + "        <table class=\"nc_table\">\n"
+                + "        <tr><td class=\"nc_table_field\">Emetteur</td><td>%nc_emettor</td></tr>\n"
+                + "        <tr><td>Création</td><td>%nc_created%</td></tr>\n"
+                + "        <tr><td>Description</td><td>%nc_description%</td></tr>\n"
+                + "        <tr><td>Image</td><td>%nc_image%</td></tr>\n"
+                + "        </table>\n"
+                + "      </p>\n"
+                + "    </div>\n"
+                + "    \n"
+                + "    <div class=\"signature\">\n"
+                + "    	<table width=\"510\" class=\"sign_table\">\n"
+                + "        <tr><td width=\"179\" rowspan=\"4\"><img src=\"cid:image\" alt=\"Header image\" width=\"179\" height=\"68\" border=\"0\" /></td>\n"
+                + "        <td width=\"329\" class=\"sign_name\">ISM MESSAGER</td>\n"
+                + "        </tr>         <tr><td class=\"sign_complement\">RESTER INFORMER</td></tr>\n"
+                + "        <tr><td class=\"sign_complement\">Industrial System Manager</td></tr>\n"
+                + "        </table>\n"
+                + "</div>\n"
                 + "</body>";
     }
-
-
 }

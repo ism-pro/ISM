@@ -84,6 +84,20 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         super(NonConformiteRequest.class);
     }
 
+    public NonConformiteRequest findLast() {
+        em.flush();
+        Query q = em.createNamedQuery(SELECTALLBYLASTCHANGED);
+        q.setMaxResults(1);
+        List l = q.getResultList();
+        if (l == null) {
+            return null;
+        }
+        if (l.isEmpty()) {
+            return null;
+        }
+        return (NonConformiteRequest) l.get(0);
+    }
+
     public List<NonConformiteRequest> findAllByLastChanged() {
         em.flush();
         Query q = em.createNamedQuery(SELECTALLBYLASTCHANGED);
@@ -465,4 +479,5 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         }
         return p;
     }
+
 }

@@ -28,11 +28,17 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import org.ism.entities.admin.Company;
+import org.ism.entities.admin.Maillist;
+import org.ism.entities.admin.Mailsender;
 import org.ism.entities.smq.Processus;
 import org.ism.jsf.admin.MaillistController;
 import org.ism.jsf.admin.MailsenderController;
+import org.ism.jsf.app.IsmNcrstateController;
+import org.ism.jsf.hr.StaffAuthController;
 import org.ism.lazy.smq.nc.NonConformiteRequestLazyModel;
 import org.ism.services.TableSet;
+import org.ism.services.admin.Mail;
+import org.ism.util.DateUtil;
 import org.primefaces.event.data.FilterEvent;
 import org.primefaces.event.data.SortEvent;
 import org.primefaces.model.SortMeta;
@@ -46,12 +52,17 @@ public class NonConformiteRequestController implements Serializable {
     private org.ism.sessions.smq.nc.NonConformiteRequestFacade ejbFacade;
 
     @ManagedProperty(value = "#{mailsenderController}")
-    private MailsenderController mailsenderController;
-    
+    MailsenderController mailsenderController;
+
     @ManagedProperty(value = "#{maillistController}")
-    private MaillistController maillistController;
-    
-    
+    MaillistController maillistController;
+
+    @ManagedProperty(value = "#{staffAuthController}")
+    StaffAuthController staffAuthController;
+
+    @ManagedProperty(value = "#{ismNcrstateController}")
+    IsmNcrstateController ismNcrstateController;
+
     // Event
     public static final String onCreated = "A", onWaitingSolution = "B", onProgressed = "C", onFinished = "D", onCanceled = "E";
 
@@ -85,7 +96,6 @@ public class NonConformiteRequestController implements Serializable {
      * Define lazy model to load progressively data
      */
     private NonConformiteRequestLazyModel lazyModel;
-
 
     public NonConformiteRequestController() {
     }
@@ -291,6 +301,70 @@ public class NonConformiteRequestController implements Serializable {
     }
 
     /**
+     * Handle Mail On Create : while event creation occure everything is prepare
+     * to informe all define receiver that new mail as bean created.
+     */
+    private void handleMailOnCreate() {
+        Maillist ml = maillistController.getItemsBy(MLGROUPE, onCreated, 1, selected.getNcrProcessus());
+        Maillist mlr = maillistController.getItemsBy(MLGROUPE, onCreated, 2, selected.getNcrProcessus());
+        String currentStaffMail = staffAuthController.getStaff().getStMaillist().trim().isEmpty() ? "" : staffAuthController.getStaff().getStMaillist();
+
+        Boolean isClient = false;
+        isClient = (selected.getNcrClientname() == null ? false : !selected.getNcrClientname().trim().isEmpty())
+                || (selected.getNcrClientaddress() == null ? false : !selected.getNcrClientaddress().trim().isEmpty())
+                || (selected.getNcrClientemail() == null ? false : !selected.getNcrClientemail().trim().isEmpty())
+                || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
+                || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
+
+        // Préparation du message
+        String sujet = selected.getNcrId() + " - création - " + selected.getNcrTitle();
+        String title = selected.getNcrId() + " : " + selected.getNcrTitle();
+
+        // Préparation mail
+        Mail mail = new Mail();
+        mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
+        mail.addCC(currentStaffMail + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
+        mail.addCCI((isClient == false ? (ml != null ? ";" + ml.getMlCcis() : "") : (mlr != null ? ";" + mlr.getMlCcis() : "")));
+        mail.setSubject(sujet);
+        mail.setHtmlMultipart(Mail.createMessageNC(title, selected));
+
+        mailsenderController.sendMessage(mail);
+    }
+
+    private void handleMailOnValidate() {
+        Maillist ml = maillistController.getItemsBy(MLGROUPE, onWaitingSolution, 1, selected.getNcrProcessus());
+        Maillist mlr = maillistController.getItemsBy(MLGROUPE, onWaitingSolution, 2, selected.getNcrProcessus());
+        if (!selected.getNcrApprouved()) {
+            ml = maillistController.getItemsBy(MLGROUPE, onCanceled, 1, selected.getNcrProcessus());
+            mlr = maillistController.getItemsBy(MLGROUPE, onCanceled, 2, selected.getNcrProcessus());
+        }
+
+        String currentStaffMail = staffAuthController.getStaff().getStMaillist().trim().isEmpty() ? "" : staffAuthController.getStaff().getStMaillist();
+        String emetteurStaffMail = selected.getNcrStaff().getStMaillist().trim().isEmpty() ? "" : ";" + selected.getNcrStaff().getStMaillist();
+
+        Boolean isClient = 
+                (selected.getNcrClientname() == null ? false : !selected.getNcrClientname().trim().isEmpty())
+                || (selected.getNcrClientaddress() == null ? false : !selected.getNcrClientaddress().trim().isEmpty())
+                || (selected.getNcrClientemail() == null ? false : !selected.getNcrClientemail().trim().isEmpty())
+                || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
+                || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
+
+        // Préparation du message
+        String sujet = selected.getNcrId() + (selected.getNcrApprouved() == true ? " - En attente de solution - " : " - Annulée - ") + selected.getNcrTitle();
+        String title = selected.getNcrId() + " " + (selected.getNcrApprouved() == true ? "<span style=\"color:green\"> - [APPROUVEE] - </span>" : "<span style=\"color:red\"> - [REFUSEE] - </span>") + " : " + selected.getNcrTitle();
+
+        // Préparation mail
+        Mail mail = new Mail();
+        mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
+        mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
+        mail.addCCI((isClient == false ? (ml != null ? ";" + ml.getMlCcis() : "") : (mlr != null ? ";" + mlr.getMlCcis() : "")));
+        mail.setSubject(sujet);
+        mail.setHtmlMultipart(Mail.createMessageNC(title, selected));
+
+        mailsenderController.sendMessage(mail);
+    }
+
+    /**
      * ************************************************************************
      * CRUD OPTIONS
      *
@@ -310,24 +384,15 @@ public class NonConformiteRequestController implements Serializable {
                 + selected.getNcrTitle());
 
         if (!JsfUtil.isValidationFailed()) {
+            // Récupère l'élément nouvellement crée
+            selected = getLast();
+            handleMailOnCreate();
 
-//            mailServiceController.setTo("raphaelhendrick@gmail.com");
-//            mailServiceController.setSubject("ISM : NC Création d'une nouvelle nc");
-//            mailServiceController.setMessage(""
-//                    + "<h1>Non conformité n°" + selected.getNcrId() + " </h1>");
-//            mailServiceController.sendMail(mailsenderController.getItemsByCompany(selected.getNcrCompany()));
-
-            items = null;    // Invalidate list of items to trigger re-query.
             if (isReleaseSelected) {
                 selected = null;
             }
             if (isOnMultiCreation) {
                 selected = new NonConformiteRequest();
-
-            } else {
-                //JsfUtil.out("is not on multicreation");
-                List<NonConformiteRequest> ncRequest = getFacade().findAll();
-                selected = ncRequest.get(ncRequest.size() - 1);
             }
         }
     }
@@ -354,10 +419,12 @@ public class NonConformiteRequestController implements Serializable {
         selected.setNcrapprouvedDate(new Date());
         if (selected.getNcrApprouved()) {
             selected.setNcrState(new IsmNcrstate(IsmNcrstate.WAITFORSOLUTION_ID));
+
         } else {
             selected.setNcrState(new IsmNcrstate(IsmNcrstate.CANCEL_ID));
         }
         update();
+        handleMailOnValidate();
     }
 
     public void updateOnReview() {
@@ -437,6 +504,10 @@ public class NonConformiteRequestController implements Serializable {
      */
     public NonConformiteRequest getNonConformiteRequest(java.lang.Integer id) {
         return getFacade().find(id);
+    }
+
+    public NonConformiteRequest getLast() {
+        return getFacade().findLast();
     }
 
     public List<NonConformiteRequest> getItems() {
@@ -533,8 +604,7 @@ public class NonConformiteRequestController implements Serializable {
     public Boolean getIsVisibleColKey(String key) {
         return this.visibleColMap.get(key);
     }
-    
-    
+
     public TableSet getTableSet() {
         return tableSet;
     }
@@ -676,11 +746,15 @@ public class NonConformiteRequestController implements Serializable {
     public void setMaillistController(MaillistController maillistController) {
         this.maillistController = maillistController;
     }
-    
-    
-    
-    
-    
+
+    public void setStaffAuthController(StaffAuthController staffAuthController) {
+        this.staffAuthController = staffAuthController;
+    }
+
+    public void setIsmNcrstateController(IsmNcrstateController ismNcrstateController) {
+        this.ismNcrstateController = ismNcrstateController;
+    }
+
     /// ////////////////////////////////////////////////////////////////////////
     //
     /// LAZY
@@ -693,7 +767,5 @@ public class NonConformiteRequestController implements Serializable {
     public void setLazyModel(NonConformiteRequestLazyModel lazyModel) {
         this.lazyModel = lazyModel;
     }
-
-
 
 }

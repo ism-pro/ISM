@@ -28,6 +28,7 @@ import org.ism.entities.admin.Company;
 import org.ism.entities.app.IsmMailtype;
 import org.ism.entities.app.IsmNcrstate;
 import org.ism.entities.smq.Processus;
+import org.ism.jsf.app.IsmMailtypeController;
 import org.ism.jsf.app.IsmNcrstateController;
 import org.ism.services.TableSet;
 import org.primefaces.model.SortMeta;
@@ -70,6 +71,18 @@ public class MaillistController implements Serializable {
     
     @ManagedProperty(value = "#{ismNcrstateController}")
     IsmNcrstateController ismNcrstateController;
+    
+    @ManagedProperty(value = "#{ismMailtypeController}")
+    IsmMailtypeController ismMailtypeController;
+    
+    /**
+     * Type standard
+     */
+    public static Integer MTYPE_STD = 1 ; 
+    /**
+     * Type RECLAMMATION
+     */
+    public static Integer MTYPE_RECLAM = 2 ; 
 
     // /////////////////////////////////////////////////////////////////////////
     //
@@ -403,6 +416,18 @@ public class MaillistController implements Serializable {
     public Maillist getItemsBy(String mlGroupe, String mlEvent, IsmMailtype ismMailtype, Processus processus, Company company) {
         return  getFacade().findUnique(mlGroupe, mlEvent, ismMailtype, processus, company);
     }
+    
+    /**
+     * Permet de retrouver la liste de message correspondant
+     * @param mlGroupe catégorie de liste
+     * @param mlEvent A : create, B : wait solution, C: processing, D : finished, E: Canceled
+     * @param type 1: standard, 2: réclam
+     * @param processus concerné affectant également la société
+     * @return la premier valeur si retrouvé sinon null
+     */
+    public Maillist getItemsBy(String mlGroupe, String mlEvent, Integer type, Processus processus) {
+        return  getFacade().findUnique(mlGroupe, mlEvent, ismMailtypeController.getIsmMailtype(type), processus, processus.getPCompany());
+    }
 
     public List<Maillist> getItemsAvailableSelectMany() {
         return getFacade().findAll();
@@ -484,6 +509,12 @@ public class MaillistController implements Serializable {
     public void setIsmNcrstateController(IsmNcrstateController ismNcrstateController) {
         this.ismNcrstateController = ismNcrstateController;
     }
+
+    public void setIsmMailtypeController(IsmMailtypeController ismMailtypeController) {
+        this.ismMailtypeController = ismMailtypeController;
+    }
+    
+    
 
     
     

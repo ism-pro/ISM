@@ -78,10 +78,6 @@ public class ViewTabManager implements Serializable {
     private List<Processus> processus;
     private List<Processus> processusFiltered;
 
-    private DocExplorerController docExplorerCtrl;
-    private List<DocExplorer> docExplorer;
-    private List<DocExplorer> docExplorerFiltered;
-
     private DocTypeController docTypeCtrl;
     private List<DocType> docType;
     private List<DocType> docTypeFiltered;
@@ -97,10 +93,6 @@ public class ViewTabManager implements Serializable {
     private NonConformiteNatureController ncNatureCtrl;
     private List<NonConformiteNature> ncNature;
     private List<NonConformiteNature> ncNatureFiltered;
-
-    private NonConformiteRequestController ncRequestCtrl;
-    private List<NonConformiteRequest> ncRequest;
-    private List<NonConformiteRequest> ncRequestFiltered;
 
     private NonConformiteUniteController ncUniteCtrl;
     private List<NonConformiteUnite> ncUnite;
@@ -137,10 +129,6 @@ public class ViewTabManager implements Serializable {
     private AnalyseCategoryController analysecategoryCtrl;
     private List<AnalyseCategory> analysecategory;
     private List<AnalyseCategory> analysecategoryFiltered;
-
-//    private AnalyseDataController analysedataCtrl;
-//    private List<AnalyseData> analysedata;
-//    private List<AnalyseData> analysedataFiltered;
 
     private AnalyseMethodController analysemethodCtrl;
     private List<AnalyseMethod> analysemethod;
@@ -179,10 +167,6 @@ public class ViewTabManager implements Serializable {
                 getValue(facesContext.getELContext(), null, "processusController");
         processus = processusCtrl.getItemsByLastChanged();
 
-        docExplorerCtrl = (DocExplorerController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "docExplorerController");
-        docExplorer = docExplorerCtrl.getItemsByLastChanged();
-
         docTypeCtrl = (DocTypeController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "docTypeController");
         docType = docTypeCtrl.getItemsByLastChanged();
@@ -198,10 +182,6 @@ public class ViewTabManager implements Serializable {
         ncNatureCtrl = (NonConformiteNatureController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "nonConformiteNatureController");
         ncNature = ncNatureCtrl.getItemsByLastChanged();
-
-        ncRequestCtrl = (NonConformiteRequestController) facesContext.getApplication().getELResolver().
-                getValue(facesContext.getELContext(), null, "nonConformiteRequestController");
-        ncRequest = ncRequestCtrl.getItemsByLastChanged();
 
         ncUniteCtrl = (NonConformiteUniteController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "nonConformiteUniteController");
@@ -238,10 +218,6 @@ public class ViewTabManager implements Serializable {
         analysecategoryCtrl = (AnalyseCategoryController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "analyseCategoryController");
         analysecategory = analysecategoryCtrl.getItemsByLastChanged();
-
-//        analysedataCtrl = (AnalyseDataController) facesContext.getApplication().getELResolver().
-//                getValue(facesContext.getELContext(), null, "analyseDataController");
-        //analysedata = analysedataCtrl.getItemsByLastChanged();
 
         analysemethodCtrl = (AnalyseMethodController) facesContext.getApplication().getELResolver().
                 getValue(facesContext.getELContext(), null, "analyseMethodController");
@@ -286,26 +262,6 @@ public class ViewTabManager implements Serializable {
         this.processusFiltered = processusFiltered;
     }
 
-    /**
-     * *************************************************************************
-     * @return doc explorer
-     * *************************************************************************
-     */
-    public List<DocExplorer> getDocExplorer() {
-        return docExplorer;
-    }
-
-    public void setDocExplorer(List<DocExplorer> docExplorer) {
-        this.docExplorer = docExplorer;
-    }
-
-    public List<DocExplorer> getDocExplorerFiltered() {
-        return docExplorerFiltered;
-    }
-
-    public void setDocExplorerFiltered(List<DocExplorer> docExplorerFiltered) {
-        this.docExplorerFiltered = docExplorerFiltered;
-    }
 
     /**
      * *************************************************************************
@@ -389,27 +345,6 @@ public class ViewTabManager implements Serializable {
 
     public void setNcNatureFiltered(List<NonConformiteNature> ncNatureFiltered) {
         this.ncNatureFiltered = ncNatureFiltered;
-    }
-
-    /**
-     * *************************************************************************
-     * @return non conformite request
-     * *************************************************************************
-     */
-    public List<NonConformiteRequest> getNcRequest() {
-        return ncRequest;
-    }
-
-    public void setNcRequest(List<NonConformiteRequest> ncRequest) {
-        this.ncRequest = ncRequest;
-    }
-
-    public List<NonConformiteRequest> getNcRequestFiltered() {
-        return ncRequestFiltered;
-    }
-
-    public void setNcRequestFiltered(List<NonConformiteRequest> ncRequestFiltered) {
-        this.ncRequestFiltered = ncRequestFiltered;
     }
 
     /**
@@ -799,13 +734,11 @@ public class ViewTabManager implements Serializable {
      */
     public void handleTableChanges() {
         processus = processusCtrl.getItemsByLastChanged();
-        docExplorer = docExplorerCtrl.getItemsByLastChanged();
         docType = docTypeCtrl.getItemsByLastChanged();
 
         ncFrequency = ncFrequencyCtrl.getItemsByLastChanged();
         ncGravity = ncGravityCtrl.getItemsByLastChanged();
         ncNature = ncNatureCtrl.getItemsByLastChanged();
-        ncRequest = ncRequestCtrl.getItemsByLastChanged();
         ncUnite = ncUniteCtrl.getItemsByLastChanged();
 
         staffGroupDef = staffGroupDefCtrl.getItemsByLastChanged();
@@ -817,7 +750,6 @@ public class ViewTabManager implements Serializable {
         unite = uniteCtrl.getItemsByLastChanged();
         analyseallowed = analyseallowedCtrl.getItemsByLastChanged();
         analysecategory = analysecategoryCtrl.getItemsByLastChanged();
-//        analysedata = analysedataCtrl.getItemsByLastChanged();
         analysemethod = analysemethodCtrl.getItemsByLastChanged();
         analysenotify = analysenotifyCtrl.getItemsByLastChanged();
         analysepoint = analysepointCtrl.getItemsByLastChanged();
@@ -837,10 +769,6 @@ public class ViewTabManager implements Serializable {
                 processusCtrl.destroy();
                 processus = processusCtrl.getItemsByLastChanged();
                 break;
-            case "docExplorer":
-                docExplorerCtrl.destroy();
-                docExplorer = docExplorerCtrl.getItemsByLastChanged();
-                break;
             case "docType":
                 docTypeCtrl.destroy();
                 docType = docTypeCtrl.getItemsByLastChanged();
@@ -856,10 +784,6 @@ public class ViewTabManager implements Serializable {
             case "nonConformiteNature":
                 ncNatureCtrl.destroy();
                 ncNature = ncNatureCtrl.getItemsByLastChanged();
-                break;
-            case "nonConformiteRequest":
-                ncRequestCtrl.destroy();
-                ncRequest = ncRequestCtrl.getItemsByLastChanged();
                 break;
             case "nonConformiteUnite":
                 ncUniteCtrl.destroy();
@@ -897,10 +821,6 @@ public class ViewTabManager implements Serializable {
                 analysecategoryCtrl.destroy();
                 analysecategory = analysecategoryCtrl.getItemsByLastChanged();
                 break;
-//            case "analysedata":
-//                analysedataCtrl.destroy();
-//                analysedata = analysedataCtrl.getItemsByLastChanged();
-//                break;
             case "analysemethod":
                 analysemethodCtrl.destroy();
                 analysemethod = analysemethodCtrl.getItemsByLastChanged();

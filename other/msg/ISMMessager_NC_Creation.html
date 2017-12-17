@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>ISM MESSAGER</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<style>
+	.bodyText {
+	font:11px Verdana, Arial, Helvetica, sans-serif;
+	color:#003366;
+	line-height:20px;
+	margin-top:0px;
+	}
+	.pageName{
+	font: 18px Verdana, Arial, Helvetica, sans-serif;
+	color: #3366CC;
+	line-height:24px;
+	letter-spacing:.2em;
+	}
+	.signature{ margin-top: 30px; }
+	.sign_table{ border-top: 1px solid #BD2B11; border-bottom: 1px solid #BD2B11; }
+	.sign_name	{
+	font:24px Verdana, Arial, Helvetica, sans-serif;
+	color: #3366CC;
+	letter-spacing:.2em;
+	line-height:30px;
+	}
+	.sign_complement{
+	font:12px Verdana, Arial, Helvetica, sans-serif;
+	color: #FF9933;
+	letter-spacing:.4em;
+	line-height:18px;
+	}
+
+	.nc_table {  width: 100%;  border-collapse:collapse; font:11px Verdana, Arial, Helvetica, sans-serif; color:#003366;}
+	.nc_table td  { border: 1px solid #EEEEEE; }
+	.nc_table_field { width : 75px; }
+</style>
+</head>
+<body >
+	<h1 class="pageName" >%Title%</h1>
+    
+    <div class="bodyText">
+      <p>Bonjour,</p>
+      <p>Cette nouvelle non-conformité vient d'être <span style="color: #FF6600; font-weight:bold;"> + state + </span>. <br/>Prennez en connaissance ci-dessous :      </p>
+      <div style="color: red;border: 1px dashed red;margin: 10px;padding: 10px; display:none;"><p>%nc_refusDesc%</p></div></div>
+      <h3>Informations</h3>
+   	  <table border="0" cellpadding="0"  cellspacing="0" class="nc_table">
+        <tr><td class="nc_table_field">N°</td><td>%nc_id%</td></tr>
+        <tr><td>Société</td><td>%nc_company%</td></tr>
+        <tr><td>Processus</td><td>%nc_processus%</td></tr>
+        <tr><td>Nature</td><td>%nc_nature%</td></tr>
+        <tr><td>Gravité</td><td>%nc_gravity%</td></tr>
+        <tr><td>Fréquence</td><td>%nc_frequency%</td></tr>
+        <tr><td>Apparution</td><td>%nc_occured%</td></tr>
+        <tr><td>Produit</td><td>%nc_product%</td></tr>
+        <tr><td>Traçabilité</td><td>%nc%trace%</td></tr>
+        <tr><td>Quantité</td><td>%nc_quantity%</td></tr>
+        <tr><td>Unité</td><td>%nc_unit%</td></tr>
+        </table>
+        <h3>Infos Client</h3>
+        <table class="nc_table">
+        <tr><td class="nc_table_field">Nom</td><td>%nc_clientname%</td></tr>
+        <tr><td>Adresse</td><td>%nc_clientaddress%</td></tr>
+        <tr><td>Téléphone</td><td>%nc_clientphone%</td></tr>
+        <tr><td>E-mail</td><td>%nc_clientmail%</td></tr>
+        <tr><td>Type</td><td>%nc_clienttype%</td></tr>
+        </table>
+        <h3>Description</h3>
+        <table class="nc_table">
+        <tr><td class="nc_table_field">Emetteur</td><td>%nc_emettor</td></tr>
+        <tr><td>Création</td><td>%nc_created%</td></tr>
+        <tr><td>Description</td><td>%nc_description%</td></tr>
+        <tr><td>Image</td><td>%nc_image%</td></tr>
+        </table>
+      </p>
+    </div>
+    
+    <div class="signature">
+    	<table width="510" class="sign_table">
+        <tr><td width="179" rowspan="4"><img src="https://localhost:8181/ISM/faces/javax.faces.resource/img/ism/ism.png" alt="Header image" width="179" height="68" border="0" /></td>
+        <td width="329" class="sign_name">ISM MESSAGER</td>
+        </tr>         <tr><td class="sign_complement">RESTER INFORMER</td></tr>
+        <tr><td class="sign_complement">Industrial System Manager</td></tr>
+        </table>
+</div>
+</body>
+</html>

@@ -161,9 +161,9 @@ public class MailsenderController implements Serializable {
         selected = null;
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderReleaseSelectedSummary"),
+                        getString("MailsenderReleaseSelectedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderReleaseSelectedDetail"));
+                        getString("MailsenderReleaseSelectedDetail"));
     }
 
     /**
@@ -173,9 +173,9 @@ public class MailsenderController implements Serializable {
         isOnMultiCreation = !isOnMultiCreation;
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderToggleMultiCreationSummary"),
+                        getString("MailsenderToggleMultiCreationSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderToggleMultiCreationDetail") + isOnMultiCreation);
+                        getString("MailsenderToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
     /**
@@ -185,9 +185,9 @@ public class MailsenderController implements Serializable {
         /*isOnMultiCreation = !isOnMultiCreation;*/
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderToggleMultiCreationSummary"),
+                        getString("MailsenderToggleMultiCreationSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderToggleMultiCreationDetail") + isOnMultiCreation);
+                        getString("MailsenderToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
     /**
@@ -205,6 +205,17 @@ public class MailsenderController implements Serializable {
                 "MAIL TEST CONFIG.",
                 Mail.msgTest()
         );
+        ejbMailFacade.send(selected, mail);
+        JsfUtil.addSuccessMessage("L'envoi d'un emssage de test à " + emailTest + " est en cours...");
+    }
+
+    public void sendMessage(Mail mail) {
+        prepareCreate();
+
+        if (mail == null) {
+            return;
+        }
+
         ejbMailFacade.send(selected, mail);
         JsfUtil.addSuccessMessage("L'envoi d'un emssage de test à " + emailTest + " est en cours...");
     }
@@ -264,9 +275,9 @@ public class MailsenderController implements Serializable {
 
         persist(PersistAction.CREATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderPersistenceCreatedSummary"),
+                        getString("MailsenderPersistenceCreatedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderPersistenceCreatedDetail")
+                        getString("MailsenderPersistenceCreatedDetail")
                 + selected.getMsAddress() + " <br > " + selected.getMsSmtpsrv());
 
         /*
@@ -298,18 +309,18 @@ public class MailsenderController implements Serializable {
 
         persist(PersistAction.UPDATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderPersistenceUpdatedSummary"),
+                        getString("MailsenderPersistenceUpdatedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderPersistenceUpdatedDetail")
+                        getString("MailsenderPersistenceUpdatedDetail")
                 + selected.getMsAddress() + " <br > " + selected.getMsSmtpsrv());
     }
 
     public void destroy() {
         persist(PersistAction.DELETE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderPersistenceDeletedSummary"),
+                        getString("MailsenderPersistenceDeletedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("MailsenderPersistenceDeletedDetail")
+                        getString("MailsenderPersistenceDeletedDetail")
                 + selected.getMsAddress() + " <br > " + selected.getMsSmtpsrv());
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.

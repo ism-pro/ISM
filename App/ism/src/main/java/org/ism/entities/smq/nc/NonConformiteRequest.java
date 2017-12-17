@@ -58,6 +58,8 @@ import org.ism.entities.hr.Staff;
     @NamedQuery(name = "NonConformiteRequest.findByNcrApprouved", query = "SELECT n FROM NonConformiteRequest n WHERE n.ncrApprouved = :ncrApprouved"),
     @NamedQuery(name = "NonConformiteRequest.findByNcrapprouvedDate", query = "SELECT n FROM NonConformiteRequest n WHERE n.ncrapprouvedDate = :ncrapprouvedDate"),
     @NamedQuery(name = "NonConformiteRequest.selectAllByLastChange", query = "SELECT n FROM NonConformiteRequest n ORDER BY n.ncrChanged DESC"),
+    
+    
     @NamedQuery(name = "NonConformiteRequest.findByNcrCompany", query = "SELECT n FROM NonConformiteRequest n WHERE n.ncrCompany.cCompany = :ncrCompany"),
     @NamedQuery(name = "NonConformiteRequest.findByNcrProcessus", query = "SELECT n FROM NonConformiteRequest n WHERE n.ncrProcessus.pProcessus = :ncrProcessus"),
     @NamedQuery(name = "NonConformiteRequest.findByNcrStaff", query = "SELECT n FROM NonConformiteRequest n WHERE n.ncrStaff.stStaff = :ncrStaff"),
