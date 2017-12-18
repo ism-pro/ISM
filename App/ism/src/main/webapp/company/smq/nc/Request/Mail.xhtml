@@ -26,7 +26,7 @@
                                          value="#{ncMailView.selectedProcessus}"
                                          converter="#{processusConverter}"
                                          >
-                            <p:ajax event="itemSelect" update="MailContent, :growl" listener="#{ncMailView.handleProcessusChanged}"  />
+                            <p:ajax event="itemSelect" update=":westGroup, MailContent, :growl" listener="#{ncMailView.handleProcessusChanged}"  />
                             <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"  />
                             <f:selectItems value="#{processusController.itemsAvailableSelectOne}"
                                            var="processusItem"
@@ -353,11 +353,11 @@
 
 
 
-                            
-                            
-                            
-                            
-                            
+
+
+
+
+
                             <div id="canceled" class="tab-pane fade">
                                 <h5>Annuler standard</h5> 
 
@@ -466,15 +466,22 @@
 
         <ui:define name="west" id="west">
             <h:panelGroup id="westGroup">
+                <p:commandButton icon="ui-btn-SaveOne"
+                                 styleClass="options-btn"
+                                 value="#{ism.Save}" 
+                                 actionListener="#{ncMailView.save}" 
+                                 update=":bodyForm,:growl"
+                                 disabled="#{ncMailView.selectedProcessus==null}"
+                                 />
+
                 <p:commandButton icon="ui-btn-Cancel"
                                  styleClass="options-btn"
                                  value="#{ism.Cancel}" 
-                                 actionListener="#{crystalController.handleCSReportViewerClose()}"
-                                 action="./List.xhtml?faces-redirect=true"
                                  update=":bodyForm,:growl"
+                                 actionListener="#{nonConformiteRequestController.prepareCreate()}"
+                                 action="./List.xhtml?faces-redirect=true"
                                  immediate="true"
                                  />
-
             </h:panelGroup>
         </ui:define>
     </ui:composition>
