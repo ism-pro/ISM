@@ -522,6 +522,15 @@
                                  disabled="#{empty nonConformiteRequestController.selected 
                                              or empty nonConformiteRequestController.selected.ncrId}"
                                  />
+                <hr style="margin-top: 5px;margin-bottom: 5px;" />
+                <p:commandButton id="mailButton"
+                                 icon="fa fa-telegram"
+                                 styleClass="options-btn "
+                                 value="#{ism.EmailMsgConfig}"
+                                 action="Mail.xhtml?faces-redirect=true"
+                                 title="Permet de configurer l'envoi des messages"
+                                 disabled="#{!request.isUserInRole('S_EXPLORER_E')}"
+                                 />
                 <p:commandButton id="reportButton"
                                  icon="fa fa-balance-scale"
                                  styleClass="options-btn"
