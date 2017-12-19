@@ -34,6 +34,11 @@
 	.nc_table {  width: 100%;  border-collapse:collapse; font:11px Verdana, Arial, Helvetica, sans-serif; color:#003366;}
 	.nc_table td  { border: 1px solid #EEEEEE; }
 	.nc_table_field { width : 75px; }
+	
+	.nca_table {  width: 100%;  border-collapse:collapse; font:11px Verdana, Arial, Helvetica, sans-serif; color:#003366;}
+	.nca_table td  { border: 1px solid #EEEEEE; }
+	.nca_table th  { border: 1px solid #EEEEEE; background-color: #DFDFDF;}
+	.nca_approbeur { width: 100%;font-weight:bold; color: #FFCC00; border-top: 1px dashed #EEEEEE;}
 </style>
 </head>
 <body >
@@ -42,7 +47,14 @@
     <div class="bodyText">
       <p>Bonjour,</p>
       <p>Cette nouvelle non-conformité vient d'être <span style="color: #FF6600; font-weight:bold;"> + state + </span>. <br/>Prennez en connaissance ci-dessous :      </p>
-      <div style="color: red;border: 1px dashed red;margin: 10px;padding: 10px; display:none;"><p>%nc_refusDesc%</p></div></div>
+      <div style="width: 100%; color: red;border: 1px dashed red;margin: 10px;padding: 10px; display:none;"><p>%nc_refusDesc%</p></div></div>
+      
+      <table border="0" cellpadding="0"  cellspacing="0" class="nca_table">
+          <tr><th width="20px" scope="col">N°</th><th  scope="col">Emetteur<br/>Approbateur</th><th  scope="col">Actions<br/>Cause Refus</th><th width="125px" scope="col">Echéance</th><th width="125px" scope="col">Etats<br/>Création</th></tr>
+          <tr><td>%nca_id_%</td><td>%nca_staff_%<div class="nca_approbeur">%nca_approbeur_%</div></td><td>%nca_action_%><div class="nca_approbeur">%nca_refus_%</div></td><td>%nca_endding_%</td><td>%nca_state_i%<br/>%nca_created_%</td></tr>
+        </table>
+
+      
       <h3>Informations</h3>
    	  <table border="0" cellpadding="0"  cellspacing="0" class="nc_table">
         <tr><td class="nc_table_field">N°</td><td>%nc_id%</td></tr>
@@ -53,7 +65,7 @@
         <tr><td>Fréquence</td><td>%nc_frequency%</td></tr>
         <tr><td>Apparution</td><td>%nc_occured%</td></tr>
         <tr><td>Produit</td><td>%nc_product%</td></tr>
-        <tr><td>Traçabilité</td><td>%nc%trace%</td></tr>
+        <tr><td>Traçabilité</td><td>%nc_trace%</td></tr>
         <tr><td>Quantité</td><td>%nc_quantity%</td></tr>
         <tr><td>Unité</td><td>%nc_unit%</td></tr>
         </table>

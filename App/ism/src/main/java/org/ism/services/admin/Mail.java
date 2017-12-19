@@ -17,6 +17,7 @@ import javax.mail.MessagingException;
 import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
+import org.ism.entities.smq.nc.NonConformiteActions;
 import org.ism.services.Util;
 import org.ism.entities.smq.nc.NonConformiteRequest;
 import org.ism.util.DateUtil;
@@ -351,18 +352,19 @@ public class Mail {
         return null;
     }
 
-    public static MimeMultipart createMessageNC(String title, NonConformiteRequest nc) {
+    public static MimeMultipart createMessageNC(String title, NonConformiteRequest nc, List<NonConformiteActions> nca) {
         try {
             // This mail has 2 part, the BODY and the embedded image
             MimeMultipart multipart = new MimeMultipart("related");
 
             // first part (the html)
             BodyPart messageBodyPart = new MimeBodyPart();
-            String htmlText = msgNonConformite(nc.getNcrState().getId());
+            String htmlText = (nca == null ? msgNonConformite(nc.getNcrState().getId()) : msgNonConformite(nc.getNcrState().getId(), nca.size()));
+            // Managed nc
             htmlText = htmlText.replace("%Title%", title)
-                    .replace("%nc_refusDesc%", (nc.getNcrapprouvedDesc()== null ? "" : nc.getNcrapprouvedDesc()))
+                    .replace("%nc_refusDesc%", (nc.getNcrapprouvedDesc() == null ? "" : nc.getNcrapprouvedDesc()))
                     .replace("%nc_id%", nc.getNcrId().toString()).replace("%nc_company%", nc.getNcrCompany().toString())
-                    .replace("%nc_Processus", nc.getNcrProcessus().toString()).replace("%nc_nature%", nc.getNcrNature().toString())
+                    .replace("%nc_processus%", nc.getNcrProcessus().toString()).replace("%nc_nature%", nc.getNcrNature().toString())
                     .replace("%nc_gravity%", nc.getNcrGravity().toString()).replace("%nc_frequency%", nc.getNcrFrequency().toString())
                     .replace("%nc_occured%", DateUtil.format("dd/MM/yyyy hh:mm:ss", nc.getNcrOccured())).replace("%nc_product%", (nc.getNcrProduct() == null ? "" : nc.getNcrProduct()))
                     .replace("%nc_trace%", (nc.getNcrTrace() == null ? "" : nc.getNcrTrace())).replace("%nc_quantity%", (nc.getNcrQuantity() == null ? "" : nc.getNcrQuantity().toString()))
@@ -372,6 +374,20 @@ public class Mail {
                     .replace("%nc_clienttype%", (nc.getNcrClienttype() == null ? "" : nc.getNcrClienttype()))
                     .replace("%nc_emettor", nc.getNcrStaff().toString()).replace("%nc_created%", DateUtil.format("dd/MM/yyyy hh:mm:ss", nc.getNcrCreated()))
                     .replace("%nc_description%", nc.getNcrDescription()).replace("%nc_image%", (nc.getNcrLink() == null ? "" : nc.getNcrLink()));
+            // Manage nca
+            if (nca != null) {
+                int j = nca.size();
+                for (int i = 0; i < nca.size(); i++) {
+                    htmlText = htmlText.replace("%nca_id_" + i + "%", nca.get(i).getNcaId().toString())
+                            .replace("%nca_staff_" + i + "%", nca.get(i).getNcaStaff().toString())
+                            .replace("%nca_approbeur_" + i + "%", (nca.get(i).getNcaStaffApprouver()==null?"":nca.get(i).getNcaStaffApprouver().toString()))
+                            .replace("%nca_action_" + i + "%", (nca.get(i).getNcaDescription()==null?"":nca.get(i).getNcaDescription()))
+                            .replace("%nca_refus_" + i + "%", (nca.get(i).getNcaDescApprouver()==null?"":nca.get(i).getNcaDescApprouver()))
+                            .replace("%nca_endding_" + i + "%", DateUtil.formatD(nca.get(i).getNcaDeadline()))
+                            .replace("%nca_state_" + i + "%", nca.get(i).getNcaState().toString())
+                            .replace("%nca_created_" + i + "%", DateUtil.formatD(nca.get(i).getNcaCreated()));
+                }
+            }
             messageBodyPart.setContent(htmlText, "text/html");
             // add it
             multipart.addBodyPart(messageBodyPart);
@@ -442,6 +458,10 @@ public class Mail {
                 + "</body>";
     }
 
+    public static String msgNonConformite(Integer code) {
+        return msgNonConformite(code, 0);
+    }
+
     /**
      * Allow to create a message for non conformite
      *
@@ -451,29 +471,33 @@ public class Mail {
      * <br>3	C	En cours
      * <br>4	D	Terminé
      * <br>5	E	Annulé
+     * @param ncaCounter if nonConformite this show number of occuring times
      *
      * @return
      */
-    public static String msgNonConformite(Integer code) {
+    public static String msgNonConformite(Integer code, Integer ncaCounter) {
         String state = "";
         switch (code) {
             case 1:
                 state = "créée, merci de la traiter...";
                 break;
-            case 5:
-                state = "refusée !";
-                break;
             case 2:
-                state = "validée, merci d'approter une actions...";
+                state = "validée, merci d'apporter une action...";
                 break;
             case 3:
                 state = "en cours";
+                break;
+            case 4:
+                state = "clôturée";
+                break;
+            case 5:
+                state = "refusée !";
                 break;
             default:
                 state = "???";
                 break;
         }
-        return ""
+        String a = ""
                 + "<head>\n"
                 + "<title>ISM MESSAGER</title>\n"
                 + "<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\" />\n"
@@ -508,6 +532,13 @@ public class Mail {
                 + "	.nc_table {  width: 100%;  border-collapse:collapse; font:11px Verdana, Arial, Helvetica, sans-serif; color:#003366;}\n"
                 + "	.nc_table td  { border: 1px solid #EEEEEE; }\n"
                 + "	.nc_table_field { width : 75px; }\n"
+                + ""
+                + "	\n"
+                + "	.nca_table {  width: 100%;  border-collapse:collapse; font:11px Verdana, Arial, Helvetica, sans-serif; color:#003366;}\n"
+                + "	.nca_table td  { border: 1px solid #EEEEEE; }\n"
+                + "	.nca_table th  { border: 1px solid #EEEEEE; background-color: #DFDFDF;}\n"
+                + "	.nca_approbeur { width: 100%;font-weight:bold; color: #FFCC00; border-top: 1px dashed #EEEEEE;}"
+                + ""
                 + "</style>\n"
                 + "</head>\n"
                 + "<body >\n"
@@ -517,6 +548,16 @@ public class Mail {
                 + "      <p>Bonjour,</p>\n"
                 + "      <p>Cette non-conformité vient d'être <span style=\"color: #FF6600; font-weight:bold;\">" + state + "</span> <br/>Prennez en connaissance ci-dessous :      </p>\n"
                 + "      <div style=\"width: 100%; color: red;border: 1px dashed red;margin: 10px;padding: 10px;  " + (code != 5 ? "display:none;" : "") + "\"><p>%nc_refusDesc%</p></div>"
+                + "      "
+                + "      <table border=\"0\" cellpadding=\"0\"  cellspacing=\"0\" class=\"nca_table\" style=\"" + (ncaCounter==0 ? "display:none;" : "") + "\">\n"
+                + "          <tr><th width=\"20px\" scope=\"col\">N°</th><th  scope=\"col\">Emetteur<br/>Approbateur</th><th  scope=\"col\">Actions<br/>Cause Refus</th><th width=\"125px\" scope=\"col\">Echéance</th><th width=\"125px\" scope=\"col\">Etats<br/>Création</th></tr>\n";
+
+        for (int i = 0; i < ncaCounter; i++) {
+            a += "          <tr><td>%nca_id_" + i + "%</td><td>%nca_staff_" + i + "%<div class=\"nca_approbeur\">%nca_approbeur_" + i + "%</div></td><td>%nca_action_" + i + "%<div class=\"nca_approbeur\">%nca_refus_" + i + "%</div></td><td>%nca_endding_" + i + "%</td><td>%nca_state_" + i + "%<br/>%nca_created_" + i + "%</td></tr>\n";
+        }
+        a
+                += "      </table>"
+                + ""
                 + "      <h3>Informations</h3>\n"
                 + "   	  <table border=\"0\" cellpadding=\"0\"  cellspacing=\"0\" class=\"nc_table\">\n"
                 + "        <tr><td class=\"nc_table_field\">N°</td><td>%nc_id%</td></tr>\n"
@@ -527,7 +568,7 @@ public class Mail {
                 + "        <tr><td>Fréquence</td><td>%nc_frequency%</td></tr>\n"
                 + "        <tr><td>Apparution</td><td>%nc_occured%</td></tr>\n"
                 + "        <tr><td>Produit</td><td>%nc_product%</td></tr>\n"
-                + "        <tr><td>Traçabilité</td><td>%nc%trace%</td></tr>\n"
+                + "        <tr><td>Traçabilité</td><td>%nc_trace%</td></tr>\n"
                 + "        <tr><td>Quantité</td><td>%nc_quantity%</td></tr>\n"
                 + "        <tr><td>Unité</td><td>%nc_unit%</td></tr>\n"
                 + "        </table>\n"
@@ -558,5 +599,7 @@ public class Mail {
                 + "        </table>\n"
                 + "</div>\n"
                 + "</body>";
+
+        return a;
     }
 }

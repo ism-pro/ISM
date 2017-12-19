@@ -29,8 +29,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import org.ism.entities.admin.Company;
 import org.ism.entities.admin.Maillist;
-import org.ism.entities.admin.Mailsender;
 import org.ism.entities.smq.Processus;
+import org.ism.entities.smq.nc.NonConformiteActions;
 import org.ism.jsf.admin.MaillistController;
 import org.ism.jsf.admin.MailsenderController;
 import org.ism.jsf.app.IsmNcrstateController;
@@ -38,7 +38,6 @@ import org.ism.jsf.hr.StaffAuthController;
 import org.ism.lazy.smq.nc.NonConformiteRequestLazyModel;
 import org.ism.services.TableSet;
 import org.ism.services.admin.Mail;
-import org.ism.util.DateUtil;
 import org.primefaces.event.data.FilterEvent;
 import org.primefaces.event.data.SortEvent;
 import org.primefaces.model.SortMeta;
@@ -326,7 +325,7 @@ public class NonConformiteRequestController implements Serializable {
         mail.addCC(currentStaffMail + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
         mail.addCCI((isClient == false ? (ml != null ? ";" + ml.getMlCcis() : "") : (mlr != null ? ";" + mlr.getMlCcis() : "")));
         mail.setSubject(sujet);
-        mail.setHtmlMultipart(Mail.createMessageNC(title, selected));
+        mail.setHtmlMultipart(Mail.createMessageNC(title, selected, null));
 
         mailsenderController.sendMessage(mail);
     }
@@ -342,8 +341,8 @@ public class NonConformiteRequestController implements Serializable {
         String currentStaffMail = staffAuthController.getStaff().getStMaillist().trim().isEmpty() ? "" : staffAuthController.getStaff().getStMaillist();
         String emetteurStaffMail = selected.getNcrStaff().getStMaillist().trim().isEmpty() ? "" : ";" + selected.getNcrStaff().getStMaillist();
 
-        Boolean isClient = 
-                (selected.getNcrClientname() == null ? false : !selected.getNcrClientname().trim().isEmpty())
+        Boolean isClient
+                = (selected.getNcrClientname() == null ? false : !selected.getNcrClientname().trim().isEmpty())
                 || (selected.getNcrClientaddress() == null ? false : !selected.getNcrClientaddress().trim().isEmpty())
                 || (selected.getNcrClientemail() == null ? false : !selected.getNcrClientemail().trim().isEmpty())
                 || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
@@ -359,7 +358,85 @@ public class NonConformiteRequestController implements Serializable {
         mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
         mail.addCCI((isClient == false ? (ml != null ? ";" + ml.getMlCcis() : "") : (mlr != null ? ";" + mlr.getMlCcis() : "")));
         mail.setSubject(sujet);
-        mail.setHtmlMultipart(Mail.createMessageNC(title, selected));
+        mail.setHtmlMultipart(Mail.createMessageNC(title, selected, null));
+
+        mailsenderController.sendMessage(mail);
+    }
+
+    /**
+     *
+     * @param state 1: for action apply, 2: for review action
+     * @param ncas
+     */
+    public void handleMailOnActions(Integer state, List<NonConformiteActions> ncas) {
+        Maillist ml = maillistController.getItemsBy(MLGROUPE, onProgressed, 1, selected.getNcrProcessus());
+        Maillist mlr = maillistController.getItemsBy(MLGROUPE, onProgressed, 2, selected.getNcrProcessus());
+
+        String currentStaffMail = staffAuthController.getStaff().getStMaillist().trim().isEmpty() ? "" : staffAuthController.getStaff().getStMaillist();
+        String emetteurStaffMail = selected.getNcrStaff().getStMaillist().trim().isEmpty() ? "" : ";" + selected.getNcrStaff().getStMaillist();
+
+        Boolean isClient
+                = (selected.getNcrClientname() == null ? false : !selected.getNcrClientname().trim().isEmpty())
+                || (selected.getNcrClientaddress() == null ? false : !selected.getNcrClientaddress().trim().isEmpty())
+                || (selected.getNcrClientemail() == null ? false : !selected.getNcrClientemail().trim().isEmpty())
+                || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
+                || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
+
+        // State
+        String strState = "";
+        switch (state) {
+            case 1:
+                strState = "(Action)";
+                break;
+            case 2:
+                strState = "(Ajournée)";
+                break;
+            default:
+                strState = "";
+                break;
+
+        }
+
+        // Préparation du message
+        String sujet = selected.getNcrId() + " - En Cours - " + selected.getNcrTitle();
+        String title = selected.getNcrId() + "<span style=\"color:green\"> - [EN COURS " + strState + "] - </span>" + selected.getNcrTitle();
+
+        // Préparation mail
+        Mail mail = new Mail();
+        mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
+        mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
+        mail.addCCI((isClient == false ? (ml != null ? ";" + ml.getMlCcis() : "") : (mlr != null ? ";" + mlr.getMlCcis() : "")));
+        mail.setSubject(sujet);
+        mail.setHtmlMultipart(Mail.createMessageNC(title, selected, ncas));
+
+        mailsenderController.sendMessage(mail);
+    }
+
+    public void handleMailOnCloture(List<NonConformiteActions> ncas) {
+        Maillist ml = maillistController.getItemsBy(MLGROUPE, onFinished, 1, selected.getNcrProcessus());
+        Maillist mlr = maillistController.getItemsBy(MLGROUPE, onFinished, 2, selected.getNcrProcessus());
+
+        String currentStaffMail = staffAuthController.getStaff().getStMaillist().trim().isEmpty() ? "" : staffAuthController.getStaff().getStMaillist();
+        String emetteurStaffMail = selected.getNcrStaff().getStMaillist().trim().isEmpty() ? "" : ";" + selected.getNcrStaff().getStMaillist();
+
+        Boolean isClient
+                = (selected.getNcrClientname() == null ? false : !selected.getNcrClientname().trim().isEmpty())
+                || (selected.getNcrClientaddress() == null ? false : !selected.getNcrClientaddress().trim().isEmpty())
+                || (selected.getNcrClientemail() == null ? false : !selected.getNcrClientemail().trim().isEmpty())
+                || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
+                || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
+
+        // Préparation du message
+        String sujet = selected.getNcrId() + " - CLOTUREE - " + selected.getNcrTitle();
+        String title = selected.getNcrId() + "<span style=\"color:green\"> - [CLOTUREE] - </span>" + selected.getNcrTitle();
+
+        // Préparation mail
+        Mail mail = new Mail();
+        mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
+        mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
+        mail.addCCI((isClient == false ? (ml != null ? ";" + ml.getMlCcis() : "") : (mlr != null ? ";" + mlr.getMlCcis() : "")));
+        mail.setSubject(sujet);
+        mail.setHtmlMultipart(Mail.createMessageNC(title, selected, ncas));
 
         mailsenderController.sendMessage(mail);
     }
@@ -425,25 +502,6 @@ public class NonConformiteRequestController implements Serializable {
         }
         update();
         handleMailOnValidate();
-    }
-
-    public void updateOnReview() {
-        selected.setNcrChanged(new Date());
-        selected.setNcrState(new IsmNcrstate(IsmNcrstate.WAITFORSOLUTION_ID));
-        update();
-    }
-
-    public void updateOnActionCreate() { // Passe de attente de solution à en cours
-        //selected.setNcrapprouvedDate(new Date());
-        selected.setNcrChanged(new Date());
-        selected.setNcrState(new IsmNcrstate(IsmNcrstate.INPROGRESS_ID));
-        update();
-    }
-
-    public void updateOnCloture() { // Passe de attente de solution à en cours
-        selected.setNcrState(new IsmNcrstate(IsmNcrstate.FINISH_ID));
-        selected.setNcrChanged(new Date());
-        update();
     }
 
     public void destroy() {

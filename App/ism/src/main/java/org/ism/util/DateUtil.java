@@ -52,6 +52,17 @@ public class DateUtil {
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         return sdf.format(date);
     }
+    public static String formatD(Date date){
+        String format = "dd/MM/yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
+    
+    public static String formatDH(Date date){
+        String format = "dd/MM/yyyy hh:mm:ss";
+        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        return sdf.format(date);
+    }
 
     /**
      * Give the actual date and time
