@@ -65,6 +65,7 @@
                                               converter="#{analysePointConverter}"
                                               >
                             <p:ajax event="change" update="requestAllowed, @this, growl" listener="#{viewAnalyseChart.handlePointSelect()}" />
+                            <p:ajax event="toggleSelect" update="requestAllowed, @this, growl" listener="#{viewAnalyseChart.handlePointSelect()}" />
                             <f:selectItems value="#{viewAnalyseChart.requestPoints}"
                                            var="adPointItem"
                                            itemLabel="#{adPointItem.apPoint} - #{adPointItem.apDesignation}" 
