@@ -13,6 +13,32 @@
 
         <ui:define name="body">
 
+            <style>
+                .columnFieldClassSmall { min-width: 100px; }
+                .ui-selectlistbox-listcontainer{ width: 100%; }
+                .columnContentClassBig{
+                    width: 100%;
+                }
+                .ui-autocomplete{   width: 100%;    }
+                .ui-autocomplete-multiple-container.ui-widget.ui-inputfield.ui-state-default.ui-corner-all{
+                    width: 100%;
+                }
+
+                .tab-content{
+                    border:1px solid #ddd; 
+                    border-top: none;
+                    padding: 5px;
+                }
+                .tab-content h4, h3{
+                    margin-top: 0px;
+                }
+
+
+                .nav>li>a {
+                    padding: 5px 10px;
+                    border-radius: initial;
+                }
+            </style>
 
             <h:form id="bodyForm" >
                 <div>
@@ -27,11 +53,10 @@
 
                 <h3>#{ism.Statistics}</h3>
 
-                <ul class="nav nav-pills">
-                    <li >
-                        <h:link outcome="Request" value="#{ism.Criteria}"/>
-                    </li>
-                    <li class="active"><a href="#">#{ism.Statistics}</a></li>
+
+                <ul class="nav nav-tabs">
+                    <li><h:link outcome="Request" value="#{ism.Criteria}"/></li>
+                    <li class="active"><h:link outcome="Statis" value="#{ism.Statistics}"/></li>
                 </ul>
 
 
@@ -42,7 +67,7 @@
                         <ic:chart  id="statisticsChart_#{count.index}" type="line"
                                    model="#{model}"
                                    style="min-width: 310px; height: 400px; margin: 0 auto"
-                                   exporting="true" debug="true"
+                                   exporting="true" debug="false"
                                    />
 
                         <hr />
