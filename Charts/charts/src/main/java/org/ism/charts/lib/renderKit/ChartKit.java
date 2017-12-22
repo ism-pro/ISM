@@ -139,6 +139,8 @@ public class ChartKit extends CoreRenderer {
         if (chart.isExporting()) {
             writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/6.0.4/code/modules/exporting.js");
         }
+        writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/ism/charts/charts.js");
+        
 
     }
 
@@ -158,9 +160,11 @@ public class ChartKit extends CoreRenderer {
             return;
         }
 
+        // Manage Prioriority Options on Property Options
         String type = chart.getType() != null ? chart.getType() : model.getChart().getType().toString();
         model.getChart().setType(ChartType.convert(type));
         model.getChart().setRenderTo(clientId);
+        model.getChart().setZommType(chart.getZoomType()!=null ? chart.getZoomType() : model.getChart().getZommType());
 
         String script = "var options={";
         script += ChartSetRenderer.renderer(model.getChart());

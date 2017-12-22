@@ -141,6 +141,18 @@
             <type>java.lang.String</type>
         </attribute>
         
+        <attribute>
+            <description>
+                <![CDATA[
+                Zoom Type is one of x, y, xy which allow to perform zooming in 
+                x, y or both direction.
+                If not defined no zoom is applied
+                ]]>
+            </description>
+            <name>zoomType</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
 
         <!-- chart UIComponentBase -->
         <attribute>

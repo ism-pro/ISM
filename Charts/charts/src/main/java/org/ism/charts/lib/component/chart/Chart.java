@@ -57,7 +57,7 @@ import org.ism.charts.lib.model.ChartModel;
     // -
     // Chart
 
-    @ResourceDependency(library = "ism", name = "charts/charts.min.css"),
+    //@ResourceDependency(library = "ism", name = "charts/charts.min.css"),
 
     ////////  JS
     // JQuery Dynamically load
@@ -66,7 +66,7 @@ import org.ism.charts.lib.model.ChartModel;
     //@ResourceDependency(library = "vendor", name = "highcharts/highcharts.js"),
     //@ResourceDependency(library = "vendor", name = "highcharts/modules/exporting.js")
     // Charts
-    @ResourceDependency(library = "ism", name = "charts/charts.js")
+    //@ResourceDependency(library = "", name = "ism/charts/charts.js")
 })
 @FacesComponent(
         //        createTag = true,
@@ -80,7 +80,7 @@ public class Chart extends UIComponentBase implements javax.faces.component.beha
     public static final String RENDERER_TYPE = "org.ism.renderKit.Chart";
 
     protected enum PropertyKeys {
-        exporting, debug, model, enabledJQuery, responsive, style, styleClass, type, widgetVar;
+        exporting, debug, model, enabledJQuery, responsive, style, styleClass, type, widgetVar, zoomType;
 
         String toString;
 
@@ -239,6 +239,15 @@ public class Chart extends UIComponentBase implements javax.faces.component.beha
      */
     public void setEnabledJQuery(boolean enabledJQuery) {
         getStateHelper().put(PropertyKeys.enabledJQuery, enabledJQuery);
+    }
+    
+    
+    public java.lang.String getZoomType() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.zoomType, null);
+    }
+
+    public void setZoomType(java.lang.String _zoomType) {
+        getStateHelper().put(PropertyKeys.zoomType, _zoomType);
     }
 
     /**
