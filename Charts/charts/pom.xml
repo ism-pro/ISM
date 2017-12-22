@@ -12,7 +12,7 @@
     <artifactId>charts</artifactId>
     <packaging>jar</packaging>
     <name>charts-lib</name>
-    <version>1712.15</version>
+    <version>1712.20</version>
     <description>ISM Charts Component Library</description>
     
     <properties>

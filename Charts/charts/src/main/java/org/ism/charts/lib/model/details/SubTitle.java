@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ism.charts.lib.model;
+package org.ism.charts.lib.model.details;
 
 import org.ism.charts.lib.model.properties.Align;
 
 /**
- * The chart's main title. ou subTitle
+ * The chart's main title
  *
  * @author r.hendrick
  */
-public class ChartTitle {
+public class SubTitle {
 
     /**
      * align: StringSince 2.0 The horizontal alignment of the title. Can be one
@@ -29,15 +29,6 @@ public class ChartTitle {
      * False by default, true - title on top of the plot area.
      */
     private Boolean floating = null;
-
-    /**
-     * margin: NumberSince 2.1 The margin between the title and the plot area,
-     * or if a subtitle is present, the margin between the subtitle and the plot
-     * area. Defaults to 15. Try it:
-     *
-     * A chart title margin of 50, the same margin applied with a subtitle.
-     */
-    private Integer margin = null;
 
     /**
      * style: CSSObject CSS styles for the title. Use this for font styling, but
@@ -101,61 +92,39 @@ public class ChartTitle {
     private Integer y = null;
 
     
-    /**
-     * Boolean used to determine if when of the setter method was used that way,
-     * we know if a parameter has to be write down
-     */
-    private Boolean unused = true;
 
-    /***
-     * <h1>isUnused</h1>
-     * Standard method to describe if class was used by set or get method
-     * 
-     * @return unused to know if change was made
-     */
-    public boolean isUnused() {
-        return unused;
-    }
-
-
-    public ChartTitle(String title) {
+    public SubTitle(String title) {
         this.text = title;
-        unused = false;
     }
 
-    public ChartTitle(String title, String style) {
+    public SubTitle(String title, String style) {
         this.text = title;
         this.style = style;
-        unused = false;
     }
 
-    public ChartTitle(String title, Integer x, Integer y) {
+    public SubTitle(String title, Integer x, Integer y) {
         this.text = title;
         this.x = x;
         this.y = y;
-        unused = false;
     }
 
-    public ChartTitle(String title, String style, Integer x, Integer y) {
+    public SubTitle(String title, String style, Integer x, Integer y) {
         this.text = title;
         this.style = style;
         this.x = x;
         this.y = y;
-        unused = false;
     }
 
-    public ChartTitle(String title, Boolean isHTML) {
+    public SubTitle(String title, Boolean isHTML) {
         this.text = title;
         this.useHTML = isHTML;
-        unused = false;
     }
 
-    public ChartTitle(String title, Boolean isHTML, Integer x, Integer y) {
+    public SubTitle(String title, Boolean isHTML, Integer x, Integer y) {
         this.text = title;
         this.useHTML = isHTML;
         this.x = x;
         this.y = y;
-        unused = false;
     }
 
 
@@ -165,7 +134,6 @@ public class ChartTitle {
 
     public void setAlign(Align align) {
         this.align = align;
-        unused = align != null;
     }
 
     public Boolean getFloating() {
@@ -174,16 +142,6 @@ public class ChartTitle {
 
     public void setFloating(Boolean floating) {
         this.floating = floating;
-        unused = floating != null;
-    }
-
-    public Integer getMargin() {
-        return margin;
-    }
-
-    public void setMargin(Integer margin) {
-        this.margin = margin;
-        unused = margin != null;
     }
 
     public String getStyle() {
@@ -192,7 +150,6 @@ public class ChartTitle {
 
     public void setStyle(String style) {
         this.style = style;
-        unused = style != null;
     }
 
     public String getText() {
@@ -201,7 +158,6 @@ public class ChartTitle {
 
     public void setText(String text) {
         this.text = text;
-        unused = text != null;
     }
 
     public Boolean getUseHTML() {
@@ -210,7 +166,6 @@ public class ChartTitle {
 
     public void setUseHTML(Boolean useHTML) {
         this.useHTML = useHTML;
-        unused = useHTML != null;
     }
 
     public Align getVerticalAlign() {
@@ -219,7 +174,6 @@ public class ChartTitle {
 
     public void setVerticalAlign(Align verticalAlign) {
         this.verticalAlign = verticalAlign;
-        unused = verticalAlign != null;
     }
 
     public Integer getWidthAdjust() {
@@ -228,7 +182,6 @@ public class ChartTitle {
 
     public void setWidthAdjust(Integer widthAdjust) {
         this.widthAdjust = widthAdjust;
-        unused = widthAdjust != null;
     }
 
     public Integer getX() {
@@ -237,7 +190,6 @@ public class ChartTitle {
 
     public void setX(Integer x) {
         this.x = x;
-        unused = x != null;
     }
 
     public Integer getY() {
@@ -246,7 +198,6 @@ public class ChartTitle {
 
     public void setY(Integer y) {
         this.y = y;
-        unused = y != null;
     }
 
 }

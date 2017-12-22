@@ -8,6 +8,8 @@ import javax.faces.render.FacesRenderer;
 import org.ism.charts.lib.component.axis.XAxisRenderer;
 import org.ism.charts.lib.component.axis.YAxisRenderer;
 import org.ism.charts.lib.component.chart.Chart;
+import org.ism.charts.lib.component.details.SubTitleRenderer;
+import org.ism.charts.lib.component.details.TitleRenderer;
 import org.ism.charts.lib.component.plots.ChartSetRenderer;
 import org.ism.charts.lib.component.series.LegendRenderer;
 import org.ism.charts.lib.component.series.PlotOptionsRenderer;
@@ -133,9 +135,9 @@ public class ChartKit extends CoreRenderer {
         if (chart.getEnabledJQuery()) {
             writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/jquery/3.1.1/js/jquery.min.js");
         }
-        writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/highcharts.js");
+        writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/6.0.4/code/highcharts.js");
         if (chart.isExporting()) {
-            writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/modules/exporting.js");
+            writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/6.0.4/code/modules/exporting.js");
         }
 
     }
@@ -162,8 +164,8 @@ public class ChartKit extends CoreRenderer {
 
         String script = "var options={";
         script += ChartSetRenderer.renderer(model.getChart());
-        script += model.renderTitle();
-        script += model.renderSubTitle();
+        script += TitleRenderer.renderer(model.getTitle());
+        script += SubTitleRenderer.renderer(model.getSubTitle());
         script += XAxisRenderer.renderer(model.getxAxis());
         script += YAxisRenderer.renderer(model.getyAxis());
         script += ToolTipRenderer.renderer(model.getToolTip());
