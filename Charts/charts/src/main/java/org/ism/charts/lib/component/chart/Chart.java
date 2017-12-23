@@ -27,6 +27,7 @@ import java.util.Collections;
 import java.util.Map;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
+import javax.faces.component.UIPanel;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.FacesEvent;
@@ -67,13 +68,17 @@ import org.ism.charts.lib.model.ChartModel;
     //@ResourceDependency(library = "vendor", name = "highcharts/modules/exporting.js")
     // Charts
     //@ResourceDependency(library = "", name = "ism/charts/charts.js")
+    
+    @ResourceDependency(library = "ism", name = "icharts/components.css"),
+    @ResourceDependency(library = "ism", name = "charts/charts.css"),
+//    @ResourceDependency(library = "ism", name = "jquery/jquery.js"),
+//    @ResourceDependency(library = "ism", name = "jquery/jquery-plugins.js"),
+    @ResourceDependency(library = "ism", name = "icharts/core.js"),
+    @ResourceDependency(library = "ism", name = "icharts/components.js"),
+    @ResourceDependency(library = "ism", name = "charts/charts.js")
 })
-@FacesComponent(
-        //        createTag = true,
-        //        namespace = Util.NAMESPACE,
-        //        tagName = "chart",
-        value = Chart.COMPONENT_TYPE)
-public class Chart extends UIComponentBase implements javax.faces.component.behavior.ClientBehaviorHolder {
+@FacesComponent(value = Chart.COMPONENT_TYPE)
+public class Chart extends UIPanel implements javax.faces.component.behavior.ClientBehaviorHolder {
 
     public static final String COMPONENT_TYPE = "org.ism.component.Chart";
     public static final String COMPONENT_FAMILY = "org.ism.component";
