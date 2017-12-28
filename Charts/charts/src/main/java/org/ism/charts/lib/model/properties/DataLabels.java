@@ -27,7 +27,7 @@ public class DataLabels {
      * align it inside the box, as given with the inside option. Can be one of
      * "left", "center" or "right". Defaults to center. Try it: Left aligned
      */
-    private Align align = null;
+    private String align = null;
 
     /**
      * allowOverlap: BooleanSince 4.1.0 Whether to allow data labels to overlap.
@@ -248,7 +248,7 @@ public class DataLabels {
      *
      * Bold labels
      */
-    private String style = null;
+    private Style style = null;
 
     /**
      * useHTML: Boolean Whether to use HTML to render the labels. Defaults to
@@ -262,7 +262,7 @@ public class DataLabels {
      * data, for instance in a column chart, the label is above positive values
      * and below negative values.
      */
-    private Align verticalAlign = null;
+    private String verticalAlign = null;
 
     /**
      * x: Number The x position offset of the label relative to the point.
@@ -292,11 +292,11 @@ public class DataLabels {
     /// Getter/Setter
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
-    public Align getAlign() {
+    public String getAlign() {
         return align;
     }
 
-    public void setAlign(Align align) {
+    public void setAlign(String align) {
         this.align = align;
     }
 
@@ -492,11 +492,11 @@ public class DataLabels {
         this.softConnector = softConnector;
     }
 
-    public String getStyle() {
+    public Style getStyle() {
         return style;
     }
 
-    public void setStyle(String style) {
+    public void setStyle(Style style) {
         this.style = style;
     }
 
@@ -508,11 +508,11 @@ public class DataLabels {
         this.useHTML = useHTML;
     }
 
-    public Align getVerticalAlign() {
+    public String getVerticalAlign() {
         return verticalAlign;
     }
 
-    public void setVerticalAlign(Align verticalAlign) {
+    public void setVerticalAlign(String verticalAlign) {
         this.verticalAlign = verticalAlign;
     }
 

@@ -1,214 +1,227 @@
 (function (a) {
     if (a.IChartsFaces) {
         a.IChartsFaces.debug("IChartsFaces already loaded, ignoring duplicate execution.");
-        return
+        return;
     }
-
 
     var b = {
         escapeClientId: function (c) {
-            return"#" + c.replace(/:/g, "\\:")
+            return"#" + c.replace(/:/g, "\\:");
         },
         cleanWatermarks: function () {
-            $.watermark.hideAll()
+            $.watermark.hideAll();
         },
         showWatermarks: function () {
-            $.watermark.showAll()
+            $.watermark.showAll();
         },
         getWidgetById: function (e) {
             for (var d in b.widgets) {
                 var c = b.widgets[d];
                 if (c && c.id === e) {
-                    return c
+                    return c;
                 }
             }
-            return null
+            return null;
         },
         addSubmitParam: function (d, f) {
             var e = $(this.escapeClientId(d));
             for (var c in f) {
-                e.append('<input type="hidden" name="' + c + '" value="' + f[c] + '" class="ui-submit-param"/>')
+                e.append('<input type="hidden" name="' + c + '" value="' + f[c] + '" class="ui-submit-param"/>');
             }
-            return this
+            return this;
         },
         submit: function (f, e) {
             var c = $(this.escapeClientId(f));
             var d;
             if (e) {
                 d = c.attr("target");
-                c.attr("target", e)
+                c.attr("target", e);
             }
             c.submit();
             c.children("input.ui-submit-param").remove();
             if (e) {
                 if (d !== undefined) {
-                    c.attr("target", d)
+                    c.attr("target", d);
                 } else {
-                    c.removeAttr("target")
+                    c.removeAttr("target");
                 }
             }
-        }, onPost: function () {
+        },
+        onPost: function () {
             this.nonAjaxPosted = true;
-            this.abortXHRs()
+            this.abortXHRs();
         },
         abortXHRs: function () {
-            b.ajax.Queue.abortAll()
+            b.ajax.Queue.abortAll();
         },
         attachBehaviors: function (d, c) {
             $.each(c, function (f, e) {
                 d.bind(f, function (g) {
-                    e.call(d, g)
-                })
-            })
+                    e.call(d, g);
+                });
+            });
         },
         getCookie: function (c) {
-            return $.cookie(c)
+            return $.cookie(c);
         },
         setCookie: function (d, e, c) {
-            $.cookie(d, e, c)
+            $.cookie(d, e, c);
         },
         deleteCookie: function (d, c) {
-            $.removeCookie(d, c)
+            $.removeCookie(d, c);
         },
         cookiesEnabled: function () {
             var c = (navigator.cookieEnabled) ? true : false;
             if (typeof navigator.cookieEnabled === "undefined" && !c) {
                 document.cookie = "testcookie";
-                c = (document.cookie.indexOf("testcookie") !== -1) ? true : false
+                c = (document.cookie.indexOf("testcookie") !== -1) ? true : false;
             }
-            return(c)
+            return(c);
         },
         skinInput: function (c) {
             c.hover(function () {
-                $(this).addClass("ui-state-hover")
+                $(this).addClass("ui-state-hover");
             }, function () {
-                $(this).removeClass("ui-state-hover")
+                $(this).removeClass("ui-state-hover");
             }).focus(function () {
-                $(this).addClass("ui-state-focus")
+                $(this).addClass("ui-state-focus");
             }).blur(function () {
-                $(this).removeClass("ui-state-focus")
+                $(this).removeClass("ui-state-focus");
             });
             c.attr("role", "textbox").attr("aria-disabled", c.is(":disabled")).attr("aria-readonly", c.prop("readonly"));
             if (c.is("textarea")) {
-                c.attr("aria-multiline", true)
+                c.attr("aria-multiline", true);
             }
-            return this
-        }, skinButton: function (c) {
+            return this;
+        },
+        skinButton: function (c) {
             c.mouseover(function () {
                 var e = $(this);
                 if (!c.prop("disabled")) {
-                    e.addClass("ui-state-hover")
+                    e.addClass("ui-state-hover");
                 }
             }).mouseout(function () {
-                $(this).removeClass("ui-state-active ui-state-hover")
+                $(this).removeClass("ui-state-active ui-state-hover");
             }).mousedown(function () {
                 var e = $(this);
                 if (!c.prop("disabled")) {
-                    e.addClass("ui-state-active").removeClass("ui-state-hover")
+                    e.addClass("ui-state-active").removeClass("ui-state-hover");
                 }
             }).mouseup(function () {
-                $(this).removeClass("ui-state-active").addClass("ui-state-hover")
+                $(this).removeClass("ui-state-active").addClass("ui-state-hover");
             }).focus(function () {
-                $(this).addClass("ui-state-focus")
+                $(this).addClass("ui-state-focus");
             }).blur(function () {
-                $(this).removeClass("ui-state-focus ui-state-active")
+                $(this).removeClass("ui-state-focus ui-state-active");
             }).keydown(function (f) {
                 if (f.which === $.ui.keyCode.SPACE || f.which === $.ui.keyCode.ENTER || f.which === $.ui.keyCode.NUMPAD_ENTER) {
-                    $(this).addClass("ui-state-active")
+                    $(this).addClass("ui-state-active");
                 }
             }).keyup(function () {
-                $(this).removeClass("ui-state-active")
+                $(this).removeClass("ui-state-active");
             });
             var d = c.attr("role");
             if (!d) {
-                c.attr("role", "button")
+                c.attr("role", "button");
             }
             c.attr("aria-disabled", c.prop("disabled"));
-            return this
-        }, skinSelect: function (c) {
+            return this;
+        },
+        skinSelect: function (c) {
             c.mouseover(function () {
                 var d = $(this);
                 if (!d.hasClass("ui-state-focus")) {
-                    d.addClass("ui-state-hover")
+                    d.addClass("ui-state-hover");
                 }
             }).mouseout(function () {
-                $(this).removeClass("ui-state-hover")
+                $(this).removeClass("ui-state-hover");
             }).focus(function () {
-                $(this).addClass("ui-state-focus").removeClass("ui-state-hover")
+                $(this).addClass("ui-state-focus").removeClass("ui-state-hover");
             }).blur(function () {
-                $(this).removeClass("ui-state-focus ui-state-hover")
+                $(this).removeClass("ui-state-focus ui-state-hover");
             });
-            return this
-        }, isIE: function (c) {
-            return b.env.isIE(c)
-        }, info: function (c) {
+            return this;
+        },
+        isIE: function (c) {
+            return b.env.isIE(c);
+        },
+        info: function (c) {
             if (this.logger) {
-                this.logger.info(c)
+                this.logger.info(c);
             }
-        }, debug: function (c) {
+        },
+        debug: function (c) {
             if (this.logger) {
-                this.logger.debug(c)
+                this.logger.debug(c);
             }
-        }, warn: function (c) {
+        },
+        warn: function (c) {
             if (this.logger) {
-                this.logger.warn(c)
+                this.logger.warn(c);
             }
             if (b.isDevelopmentProjectStage() && a.console) {
-                console.log(c)
+                console.log(c);
             }
-        }, error: function (c) {
+        },
+        error: function (c) {
             if (this.logger) {
-                this.logger.error(c)
+                this.logger.error(c);
             }
             if (b.isDevelopmentProjectStage() && a.console) {
-                console.log(c)
+                console.log(c);
             }
-        }, isDevelopmentProjectStage: function () {
-            return b.settings.projectStage === "Development"
-        }, setCaretToEnd: function (d) {
+        },
+        isDevelopmentProjectStage: function () {
+            return b.settings.projectStage === "Development";
+        },
+        setCaretToEnd: function (d) {
             if (d) {
                 d.focus();
                 var e = d.value.length;
                 if (e > 0) {
                     if (d.setSelectionRange) {
-                        d.setSelectionRange(0, e)
+                        d.setSelectionRange(0, e);
                     } else {
                         if (d.createTextRange) {
                             var c = d.createTextRange();
                             c.collapse(true);
                             c.moveEnd("character", 1);
                             c.moveStart("character", 1);
-                            c.select()
+                            c.select();
                         }
                     }
                 }
             }
-        }, changeTheme: function (g) {
+        },
+        changeTheme: function (g) {
             if (g && g !== "") {
                 var h = $('link[href*="' + b.RESOURCE_IDENTIFIER + '/theme.css"]');
                 if (h.length === 0) {
-                    h = $('link[href*="' + b.RESOURCE_IDENTIFIER + '=theme.css"]')
+                    h = $('link[href*="' + b.RESOURCE_IDENTIFIER + '=theme.css"]');
                 }
                 var f = h.attr("href"), e = f.split("&")[0], d = e.split("ln=")[1], c = f.replace(d, "primefaces-" + g);
-                h.attr("href", c)
+                h.attr("href", c);
             }
-        }, escapeRegExp: function (c) {
-            return this.escapeHTML(c.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1"))
-        }, escapeHTML: function (c) {
-            return c.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-        }, clearSelection: function () {
+        },
+        escapeRegExp: function (c) {
+            return this.escapeHTML(c.replace(/([.?*+^$[\]\\(){}|-])/g, "\\$1"));
+        },
+        escapeHTML: function (c) {
+            return c.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        },
+        clearSelection: function () {
             if (a.getSelection) {
                 if (a.getSelection().empty) {
-                    a.getSelection().empty()
+                    a.getSelection().empty();
                 } else {
                     if (a.getSelection().removeAllRanges && a.getSelection().rangeCount > 0 && a.getSelection().getRangeAt(0).getClientRects().length > 0) {
-                        a.getSelection().removeAllRanges()
+                        a.getSelection().removeAllRanges();
                     }
                 }
             } else {
                 if (document.selection && document.selection.empty) {
                     try {
-                        document.selection.empty()
+                        document.selection.empty();
                     } catch (c) {
                     }
                 }
@@ -217,125 +230,137 @@
         getSelection: function () {
             var c = "";
             if (a.getSelection) {
-                c = a.getSelection()
+                c = a.getSelection();
             } else {
                 if (document.getSelection) {
-                    c = document.getSelection()
+                    c = document.getSelection();
                 } else {
                     if (document.selection) {
-                        c = document.selection.createRange().text
+                        c = document.selection.createRange().text;
                     }
                 }
             }
-            return c
-        }, hasSelection: function () {
-            return this.getSelection().length > 0
-        }, cw: function (d, e, c) {
-            this.createWidget(d, e, c)
-        }, createWidget: function (d, f, c) {
+            return c;
+        },
+        hasSelection: function () {
+            return this.getSelection().length > 0;
+        },
+        cw: function (d, e, c) {
+            this.createWidget(d, e, c);
+        },
+        createWidget: function (d, f, c) {
             c.widgetVar = f;
             if (this.widget[d]) {
                 var e = this.widgets[f];
                 if (e && (e.constructor === this.widget[d])) {
-                    e.refresh(c)
+                    e.refresh(c);
                 } else {
                     this.widgets[f] = new this.widget[d](c);
                     if (this.settings.legacyWidgetNamespace) {
-                        a[f] = this.widgets[f]
+                        a[f] = this.widgets[f];
                     }
                 }
             } else {
-                b.error("Widget not available: " + d)
+                b.error("Widget not available: " + d);
             }
-        }, getFacesResource: function (f, e, c) {
+        },
+        getFacesResource: function (f, e, c) {
             if (f.indexOf("/") === 0) {
-                f = f.substring(1, f.length)
+                f = f.substring(1, f.length);
             }
             var d = $('script[src*="/' + b.RESOURCE_IDENTIFIER + '/core.js"]').attr("src");
             if (!d) {
-                d = $('script[src*="' + b.RESOURCE_IDENTIFIER + '=core.js"]').attr("src")
+                d = $('script[src*="' + b.RESOURCE_IDENTIFIER + '=core.js"]').attr("src");
             }
             d = d.replace("core.js", f);
             d = d.replace("ln=primefaces", "ln=" + e);
             if (c) {
                 var h = new RegExp("[?&]v=([^&]*)").exec(d)[1];
-                d = d.replace("v=" + h, "v=" + c)
+                d = d.replace("v=" + h, "v=" + c);
             }
             var g = a.location.protocol + "//" + a.location.host;
-            return d.indexOf(g) >= 0 ? d : g + d
-        }, inArray: function (c, e) {
+            return d.indexOf(g) >= 0 ? d : g + d;
+        },
+        inArray: function (c, e) {
             for (var d = 0; d < c.length; d++) {
                 if (c[d] === e) {
-                    return true
+                    return true;
                 }
             }
-            return false
-        }, isNumber: function (c) {
-            return typeof c === "number" && isFinite(c)
-        }, getScript: function (c, d) {
-            $.ajax({type: "GET", url: c, success: d, dataType: "script", cache: true, async: false})
-        }, focus: function (e, d) {
+            return false;
+        },
+        isNumber: function (c) {
+            return typeof c === "number" && isFinite(c);
+        },
+        getScript: function (c, d) {
+            $.ajax({type: "GET", url: c, success: d, dataType: "script", cache: true, async: false});
+        },
+        focus: function (e, d) {
             var c = ":not(:submit):not(:button):input:visible:enabled[name]";
             setTimeout(function () {
                 if (e) {
                     var i = $(b.escapeClientId(e));
                     if (i.is(c)) {
-                        i.focus()
+                        i.focus();
                     } else {
-                        i.find(c).eq(0).focus()
+                        i.find(c).eq(0).focus();
                     }
                 } else {
                     if (d) {
-                        $(b.escapeClientId(d)).find(c).eq(0).focus()
+                        $(b.escapeClientId(d)).find(c).eq(0).focus();
                     } else {
                         var h = $(c), g = h.eq(0);
                         if (g.is(":radio")) {
                             var f = $(':radio[name="' + g.attr("name") + '"]').filter(":checked");
                             if (f.length) {
-                                f.focus()
+                                f.focus();
                             } else {
-                                g.focus()
+                                g.focus();
                             }
                         } else {
-                            g.focus()
+                            g.focus();
                         }
                     }
                 }
             }, 50);
-            b.customFocus = true
-        }, monitorDownload: function (f, c, d) {
+            b.customFocus = true;
+        },
+        monitorDownload: function (f, c, d) {
             if (this.cookiesEnabled()) {
                 if (f) {
-                    f()
+                    f();
                 }
                 var e = d ? "primefaces.download_" + d : "primefaces.download";
                 a.downloadMonitor = setInterval(function () {
                     var g = b.getCookie(e);
                     if (g === "true") {
                         if (c) {
-                            c()
+                            c();
                         }
                         clearInterval(a.downloadMonitor);
-                        b.setCookie(e, null)
+                        b.setCookie(e, null);
                     }
-                }, 1000)
+                }, 1000);
             }
-        }, scrollTo: function (d) {
+        },
+        scrollTo: function (d) {
             var c = $(b.escapeClientId(d)).offset();
-            $("html,body").animate({scrollTop: c.top, scrollLeft: c.left}, {easing: "easeInCirc"}, 1000)
-        }, scrollInView: function (d, g) {
+            $("html,body").animate({scrollTop: c.top, scrollLeft: c.left}, {easing: "easeInCirc"}, 1000);
+        },
+        scrollInView: function (d, g) {
             if (g.length === 0) {
-                return
+                return;
             }
             var j = parseFloat(d.css("borderTopWidth")) || 0, f = parseFloat(d.css("paddingTop")) || 0, h = g.offset().top - d.offset().top - j - f, c = d.scrollTop(), e = d.height(), i = g.outerHeight(true);
             if (h < 0) {
-                d.scrollTop(c + h)
+                d.scrollTop(c + h);
             } else {
                 if ((h + i) > e) {
-                    d.scrollTop(c + h - e + i)
+                    d.scrollTop(c + h - e + i);
                 }
             }
-        }, calculateScrollbarWidth: function () {
+        },
+        calculateScrollbarWidth: function () {
             if (!this.scrollbarWidth) {
                 if (b.env.browser.msie) {
                     var e = $('<textarea cols="10" rows="2"></textarea>').css({position: "absolute", top: -1000, left: -1000}).appendTo("body"), d = $('<textarea cols="10" rows="2" style="overflow: hidden;"></textarea>').css({position: "absolute", top: -1000, left: -1000}).appendTo("body");
@@ -348,7 +373,8 @@
                 }
             }
             return this.scrollbarWidth
-        }, bcn: function (d, e, g) {
+        },
+        bcn: function (d, e, g) {
             if (g) {
                 for (var c = 0; c < g.length; c++) {
                     var f = g[c].call(d, e);
@@ -362,7 +388,8 @@
                     }
                 }
             }
-        }, bcnu: function (e, f, d) {
+        },
+        bcnu: function (e, f, d) {
             if (d) {
                 for (var c = 0; c < d.length; c++) {
                     var g = d[c].call(this, e, f);
@@ -371,24 +398,32 @@
                     }
                 }
             }
-        }, openDialog: function (c) {
+        },
+        openDialog: function (c) {
             b.dialog.DialogHandler.openDialog(c)
-        }, closeDialog: function (c) {
+        },
+        closeDialog: function (c) {
             b.dialog.DialogHandler.closeDialog(c)
-        }, showMessageInDialog: function (c) {
+        },
+        showMessageInDialog: function (c) {
             b.dialog.DialogHandler.showMessageInDialog(c)
-        }, confirm: function (c) {
+        },
+        confirm: function (c) {
             b.dialog.DialogHandler.confirm(c)
-        }, deferredRenders: [], addDeferredRender: function (e, c, d) {
+        },
+        deferredRenders: [],
+        addDeferredRender: function (e, c, d) {
             this.deferredRenders.push({widget: e, container: c, callback: d})
-        }, removeDeferredRenders: function (e) {
+        },
+        removeDeferredRenders: function (e) {
             for (var d = (this.deferredRenders.length - 1); d >= 0; d--) {
                 var c = this.deferredRenders[d];
                 if (c.widget === e) {
                     this.deferredRenders.splice(d, 1)
                 }
             }
-        }, invokeDeferredRenders: function (c) {
+        },
+        invokeDeferredRenders: function (c) {
             var g = [];
             for (var f = 0; f < this.deferredRenders.length; f++) {
                 var d = this.deferredRenders[f];
@@ -402,7 +437,8 @@
             for (var e = 0; e < g.length; e++) {
                 this.removeDeferredRenders(g[e])
             }
-        }, getLocaleSettings: function () {
+        },
+        getLocaleSettings: function () {
             if (!this.localeSettings) {
                 var c = b.settings.locale;
                 this.localeSettings = b.locales[c];
@@ -414,25 +450,113 @@
                 }
             }
             return this.localeSettings
-        }, getAriaLabel: function (d) {
+        },
+        getAriaLabel: function (d) {
             var c = this.getLocaleSettings()["aria"];
             return(c && c[d]) ? c[d] : b.locales.en_US["aria"][d]
-        }, zindex: 1000, customFocus: false, detachedWidgets: [], PARTIAL_REQUEST_PARAM: "javax.faces.partial.ajax", PARTIAL_UPDATE_PARAM: "javax.faces.partial.render", PARTIAL_PROCESS_PARAM: "javax.faces.partial.execute", PARTIAL_SOURCE_PARAM: "javax.faces.source", BEHAVIOR_EVENT_PARAM: "javax.faces.behavior.event", PARTIAL_EVENT_PARAM: "javax.faces.partial.event", RESET_VALUES_PARAM: "primefaces.resetvalues", IGNORE_AUTO_UPDATE_PARAM: "primefaces.ignoreautoupdate", SKIP_CHILDREN_PARAM: "primefaces.skipchildren", VIEW_STATE: "javax.faces.ViewState", CLIENT_WINDOW: "javax.faces.ClientWindow", VIEW_ROOT: "javax.faces.ViewRoot", CLIENT_ID_DATA: "primefaces.clientid", RESOURCE_IDENTIFIER: "javax.faces.resource", VERSION: "${project.version}"};
+        },
+        zindex: 1000,
+        customFocus: false,
+        detachedWidgets: [],
+        PARTIAL_REQUEST_PARAM: "javax.faces.partial.ajax",
+        PARTIAL_UPDATE_PARAM: "javax.faces.partial.render",
+        PARTIAL_PROCESS_PARAM: "javax.faces.partial.execute",
+        PARTIAL_SOURCE_PARAM: "javax.faces.source",
+        BEHAVIOR_EVENT_PARAM: "javax.faces.behavior.event",
+        PARTIAL_EVENT_PARAM: "javax.faces.partial.event",
+        RESET_VALUES_PARAM: "ichartsfaces.resetvalues",
+        IGNORE_AUTO_UPDATE_PARAM: "ichartsfaces.ignoreautoupdate",
+        SKIP_CHILDREN_PARAM: "ichartsfaces.skipchildren",
+        VIEW_STATE: "javax.faces.ViewState",
+        CLIENT_WINDOW: "javax.faces.ClientWindow",
+        VIEW_ROOT: "javax.faces.ViewRoot",
+        CLIENT_ID_DATA: "ichartsfaces.clientid",
+        RESOURCE_IDENTIFIER: "javax.faces.resource",
+        VERSION: "${project.version}"
+    };
     b.settings = {};
     b.util = {};
     b.widgets = {};
-    b.locales = {en_US: {closeText: "Close", prevText: "Previous", nextText: "Next", monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"], dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"], dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"], dayNamesMin: ["S", "M", "T", "W ", "T", "F ", "S"], weekHeader: "Week", firstDay: 0, isRTL: false, showMonthAfterYear: false, yearSuffix: "", timeOnlyTitle: "Only Time", timeText: "Time", hourText: "Hour", minuteText: "Minute", secondText: "Second", currentText: "Current Date", ampm: false, month: "Month", week: "Week", day: "Day", allDayText: "All Day",
-            aria: {"paginator.PAGE": "Page {0}", "calendar.BUTTON": "Show Calendar", "datatable.sort.ASC": "activate to sort column ascending", "datatable.sort.DESC": "activate to sort column descending", "columntoggler.CLOSE": "Close"}}};
-    b.locales.en = b.locales.en_US;
+    b.locales = {
+        en_US: {
+            closeText: "Close",
+            prevText: "Previous",
+            nextText: "Next",
+            monthNames: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+            monthNamesShort: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+            dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            dayNamesShort: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+            dayNamesMin: ["S", "M", "T", "W ", "T", "F ", "S"],
+            weekHeader: "Week",
+            firstDay: 0,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: "",
+            timeOnlyTitle: "Only Time",
+            timeText: "Time",
+            hourText: "Hour",
+            minuteText: "Minute",
+            secondText: "Second",
+            currentText: "Current Date",
+            ampm: false,
+            month: "Month",
+            week: "Week",
+            day: "Day",
+            allDayText: "All Day",
+            aria: {
+                "paginator.PAGE": "Page {0}",
+                "calendar.BUTTON": "Show Calendar",
+                "datatable.sort.ASC": "activate to sort column ascending",
+                "datatable.sort.DESC": "activate to sort column descending",
+                "columntoggler.CLOSE": "Close"
+            }
+        },
+        fr_FR: {
+            closeText: "Fermer",
+            prevText: "Précédent",
+            nextText: "Suivant",
+            monthNames: ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"],
+            monthNamesShort: ["Jan", "Fév", "Mar", "Avr", "Mai", "Juin", "Juil", "Aoû", "Sep", "Oct", "Nov", "Déc"],
+            dayNames: ["Dimanche", "Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi"],
+            dayNamesShort: ["Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam"],
+            dayNamesMin: ["D", "L", "Ma", "Me", "J", "V ", "S"],
+            weekHeader: "Sem",
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: "",
+            timeOnlyTitle: "Temps Seul",
+            timeText: "Temps",
+            hourText: "Heure",
+            minuteText: "Minute",
+            secondText: "Seconde",
+            currentText: "Date Courente",
+            ampm: false,
+            month: "Mois",
+            week: "Semaine",
+            day: "Jour",
+            allDayText: "Journée Entière",
+            aria: {
+                "paginator.PAGE": "Page {0}",
+                "calendar.BUTTON": "Calendrier",
+                "datatable.sort.ASC": "activation du classement ascendant de la colonne",
+                "datatable.sort.DESC": "activation du classement descendant de la colonne",
+                "columntoggler.CLOSE": "Fermer"
+            }
+        }
+    };
+
+    b.locales.en = b.locales.fr_FR;
     PF = function (d) {
         var c = b.widgets[d];
         if (!c) {
-            b.error("Widget for var '" + d + "' not available!")
+            b.error("Widget for var '" + d + "' not available!");
         }
-        return c
+        return c;
     };
-    a.IChartsFaces = b
+    a.IChartsFaces = b;
 })(window);
+
 
 if (!IChartsFaces.env) {
     IChartsFaces.env = {
@@ -440,7 +564,7 @@ if (!IChartsFaces.env) {
             this.mobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(window.navigator.userAgent);
             this.touch = "ontouchstart" in window || window.navigator.msMaxTouchPoints || IChartsFaces.env.mobile;
             this.ios = /iPhone|iPad|iPod/i.test(window.navigator.userAgent);
-            this.resolveUserAgent()
+            this.resolveUserAgent();
         },
 
         resolveUserAgent: function () {
@@ -505,9 +629,9 @@ if (!IChartsFaces.env) {
             var a = document.createElement("canvas");
             return !!(a.getContext && a.getContext("2d"))
         }};
-    IChartsFaces.env.init()
-}
-;
+    IChartsFaces.env.init();
+};
+
 if (!IChartsFaces.ajax) {
     IChartsFaces.AB_MAPPING = {s: "source", f: "formId", p: "process", u: "update", e: "event", a: "async", g: "global", d: "delay", t: "timeout", sc: "skipChildren", iau: "ignoreAutoUpdate", ps: "partialSubmit", psf: "partialSubmitFilter", rv: "resetValues", fi: "fragmentId", fu: "fragmentUpdate", pa: "params", onst: "onstart", oner: "onerror", onsu: "onsuccess", onco: "oncomplete"};
     IChartsFaces.ab = function (a, c) {
@@ -517,33 +641,36 @@ if (!IChartsFaces.ajax) {
             }
             if (this.AB_MAPPING[b]) {
                 a[this.AB_MAPPING[b]] = a[b];
-                delete a[b]
+                delete a[b];
             }
         }
 
-        IChartsFaces.ajax.Request.handle(a, c)
+        IChartsFaces.ajax.Request.handle(a, c);
     };
 
     IChartsFaces.ajax = {
         VIEW_HEAD: "javax.faces.ViewHead", VIEW_BODY: "javax.faces.ViewBody", RESOURCE: "javax.faces.Resource", Utils: {loadStylesheets: function (b) {
                 for (var a = 0; a < b.length; a++) {
-                    $("head").append('<link type="text/css" rel="stylesheet" href="' + b[a] + '" />')
+                    $("head").append('<link type="text/css" rel="stylesheet" href="' + b[a] + '" />');
                 }
-            }, loadScripts: function (b) {
+            },
+            loadScripts: function (b) {
                 var a = function () {
                     var c = b.shift();
                     if (c) {
-                        IChartsFaces.getScript(c, a)
+                        IChartsFaces.getScript(c, a);
                     }
                 };
-                a()
-            }, getContent: function (c) {
+                a();
+            },
+            getContent: function (c) {
                 var b = "";
                 for (var a = 0; a < c.childNodes.length; a++) {
-                    b += c.childNodes[a].nodeValue
+                    b += c.childNodes[a].nodeValue;
                 }
                 return b
-            }, updateFormStateInput: function (b, g, j) {
+            },
+            updateFormStateInput: function (b, g, j) {
                 var e = $.trim(g);
                 var a = null;
                 if (j && j.pfSettings && j.pfSettings.portletForms) {
@@ -566,18 +693,21 @@ if (!IChartsFaces.ajax) {
                         }
                     }
                 }
-            }, updateHead: function (d) {
+            },
+            updateHead: function (d) {
                 var b = $.ajaxSetup()["cache"];
                 $.ajaxSetup()["cache"] = true;
                 var a = new RegExp("<head[^>]*>", "gi").exec(d)[0];
                 var c = d.indexOf(a) + a.length;
                 $("head").html(d.substring(c, d.lastIndexOf("</head>")));
                 $.ajaxSetup()["cache"] = b
-            }, updateBody: function (b) {
+            },
+            updateBody: function (b) {
                 var c = new RegExp("<body[^>]*>", "gi").exec(b)[0];
                 var a = b.indexOf(c) + c.length;
                 $("body").html(b.substring(a, b.lastIndexOf("</body>")))
-            }, updateElement: function (d, b, c) {
+            },
+            updateElement: function (d, b, c) {
                 if (d.indexOf(IChartsFaces.VIEW_STATE) !== -1) {
                     IChartsFaces.ajax.Utils.updateFormStateInput(IChartsFaces.VIEW_STATE, b, c)
                 } else {
@@ -610,7 +740,10 @@ if (!IChartsFaces.ajax) {
                         }
                     }
                 }
-            }}, Queue: {delays: {}, requests: new Array(), xhrs: new Array(), offer: function (a) {
+            }
+        },
+        Queue: {
+            delays: {}, requests: new Array(), xhrs: new Array(), offer: function (a) {
                 if (a.delay) {
                     var b = null, d = this, b = (typeof (a.source) === "string") ? a.source : $(a.source).attr("id"), c = function () {
                         return setTimeout(function () {
@@ -632,7 +765,8 @@ if (!IChartsFaces.ajax) {
                         IChartsFaces.ajax.Request.send(a)
                     }
                 }
-            }, poll: function () {
+            },
+            poll: function () {
                 if (this.isEmpty()) {
                     return null
                 }
@@ -641,27 +775,35 @@ if (!IChartsFaces.ajax) {
                     IChartsFaces.ajax.Request.send(a)
                 }
                 return b
-            }, peek: function () {
+            },
+            peek: function () {
                 if (this.isEmpty()) {
                     return null
                 }
                 return this.requests[0]
-            }, isEmpty: function () {
+            },
+            isEmpty: function () {
                 return this.requests.length === 0
-            }, addXHR: function (a) {
+            },
+            addXHR: function (a) {
                 this.xhrs.push(a)
-            }, removeXHR: function (b) {
+            },
+            removeXHR: function (b) {
                 var a = $.inArray(b, this.xhrs);
                 if (a > -1) {
                     this.xhrs.splice(a, 1)
                 }
-            }, abortAll: function () {
+            },
+            abortAll: function () {
                 for (var a = 0; a < this.xhrs.length; a++) {
                     this.xhrs[a].abort()
                 }
                 this.xhrs = new Array();
                 this.requests = new Array()
-            }}, Request: {handle: function (a, b) {
+            }
+        },
+        Request: {
+            handle: function (a, b) {
                 a.ext = b;
                 if (IChartsFaces.settings.earlyPostParamEvaluation) {
                     a.earlyPostParams = IChartsFaces.ajax.Request.collectEarlyPostParams(a)
@@ -671,7 +813,8 @@ if (!IChartsFaces.ajax) {
                 } else {
                     IChartsFaces.ajax.Queue.offer(a)
                 }
-            }, collectEarlyPostParams: function (a) {
+            },
+            collectEarlyPostParams: function (a) {
                 var b;
                 var c;
                 if (typeof (a.source) === "string") {
@@ -690,7 +833,8 @@ if (!IChartsFaces.ajax) {
                     }).get())
                 }
                 return b
-            }, send: function (e) {
+            },
+            send: function (e) {
                 IChartsFaces.debug("Initiating ajax request.");
                 IChartsFaces.customFocus = false;
                 var m = (e.global === true || e.global === undefined) ? true : false, b = null, f = null, t = null;
@@ -730,7 +874,7 @@ if (!IChartsFaces.ajax) {
                 var v = null;
                 if (s.length > 0) {
                     v = 'form[id*="' + u + '"]';
-                    w = s.val()
+                    w = s.val();
                 }
                 IChartsFaces.debug("URL to post " + w + ".");
                 IChartsFaces.ajax.Request.addParam(g, IChartsFaces.PARTIAL_REQUEST_PARAM, true, u);
@@ -837,7 +981,8 @@ if (!IChartsFaces.ajax) {
                         if (m) {
                             $(document).trigger("pfAjaxSend", [y, this])
                         }
-                    }, error: function (z, i, y) {
+                    },
+                    error: function (z, i, y) {
                         if (e.onerror) {
                             e.onerror.call(this, z, i, y)
                         }
@@ -848,7 +993,8 @@ if (!IChartsFaces.ajax) {
                             $(document).trigger("pfAjaxError", [z, this, y])
                         }
                         IChartsFaces.error("Request return with error:" + i + ".")
-                    }, success: function (z, i, A) {
+                    },
+                    success: function (z, i, A) {
                         IChartsFaces.debug("Response received succesfully.");
                         var y;
                         if (e.onsuccess) {
@@ -866,7 +1012,8 @@ if (!IChartsFaces.ajax) {
                             IChartsFaces.ajax.Response.handle(z, i, A)
                         }
                         IChartsFaces.debug("DOM is updated.")
-                    }, complete: function (y, i) {
+                    },
+                    complete: function (y, i) {
                         if (e.oncomplete) {
                             e.oncomplete.call(this, y, i, y.pfArgs)
                         }
@@ -881,12 +1028,14 @@ if (!IChartsFaces.ajax) {
                         if (!e.async && !IChartsFaces.nonAjaxPosted) {
                             IChartsFaces.ajax.Queue.poll()
                         }
-                    }};
+                    }
+                };
                 if (e.timeout) {
-                    p.timeout = e.timeout
+                    p.timeout = e.timeout;
                 }
-                IChartsFaces.ajax.Queue.addXHR($.ajax(p))
-            }, resolveExpressionsForAjaxCall: function (a, b) {
+                IChartsFaces.ajax.Queue.addXHR($.ajax(p));
+            },
+            resolveExpressionsForAjaxCall: function (a, b) {
                 var c = "";
                 if (a[b]) {
                     c += a[b]
@@ -895,16 +1044,19 @@ if (!IChartsFaces.ajax) {
                     c += " " + a.ext[b]
                 }
                 return c
-            }, resolveComponentsForAjaxCall: function (a, b) {
+            }, 
+            resolveComponentsForAjaxCall: function (a, b) {
                 var c = IChartsFaces.ajax.Request.resolveExpressionsForAjaxCall(a, b);
                 return IChartsFaces.expressions.SearchExpressionFacade.resolveComponents(c)
-            }, addParam: function (c, a, b, d) {
+            },
+            addParam: function (c, a, b, d) {
                 if (d || !a.indexOf(d) === 0) {
                     c.push({name: d + a, value: b})
                 } else {
                     c.push({name: a, value: b})
                 }
-            }, addParams: function (d, a, e) {
+            },
+            addParams: function (d, a, e) {
                 for (var b = 0; b < a.length; b++) {
                     var c = a[b];
                     if (e && !c.name.indexOf(e) === 0) {
@@ -912,7 +1064,8 @@ if (!IChartsFaces.ajax) {
                     }
                     d.push(c)
                 }
-            }, addParamFromInput: function (e, b, c, f) {
+            },
+            addParamFromInput: function (e, b, c, f) {
                 var a = null;
                 if (f) {
                     a = c.children("input[name*='" + b + "']")
@@ -923,7 +1076,8 @@ if (!IChartsFaces.ajax) {
                     var d = a.val();
                     IChartsFaces.ajax.Request.addParam(e, b, d, f)
                 }
-            }, extractParameterNamespace: function (c) {
+            },
+            extractParameterNamespace: function (c) {
                 var a = c.children("input[name*='" + IChartsFaces.VIEW_STATE + "']");
                 if (a && a.length > 0) {
                     var b = a[0].name;
@@ -932,7 +1086,10 @@ if (!IChartsFaces.ajax) {
                     }
                 }
                 return null
-            }}, Response: {handle: function (h, e, m, b) {
+            }
+        }, 
+        Response: {
+            handle: function (h, e, m, b) {
                 var n = h.getElementsByTagName("partial-response")[0];
                 for (var g = 0; g < n.childNodes.length; g++) {
                     var a = n.childNodes[g];
@@ -984,7 +1141,8 @@ if (!IChartsFaces.ajax) {
                             break
                     }
                 }
-            }, handleReFocus: function (d, b) {
+            },
+            handleReFocus: function (d, b) {
                 if (IChartsFaces.customFocus === false && d && d !== $(document.activeElement).attr("id")) {
                     var c = $(IChartsFaces.escapeClientId(d));
                     var a = function () {
@@ -1003,7 +1161,8 @@ if (!IChartsFaces.ajax) {
                     }
                 }
                 IChartsFaces.customFocus = false
-            }, destroyDetachedWidgets: function () {
+            }, 
+            destroyDetachedWidgets: function () {
                 for (var a = 0; a < IChartsFaces.detachedWidgets.length; a++) {
                     var d = IChartsFaces.detachedWidgets[a];
                     var b = PF(d);
@@ -1019,25 +1178,31 @@ if (!IChartsFaces.ajax) {
                     }
                 }
                 IChartsFaces.detachedWidgets = []
-            }}, ResponseProcessor: {doRedirect: function (b) {
+            }
+        },
+        ResponseProcessor: {
+            doRedirect: function (b) {
                 try {
                     window.location.assign(b.getAttribute("url"))
                 } catch (a) {
                     IChartsFaces.warn("Error redirecting to URL: " + b.getAttribute("url"))
                 }
-            }, doUpdate: function (c, d, a) {
+            },
+            doUpdate: function (c, d, a) {
                 var e = c.getAttribute("id"), b = IChartsFaces.ajax.Utils.getContent(c);
                 if (a && a.widget && a.widget.id === e) {
                     a.handle.call(a.widget, b)
                 } else {
                     IChartsFaces.ajax.Utils.updateElement(e, b, d)
                 }
-            }, doEval: function (b) {
+            }, 
+            doEval: function (b) {
                 var a = b.textContent || b.innerText || b.text;
                 $.globalEval(a)
-            }, doExtension: function (d, e) {
+            },
+            doExtension: function (d, e) {
                 if (e) {
-                    if (d.getAttribute("ln") === "primefaces" && d.getAttribute("type") === "args") {
+                    if (d.getAttribute("ln") === "ichartsfaces" && d.getAttribute("type") === "args") {
                         var c = d.textContent || d.innerText || d.text;
                         if (e.pfArgs) {
                             var b = $.parseJSON(c);
@@ -1049,10 +1214,13 @@ if (!IChartsFaces.ajax) {
                         }
                     }
                 }
-            }, doError: function (a, b) {}, doDelete: function (a) {
+            }, 
+            doError: function (a, b) {}, 
+            doDelete: function (a) {
                 var b = a.getAttribute("id");
                 $(IChartsFaces.escapeClientId(b)).remove()
-            }, doInsert: function (d) {
+            }, 
+            doInsert: function (d) {
                 if (!d.childNodes) {
                     return false
                 }
@@ -1069,7 +1237,8 @@ if (!IChartsFaces.ajax) {
                         }
                     }
                 }
-            }, doAttributes: function (c) {
+            },
+            doAttributes: function (c) {
                 if (!c.childNodes) {
                     return false
                 }
@@ -1087,17 +1256,22 @@ if (!IChartsFaces.ajax) {
                     }
                     f.attr(a, e)
                 }
-            }}, AjaxRequest: function (a, b) {
-            return IChartsFaces.ajax.Request.handle(a, b)
-        }};
+            }
+        }, 
+        AjaxRequest: function (a, b) {
+            return IChartsFaces.ajax.Request.handle(a, b);
+        }
+    };
+    
     $(window).unload(function () {
-        IChartsFaces.ajax.Queue.abortAll()
-    })
-}
-;
+        IChartsFaces.ajax.Queue.abortAll();
+    });
+};
+
 if (!IChartsFaces.expressions) {
     IChartsFaces.expressions = {};
-    IChartsFaces.expressions.SearchExpressionFacade = {resolveComponentsAsSelector: function (c) {
+    IChartsFaces.expressions.SearchExpressionFacade = {
+        resolveComponentsAsSelector: function (c) {
             var a = IChartsFaces.expressions.SearchExpressionFacade.splitExpressions(c);
             var e = $();
             if (a) {
@@ -1128,7 +1302,8 @@ if (!IChartsFaces.expressions) {
                 }
             }
             return e
-        }, resolveComponents: function (l) {
+        },
+        resolveComponents: function (l) {
             var k = IChartsFaces.expressions.SearchExpressionFacade.splitExpressions(l), c = [];
             if (k) {
                 for (var g = 0; g < k.length; ++g) {
@@ -1164,7 +1339,8 @@ if (!IChartsFaces.expressions) {
                 }
             }
             return c
-        }, splitExpressions: function (f) {
+        },
+        splitExpressions: function (f) {
             if (IChartsFaces.isIE(7)) {
                 f = f.split("")
             }
@@ -1188,9 +1364,10 @@ if (!IChartsFaces.expressions) {
             }
             e.push(b);
             return e
-        }}
-}
-;
+        }
+    }
+};
+
 (function () {
     var a = false, b = /xyz/.test(function () {
         xyz
@@ -1223,9 +1400,11 @@ if (!IChartsFaces.expressions) {
         return c
     }
 })();
+
 if (!IChartsFaces.widget) {
     IChartsFaces.widget = {};
-    IChartsFaces.widget.BaseWidget = Class.extend({init: function (a) {
+    IChartsFaces.widget.BaseWidget = Class.extend({
+        init: function (a) {
             this.cfg = a;
             this.id = a.id;
             this.jqId = IChartsFaces.escapeClientId(this.id);
@@ -1240,18 +1419,25 @@ if (!IChartsFaces.widget) {
                     }
                 })
             }
-        }, refresh: function (a) {
+        }, 
+        refresh: function (a) {
             return this.init(a)
-        }, destroy: function () {
+        }, 
+        destroy: function () {
             IChartsFaces.debug("Destroyed detached widget: " + this.widgetVar)
-        }, isDetached: function () {
+        },
+        isDetached: function () {
             return document.getElementById(this.id) === null
-        }, getJQ: function () {
+        },
+        getJQ: function () {
             return this.jq
-        }, removeScriptElement: function (a) {
+        },
+        removeScriptElement: function (a) {
             $(IChartsFaces.escapeClientId(a) + "_s").remove()
-        }});
-    IChartsFaces.widget.DeferredWidget = IChartsFaces.widget.BaseWidget.extend({renderDeferred: function () {
+        }
+    });
+    IChartsFaces.widget.DeferredWidget = IChartsFaces.widget.BaseWidget.extend({
+        renderDeferred: function () {
             if (this.jq.is(":visible")) {
                 this._render();
                 this.postRender()
@@ -1263,7 +1449,8 @@ if (!IChartsFaces.widget) {
                     })
                 }
             }
-        }, render: function () {
+        },
+        render: function () {
             if (this.jq.is(":visible")) {
                 this._render();
                 this.postRender();
@@ -1271,12 +1458,16 @@ if (!IChartsFaces.widget) {
             } else {
                 return false
             }
-        }, _render: function () {
+        },
+        _render: function () {
             throw"Unsupported Operation"
-        }, postRender: function () {}, destroy: function () {
+        },
+        postRender: function () {},
+        destroy: function () {
             this._super();
             IChartsFaces.removeDeferredRenders(this.id)
-        }, addDeferredRender: function (b, a, d) {
+        },
+        addDeferredRender: function (b, a, d) {
             IChartsFaces.addDeferredRender(b, a.attr("id"), d);
             if (a.is(":hidden")) {
                 var c = this.jq.closest(".ui-hidden-container");
@@ -1284,73 +1475,82 @@ if (!IChartsFaces.widget) {
                     this.addDeferredRender(b, a.parent().closest(".ui-hidden-container"), d)
                 }
             }
-        }})
-}
-;
-IChartsFaces.widget.AjaxStatus = IChartsFaces.widget.BaseWidget.extend({init: function (a) {
+        }
+    });
+};
+
+IChartsFaces.widget.AjaxStatus = IChartsFaces.widget.BaseWidget.extend({
+    init: function (a) {
         this._super(a);
-        this.bind()
-    }, bind: function () {
+        this.bind();
+    },
+    bind: function () {
         var b = $(document), a = this;
         b.on("pfAjaxStart", function () {
-            a.trigger("start", arguments)
+            a.trigger("start", arguments);
         }).on("pfAjaxError", function () {
-            a.trigger("error", arguments)
+            a.trigger("error", arguments);
         }).on("pfAjaxSuccess", function () {
-            a.trigger("success", arguments)
+            a.trigger("success", arguments);
         }).on("pfAjaxComplete", function () {
-            a.trigger("complete", arguments)
+            a.trigger("complete", arguments);
         });
-        this.bindToStandard()
-    }, trigger: function (b, a) {
+        this.bindToStandard();
+    },
+    trigger: function (b, a) {
         var c = this.cfg[b];
         if (c) {
-            c.apply(document, a)
+            c.apply(document, a);
         }
-        this.jq.children().hide().filter(this.jqId + "_" + b).show()
-    }, bindToStandard: function () {
+        this.jq.children().hide().filter(this.jqId + "_" + b).show();
+    },
+    bindToStandard: function () {
         if (window.jsf && window.jsf.ajax) {
             var a = $(document);
             jsf.ajax.addOnEvent(function (b) {
                 if (b.status === "begin") {
-                    a.trigger("pfAjaxStart", arguments)
+                    a.trigger("pfAjaxStart", arguments);
                 } else {
                     if (b.status === "complete") {
-                        a.trigger("pfAjaxSuccess", arguments)
+                        a.trigger("pfAjaxSuccess", arguments);
                     } else {
                         if (b.status === "success") {
-                            a.trigger("pfAjaxComplete", arguments)
+                            a.trigger("pfAjaxComplete", arguments);
                         }
                     }
                 }
             });
             jsf.ajax.addOnError(function (b) {
-                a.trigger("pfAjaxError", arguments)
-            })
+                a.trigger("pfAjaxError", arguments);
+            });
         }
-    }});
-IChartsFaces.widget.Poll = IChartsFaces.widget.BaseWidget.extend(
-        {
-            init: function (a) {
-                this.cfg = a;
-                this.id = this.cfg.id;
-                this.active = false;
-                if (this.cfg.autoStart) {
-                    this.start()
-                }
-            }, refresh: function (a) {
-                if (this.isActive()) {
-                    this.stop()
-                }
-                this.init(a)
-            }, start: function () {
-                this.timer = setInterval(this.cfg.fn, (this.cfg.frequency * 1000));
-                this.active = true
-            }, stop: function () {
-                clearInterval(this.timer);
-                this.active = false
-            }, isActive: function () {
-                return this.active
-            }
+    }
+});
+
+IChartsFaces.widget.Poll = IChartsFaces.widget.BaseWidget.extend({
+    init: function (a) {
+        this.cfg = a;
+        this.id = this.cfg.id;
+        this.active = false;
+        if (this.cfg.autoStart) {
+            this.start();
         }
-);
+    },
+    refresh: function (a) {
+        if (this.isActive()) {
+            this.stop();
+        }
+        this.init(a);
+    },
+    start: function () {
+        this.timer = setInterval(this.cfg.fn, (this.cfg.frequency * 1000));
+        this.active = true;
+    },
+    stop: function () {
+        clearInterval(this.timer);
+        this.active = false;
+    },
+    isActive: function () {
+        return this.active;
+    }
+});

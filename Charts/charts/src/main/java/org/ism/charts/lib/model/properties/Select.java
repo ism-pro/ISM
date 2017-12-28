@@ -5,6 +5,8 @@
  */
 package org.ism.charts.lib.model.properties;
 
+import org.ism.charts.lib.model.series.Marker;
+
 /**
  * <h1>Select</h1><br>
  * Select class
@@ -37,6 +39,8 @@ public class Select {
      * Try it: 3px line width
      */
     private Integer lineWidth = null;
+
+    private Marker marker = null;
 
     /**
      * radius: Number The radius of the point marker. In hover state, it
@@ -80,6 +84,14 @@ public class Select {
 
     public void setLineWidth(Integer lineWidth) {
         this.lineWidth = lineWidth;
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
     }
 
     public Integer getRadius() {

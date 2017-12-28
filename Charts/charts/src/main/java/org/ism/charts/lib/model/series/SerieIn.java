@@ -33,6 +33,8 @@ public class SerieIn {
      * this specific type, apply it to plotOptions.line.
      */
     private ChartType type = ChartType.LINE;
+    
+    
     /**
      * Allow this series' points to be selected by clicking on the markers, bars
      * or pie slices. Defaults to false. Try it:
@@ -68,6 +70,15 @@ public class SerieIn {
      * graphical elements.
      */
     private String className = null;
+
+    /**
+     * colorIndex: NumberSince 5.0.0 Styled mode only. A specific color index to
+     * use for the series, so its graphic representations are given the class
+     * name highcharts-color- {n}.
+     *
+     * Defaults to undefined.
+     */
+    private Integer colorIndex = null;
 
     /**
      * color: Color The main color or the series. In line type series it applies
@@ -467,6 +478,10 @@ public class SerieIn {
     private Integer xAxis = null;
 
     /**
+     * xIncrement
+     */
+    public Integer xIncrement = null;
+    /**
      * yAxis: Number|String When using dual or multiple y axes, this number
      * defines which yAxis the particular series is connected to. It refers to
      * either the axis id or the index of the axis in the yAxis array, with 0
@@ -545,6 +560,14 @@ public class SerieIn {
         this.className = className;
     }
 
+    public Integer getColorIndex() {
+        return colorIndex;
+    }
+
+    public void setColorIndex(Integer colorIndex) {
+        this.colorIndex = colorIndex;
+    }
+
     public String getColor() {
         return color;
     }
@@ -560,8 +583,6 @@ public class SerieIn {
     public void setColorByPoint(Boolean colorByPoint) {
         this.colorByPoint = colorByPoint;
     }
-    
-    
 
     public Boolean getConnectEnds() {
         return connectEnds;
@@ -889,6 +910,14 @@ public class SerieIn {
 
     public void setxAxis(Integer xAxis) {
         this.xAxis = xAxis;
+    }
+
+    public Integer getxIncrement() {
+        return xIncrement;
+    }
+
+    public void setxIncrement(Integer xIncrement) {
+        this.xIncrement = xIncrement;
     }
 
     public Integer getyAxis() {

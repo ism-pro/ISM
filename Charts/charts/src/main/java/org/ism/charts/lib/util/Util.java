@@ -87,4 +87,8 @@ public class Util {
     public static ResourceBundle getResourceBundle(String key) {
         return getApplication().getResourceBundle(getFacesContext(), key);
     }
+
+    public static String removeLastChar(String str) {
+        return str.substring(0, str.length() - 1);
+    }
 }

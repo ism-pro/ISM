@@ -5,6 +5,8 @@
  */
 package org.ism.charts.lib.model.properties;
 
+import org.ism.charts.lib.model.series.Marker;
+
 /**
  * <h1>hover</h1><br>
  * hover class
@@ -13,6 +15,11 @@ package org.ism.charts.lib.model.properties;
  *
  */
 public class Hover {
+
+    /**
+     * animation Animation when hovering over the marker.
+     */
+    private Animation animation = null;
 
     /**
      * enabled: Boolean Enable or disable the point marker. Defaults to true.
@@ -58,6 +65,7 @@ public class Hover {
      */
     private Integer lineWidthPlus = null;
 
+    private Marker marker = null;
     /**
      * radius: Number The radius of the point marker. In hover state, it
      * defaults to the normal state's radius + 2 as per the radiusPlus option.
@@ -77,6 +85,14 @@ public class Hover {
     /// Getter/Setter
     ////////////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
     public Boolean getEnabled() {
         return enabled;
     }
@@ -100,8 +116,6 @@ public class Hover {
     public void setHalo(Halo halo) {
         this.halo = halo;
     }
-    
-    
 
     public String getLineColor() {
         return lineColor;
@@ -125,6 +139,14 @@ public class Hover {
 
     public void setLineWidthPlus(Integer lineWidthPlus) {
         this.lineWidthPlus = lineWidthPlus;
+    }
+
+    public Marker getMarker() {
+        return marker;
+    }
+
+    public void setMarker(Marker marker) {
+        this.marker = marker;
     }
 
     public Integer getRadius() {

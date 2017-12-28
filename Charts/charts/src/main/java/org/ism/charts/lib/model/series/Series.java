@@ -5,9 +5,12 @@
  */
 package org.ism.charts.lib.model.series;
 
+
+import com.google.gson.Gson;
 import org.ism.charts.lib.model.series.type.BarSerie;
 import org.ism.charts.lib.model.series.type.LineSerie;
 import org.ism.charts.lib.model.series.type.PieSerie;
+import org.ism.charts.lib.util.Util;
 
 /**
  * <h1>Series</h1><br>
@@ -50,5 +53,7 @@ public class Series {
     public void setPieSerie(PieSerie pieSerie) {
         this.pieSerie = pieSerie;
     }
+
+
 
 }

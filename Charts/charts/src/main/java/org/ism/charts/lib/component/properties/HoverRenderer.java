@@ -7,7 +7,6 @@ package org.ism.charts.lib.component.properties;
 
 import org.ism.charts.lib.model.properties.Halo;
 import org.ism.charts.lib.model.properties.Hover;
-import org.ism.charts.lib.util.Util;
 
 /**
  *

@@ -18,20 +18,27 @@
  */
 package org.ism.charts.lib.component.chart;
 
-import javax.faces.component.UIComponentBase;
 import javax.faces.context.FacesContext;
 import javax.faces.application.ResourceDependencies;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
+import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.FacesEvent;
+import org.ism.charts.lib.event.CloseEvent;
+import org.ism.charts.lib.event.SelectEvent;
+import org.ism.charts.lib.event.SerieClickEvent;
+import org.ism.charts.lib.event.UnselectEvent;
 import org.ism.charts.lib.model.ChartModel;
+import org.ism.charts.lib.model.json.Options;
+import org.ism.charts.lib.model.series.Series;
+import org.ism.charts.lib.util.Constants;
 
 /**
  * <h3>chart component</h3>
@@ -58,34 +65,47 @@ import org.ism.charts.lib.model.ChartModel;
     // -
     // Chart
 
-    //@ResourceDependency(library = "ism", name = "charts/charts.min.css"),
-
+    @ResourceDependency(library = "ism", name = "icharts/components.min.css")
+    ,@ResourceDependency(library = "ism", name = "charts/charts.min.css")
+    ,
     ////////  JS
     // JQuery Dynamically load
-    //@ResourceDependency(library = "vendor", name = "jquery/3.1.1/js/jquery.min.js"),
-    // Highcharts.js Dynamically load due to JQuery
-    //@ResourceDependency(library = "vendor", name = "highcharts/highcharts.js"),
-    //@ResourceDependency(library = "vendor", name = "highcharts/modules/exporting.js")
+//    @ResourceDependency(library = "vendor", name = "jquery/jquery.js", target = "head")
+//    ,@ResourceDependency(library = "vendor", name = "jquery/jquery-plugins.js", target = "head")
+//    ,
+	
     // Charts
-    //@ResourceDependency(library = "", name = "ism/charts/charts.js")
-    
-    @ResourceDependency(library = "ism", name = "icharts/components.css"),
-    @ResourceDependency(library = "ism", name = "charts/charts.css"),
-//    @ResourceDependency(library = "ism", name = "jquery/jquery.js"),
-//    @ResourceDependency(library = "ism", name = "jquery/jquery-plugins.js"),
-    @ResourceDependency(library = "ism", name = "icharts/core.js"),
-    @ResourceDependency(library = "ism", name = "icharts/components.js"),
-    @ResourceDependency(library = "ism", name = "charts/charts.js")
+    @ResourceDependency(library = "ism", name = "icharts/core.js")
+    ,@ResourceDependency(library = "ism", name = "icharts/components.js")
+    ,
+    // Highcharts.js Dynamically load due to JQuery
+    @ResourceDependency(library = "vendor", name = "highcharts/6.0.4/code/highcharts.js")
+    ,@ResourceDependency(library = "vendor", name = "highcharts/6.0.4/code/modules/exporting.js")
+    ,@ResourceDependency(library = "ism", name = "charts/charts.min.js")
 })
 @FacesComponent(value = Chart.COMPONENT_TYPE)
-public class Chart extends UIPanel implements javax.faces.component.behavior.ClientBehaviorHolder {
+public class Chart extends UIPanel implements org.ism.charts.lib.component.api.Widget, javax.faces.component.behavior.ClientBehaviorHolder, org.ism.charts.lib.component.api.IChartsClientBehaviorHolder {
 
     public static final String COMPONENT_TYPE = "org.ism.component.Chart";
     public static final String COMPONENT_FAMILY = "org.ism.component";
     public static final String RENDERER_TYPE = "org.ism.renderKit.Chart";
 
+    public static final String CHART_PANEL = "ui-chart-panel";
+    public static final String CHART_CONTAINER = "ui-chart-container";
+
     protected enum PropertyKeys {
-        exporting, debug, model, enabledJQuery, responsive, style, styleClass, type, widgetVar, zoomType;
+        debug,
+        enabledJQuery,
+        exporting,
+        model,
+        responsive,
+        selectedSerieId,
+        selectedSerieOptions,
+        style,
+        styleClass,
+        type,
+        widgetVar,
+        zoomType;
 
         String toString;
 
@@ -102,6 +122,13 @@ public class Chart extends UIPanel implements javax.faces.component.behavior.Cli
         }
     }
 
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    ///
+    /// Component setup
+    ///
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public Chart() {
         setRendererType(RENDERER_TYPE);
     }
@@ -125,87 +152,13 @@ public class Chart extends UIPanel implements javax.faces.component.behavior.Cli
         return true;
     }
 
-    public java.lang.String getWidgetVar() {
-        return (java.lang.String) getStateHelper().eval(PropertyKeys.widgetVar, null);
-    }
-
-    /**
-     * Deprecated : not working
-     *
-     * @param _widgetVar is the primefaces
-     */
-    public void setWidgetVar(java.lang.String _widgetVar) {
-        getStateHelper().put(PropertyKeys.widgetVar, _widgetVar);
-    }
-
-    /**
-     * <h3>Description</h3>
-     * Type allow to specify kind of chart to be render. Type is one of Line,
-     * Pie,
-     *
-     * <h3>Note :</h3>
-     * Defining this properety have priority on model type chart.
-     *
-     * @return type
-     */
-    public java.lang.String getType() {
-        return (java.lang.String) getStateHelper().eval(PropertyKeys.type, null);
-    }
-
-    /**
-     * <h3>Description</h3>
-     * Type allow to specify kind of chart to be render. Type is one of Line,
-     * Pie,
-     *
-     * <h3>Note :</h3>
-     * Defining this properety have priority on model type chart.
-     *
-     * @param _type is one of line, pie,
-     */
-    public void setType(java.lang.String _type) {
-        getStateHelper().put(PropertyKeys.type, _type);
-    }
-
-    public ChartModel getModel() {
-        return (ChartModel) getStateHelper().eval(PropertyKeys.model, null);
-    }
-
-    public void setModel(ChartModel model) {
-        getStateHelper().put(PropertyKeys.model, model);
-    }
-
-    public java.lang.String getStyle() {
-        return (java.lang.String) getStateHelper().eval(PropertyKeys.style, null);
-    }
-
-    public void setStyle(java.lang.String _style) {
-        getStateHelper().put(PropertyKeys.style, _style);
-    }
-
-    public java.lang.String getStyleClass() {
-        return (java.lang.String) getStateHelper().eval(PropertyKeys.styleClass, null);
-    }
-
-    public void setStyleClass(java.lang.String _styleClass) {
-        getStateHelper().put(PropertyKeys.styleClass, _styleClass);
-    }
-
-    public boolean isResponsive() {
-        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.responsive, false);
-    }
-
-    public void setResponsive(boolean _responsive) {
-        getStateHelper().put(PropertyKeys.responsive, _responsive);
-    }
-
-    public boolean isExporting() {
-        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.exporting, false);
-    }
-
-    public void setExporting(boolean _exporting) {
-        getStateHelper().put(PropertyKeys.exporting, _exporting);
-    }
-
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    ///
+    /// Property
+    ///
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     /**
      * When enable this property allow to display the render mecanisme for the
      * chart to render.
@@ -237,16 +190,122 @@ public class Chart extends UIPanel implements javax.faces.component.behavior.Cli
     }
 
     /**
-     * When enable this property allow to add JQuery librarie this in case of 
-     * no conflit if already loaded. default value is true
+     * When enable this property allow to add JQuery librarie this in case of no
+     * conflit if already loaded. default value is true
      *
      * @param enabledJQuery true for renderer
      */
     public void setEnabledJQuery(boolean enabledJQuery) {
         getStateHelper().put(PropertyKeys.enabledJQuery, enabledJQuery);
     }
+
+    public boolean isExporting() {
+        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.exporting, false);
+    }
+
+    public void setExporting(boolean _exporting) {
+        getStateHelper().put(PropertyKeys.exporting, _exporting);
+    }
+
+    public ChartModel getModel() {
+        return (ChartModel) getStateHelper().eval(PropertyKeys.model, null);
+    }
+
+    public void setModel(ChartModel model) {
+        getStateHelper().put(PropertyKeys.model, model);
+    }
+
+    public boolean isResponsive() {
+        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.responsive, false);
+    }
+
+    public void setResponsive(boolean _responsive) {
+        getStateHelper().put(PropertyKeys.responsive, _responsive);
+    }
+
+    /**
+     * Selected Serie Id, give the number of the current serie selected
+     *
+     * @return id of the current selected serie started with 0.
+     */
+    public java.lang.Integer getSelectedSerieId() {
+        return (java.lang.Integer) getStateHelper().eval(PropertyKeys.selectedSerieId, null);
+    }
+
+    /**
+     * Define the current selected serie ID
+     *
+     * @param _selectedSerieId an id of the current slected serie started by 0
+     */
+    public void setSelectedSerieId(java.lang.Integer _selectedSerieId) {
+        getStateHelper().put(PropertyKeys.selectedSerieId, _selectedSerieId);
+    }
     
+    public Options getSelectedSerieOptions(){
+        return (Options) getStateHelper().eval(PropertyKeys.selectedSerieOptions, null);
+    }
     
+    public void setSelectedSerieOptions(Options _selectedSerieOptions){
+        getStateHelper().put(PropertyKeys.selectedSerieOptions, _selectedSerieOptions);
+    }
+
+    public java.lang.String getStyle() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.style, null);
+    }
+
+    public void setStyle(java.lang.String _style) {
+        getStateHelper().put(PropertyKeys.style, _style);
+    }
+
+    public java.lang.String getStyleClass() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.styleClass, null);
+    }
+
+    public void setStyleClass(java.lang.String _styleClass) {
+        getStateHelper().put(PropertyKeys.styleClass, _styleClass);
+    }
+
+    /**
+     * <h3>Description</h3>
+     * Type allow to specify kind of chart to be render. Type is one of Line,
+     * Pie,
+     *
+     * <h3>Note :</h3>
+     * Defining this properety have priority on model type chart.
+     *
+     * @return type
+     */
+    public java.lang.String getType() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.type, null);
+    }
+
+    /**
+     * <h3>Description</h3>
+     * Type allow to specify kind of chart to be render. Type is one of Line,
+     * Pie,
+     *
+     * <h3>Note :</h3>
+     * Defining this properety have priority on model type chart.
+     *
+     * @param _type is one of line, pie,
+     */
+    public void setType(java.lang.String _type) {
+        getStateHelper().put(PropertyKeys.type, _type);
+    }
+
+    public java.lang.String getWidgetVar() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.widgetVar, null);
+    }
+
+    /**
+     * Deprecated : not working
+     *
+     * @param _widgetVar is the primefaces
+     */
+    public void setWidgetVar(java.lang.String _widgetVar) {
+        getStateHelper().put(PropertyKeys.widgetVar, _widgetVar);
+    }
+
     public java.lang.String getZoomType() {
         return (java.lang.String) getStateHelper().eval(PropertyKeys.zoomType, null);
     }
@@ -255,6 +314,13 @@ public class Chart extends UIPanel implements javax.faces.component.behavior.Cli
         getStateHelper().put(PropertyKeys.zoomType, _zoomType);
     }
 
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    ///
+    /// 
+    ///
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     /**
      * Returns the saved state for this component.
      *
@@ -293,9 +359,23 @@ public class Chart extends UIPanel implements javax.faces.component.behavior.Cli
         getStateHelper().restoreState(context, state);
     }
 
-    private final static String DEFAULT_EVENT = "itemSelect";
+    private static final Map<String, Class<? extends BehaviorEvent>> BEHAVIOR_EVENT_MAPPING = Collections.unmodifiableMap(new HashMap<String, Class<? extends BehaviorEvent>>() {
+        {
+            put("serieclick", SerieClickEvent.class);
+            put("select", SelectEvent.class);
+            put("unselect", UnselectEvent.class);
+            put("close", CloseEvent.class);
+        }
+    });
 
-    private static final Collection<String> EVENT_NAMES = Collections.unmodifiableCollection(Arrays.asList(DEFAULT_EVENT));
+    private static final Collection<String> EVENT_NAMES = BEHAVIOR_EVENT_MAPPING.keySet();
+
+    @Override
+    public Map<String, Class<? extends BehaviorEvent>> getBehaviorEventMapping() {
+        return BEHAVIOR_EVENT_MAPPING;
+    }
+
+    private final static String DEFAULT_EVENT = "serieclick, select, unselect, close";
 
     @Override
     public Collection<String> getEventNames() {
@@ -309,14 +389,55 @@ public class Chart extends UIPanel implements javax.faces.component.behavior.Cli
 
     @Override
     public void queueEvent(FacesEvent event) {
-        if (event instanceof AjaxBehaviorEvent) {
-            BehaviorEvent behaviorEvent = (AjaxBehaviorEvent) event;
-            Map<String, String> map = getFacesContext().getExternalContext().getRequestParameterMap();
-            int itemIndex = Integer.parseInt(map.get("itemIndex"));
-            int seriesIndex = Integer.parseInt(map.get("seriesIndex"));
+        FacesContext context = getFacesContext();
+        Map<String, String> params = context.getExternalContext().getRequestParameterMap();
+        String eventName = params.get(Constants.RequestParams.PARTIAL_BEHAVIOR_EVENT_PARAM);
+        String clientId = this.getClientId(context);
 
-            //ItemSelectEvent itemSelectEvent = new ItemSelectEvent(this, behaviorEvent.getBehavior(), itemIndex, seriesIndex);
-            //super.queueEvent(itemSelectEvent);
+        if (isSelfRequest(context)) {
+            AjaxBehaviorEvent behaviorEvent = (AjaxBehaviorEvent) event;
+
+            if (eventName.equals("serieclick")) {
+                Integer index = getSelectedSerieId();
+                Options options = this.getSelectedSerieOptions();
+                SerieClickEvent evt = new SerieClickEvent(this, behaviorEvent.getBehavior(), options, index);
+                super.queueEvent(evt);
+
+            }
+        } else {
+            super.queueEvent(event);
+        }
+    }
+
+    @Override
+    public void processDecodes(FacesContext context) {
+        if (isSelfRequest(context)) {
+            this.decode(context);
+        } else {
+            super.processDecodes(context);
+        }
+    }
+
+    @Override
+    public void processValidators(FacesContext context) {
+        if (!isSelfRequest(context)) {
+            super.processValidators(context);
+        }
+    }
+
+    private boolean isSelfRequest(FacesContext context) {
+        return this.getClientId(context).equals(context.getExternalContext().getRequestParameterMap().get(Constants.RequestParams.PARTIAL_SOURCE_PARAM));
+    }
+
+    @Override
+    public String resolveWidgetVar() {
+        FacesContext context = getFacesContext();
+        String userWidgetVar = (String) getAttributes().get("widgetVar");
+
+        if (userWidgetVar != null) {
+            return userWidgetVar;
+        } else {
+            return "widget_" + getClientId(context).replaceAll("-|" + UINamingContainer.getSeparatorChar(context), "_");
         }
     }
 

@@ -9786,7 +9786,7 @@
                  * @sample {highmaps} maps/credits/enabled-false/ Credits disabled
                  * @default true
                  */
-                enabled: true,
+                enabled: false,
 
                 /**
                  * The URL for the credits label.
@@ -9875,7 +9875,8 @@
                  * @sample {highmaps} maps/credits/customized/ Custom URL and text
                  * @default {highcharts|highstock} Highcharts.com
                  */
-                text: 'Highcharts.com'
+                //text:'Highcharts.com'
+                text: ''
             }
         };
 

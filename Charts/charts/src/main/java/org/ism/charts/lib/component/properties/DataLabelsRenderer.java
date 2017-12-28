@@ -7,7 +7,7 @@ package org.ism.charts.lib.component.properties;
 
 import org.ism.charts.lib.model.properties.Align;
 import org.ism.charts.lib.model.properties.DataLabels;
-import org.ism.charts.lib.util.Util;
+import org.ism.charts.lib.model.properties.Style;
 
 /**
  *
@@ -82,7 +82,7 @@ public class DataLabelsRenderer {
         return point.endsWith(",");
     }
 
-    static private String align(Align align) {
+    static private String align(String align) {
         if (align != null) {
             return "align:'" + align + "',";
         }
@@ -257,9 +257,9 @@ public class DataLabelsRenderer {
         return "";
     }
 
-    static private String style(String style) {
+    static private String style(Style style) {
         if (style != null) {
-            return "style:" + style + ",";
+            return "style:{" + style.toString() + "},";
         }
         return "";
     }
@@ -271,7 +271,7 @@ public class DataLabelsRenderer {
         return "";
     }
 
-    static private String verticalAlign(Align verticalAlign) {
+    static private String verticalAlign(String verticalAlign) {
         if (verticalAlign != null) {
             return "verticalAlign:'" + verticalAlign + "',";
         }
