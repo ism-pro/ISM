@@ -18,8 +18,10 @@ import org.ism.jsf.hr.StaffController;
 import org.ism.jsf.smq.nc.NonConformiteRequestController;
 import org.ism.listener.SessionCounterListener;
 import org.ism.charts.lib.model.ChartModel;
+import org.ism.charts.lib.model.details.Title;
 import org.ism.charts.lib.model.properties.ChartType;
 import org.ism.charts.lib.model.properties.DataLabels;
+import org.ism.charts.lib.model.properties.Style;
 import org.ism.charts.lib.model.series.Data;
 import org.ism.charts.lib.model.series.PlotOptions;
 import org.ism.charts.lib.model.series.Series;
@@ -118,7 +120,7 @@ public class ViewCompanyCharts implements Serializable {
         model.getChart().setPlotShadow(false);
 
         // Managing Titles
-        model.getTitle().setText("Staffs Connectés");
+        model.setTitle(new Title("Staffs Connectés"));
 
         // Managing plotOptions
         model.setPlotOptions(new PlotOptions());
@@ -128,7 +130,7 @@ public class ViewCompanyCharts implements Serializable {
         model.getPlotOptions().setDataLabels(new DataLabels());
         model.getPlotOptions().getDataLabels().setEnabled(true);
         model.getPlotOptions().getDataLabels().setFormat("<b>{point.name}</b>: {point.percentage:.1f} %");
-        model.getPlotOptions().getDataLabels().setStyle("{color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'}");
+        model.getPlotOptions().getDataLabels().setStyle(new Style("(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"));
 
         // Managing Series
         Data connect = new Data("Connectés", (Float) percActiveSession);
@@ -156,7 +158,7 @@ public class ViewCompanyCharts implements Serializable {
         model.getChart().setPlotShadow(false);
 
         // Seutp Title
-        model.getTitle().setText("Non conformités");
+        model.setTitle(new Title("Non conformités"));
 
         // Setup Tooltip
         model.setToolTip(new ToolTip());
@@ -169,7 +171,7 @@ public class ViewCompanyCharts implements Serializable {
         model.getPlotOptions().setDataLabels(new DataLabels());
         model.getPlotOptions().getDataLabels().setEnabled(true);
         model.getPlotOptions().getDataLabels().setFormat("<b>{point.name}</b>: {point.percentage:.1f} %");
-        model.getPlotOptions().getDataLabels().setStyle("{color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'}");
+        model.getPlotOptions().getDataLabels().setStyle(new Style("(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"));
 
         // Setup Legend
 //        model.setLegend(new Legend());

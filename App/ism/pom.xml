@@ -9,7 +9,7 @@
     
     <groupId>org.ism</groupId>
     <artifactId>app</artifactId>
-    <version>1712.15</version>
+    <version>1712.25</version>
     <packaging>war</packaging>
 
     <name>ism-app</name>
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>org.ism.charts</groupId>
             <artifactId>charts</artifactId>
-            <version>1712.15</version>
+            <version>1712.20</version>
         </dependency>
         <!--
         <dependency>

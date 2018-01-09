@@ -14,9 +14,12 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import org.ism.charts.lib.model.ChartModel;
 import org.ism.charts.lib.model.axis.AxisTitle;
+import org.ism.charts.lib.model.details.SubTitle;
+import org.ism.charts.lib.model.details.Title;
 import org.ism.charts.lib.model.properties.Align;
 import org.ism.charts.lib.model.properties.ChartType;
 import org.ism.charts.lib.model.properties.DataLabels;
+import org.ism.charts.lib.model.properties.Style;
 import org.ism.charts.lib.model.series.Data;
 import org.ism.charts.lib.model.series.Legend;
 import org.ism.charts.lib.model.series.PlotOptions;
@@ -88,8 +91,8 @@ public class DocExplorerChartView implements Serializable {
         model.getChart().setPlotShadow(false);
 
         // Setup Titles
-        model.getTitle().setText("Documentation");
-        model.getSubTitle().setText("Répartition par processus");
+        model.setTitle(new Title("Documentation"));
+        model.setSubTitle(new SubTitle("Répartition par processus"));
 
         // Managing XAxis
         List<String> xAxis = processusController.getApprouvedItemsAsString();
@@ -116,7 +119,7 @@ public class DocExplorerChartView implements Serializable {
         model.getPlotOptions().setDataLabels(new DataLabels());
         model.getPlotOptions().getDataLabels().setEnabled(true);
         //model.getPlotOptions().getDataLabels().setFormat("<b>{point.name}</b>: {point.y:.1f}");
-        model.getPlotOptions().getDataLabels().setStyle("{color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'}");
+        model.getPlotOptions().getDataLabels().setStyle(new Style("(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"));
 
         // Setup Legend
         model.setLegend(new Legend());
@@ -164,7 +167,7 @@ public class DocExplorerChartView implements Serializable {
         model.getChart().setPlotShadow(false);
 
         // Setup Titles
-        model.getTitle().setText(staffAuthController.getStaff().getStProcessus().getPDesignation());
+        model.setTitle(new Title(staffAuthController.getStaff().getStProcessus().getPDesignation()));
         //model.getSubTitle().setText("Répartition par processus");
 
         // Managing XAxis
@@ -195,7 +198,7 @@ public class DocExplorerChartView implements Serializable {
         model.getPlotOptions().setDataLabels(new DataLabels());
         model.getPlotOptions().getDataLabels().setEnabled(true);
         //model.getPlotOptions().getDataLabels().setFormat("<b>{point.name}</b>: {point.y:.1f}");
-        model.getPlotOptions().getDataLabels().setStyle("{color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'}");
+        model.getPlotOptions().getDataLabels().setStyle(new Style("(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"));
 
         // Setup Legend
 //        model.setLegend(new Legend());

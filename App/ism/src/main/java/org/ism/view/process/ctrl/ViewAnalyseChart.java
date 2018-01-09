@@ -26,6 +26,8 @@ import org.ism.entities.process.ctrl.AnalysePoint;
 import org.ism.jsf.util.JsfUtil;
 import org.ism.charts.lib.model.ChartModel;
 import org.ism.charts.lib.model.axis.PlotLines;
+import org.ism.charts.lib.model.details.SubTitle;
+import org.ism.charts.lib.model.details.Title;
 import org.ism.charts.lib.model.properties.ChartType;
 import org.ism.charts.lib.model.properties.DataLabels;
 import org.ism.charts.lib.model.series.Data;
@@ -305,15 +307,15 @@ public class ViewAnalyseChart implements Serializable {
         model.getChart().setZommType("x");
 
         // Seutp Title
-        model.getTitle().setText(StringEscapeUtils.escapeJavaScript(currentAnalyse.getAaPoint().getApPoint() + " - "
-                + currentAnalyse.getAaPoint().getApDesignation()));
+        model.setTitle(new Title(StringEscapeUtils.escapeJavaScript(currentAnalyse.getAaPoint().getApPoint() + " - "
+                + currentAnalyse.getAaPoint().getApDesignation())));
         model.getTitle().setX(-20);
 
         // Setup SubTitle
-        model.getSubTitle().setText(StringEscapeUtils.escapeJavaScript("["
+        model.setSubTitle(new SubTitle(StringEscapeUtils.escapeJavaScript("["
                 + currentAnalyse.getAaType().getAtType()
                 + " - "
-                + currentAnalyse.getAaType().getAtDesignation() + "]"));
+                + currentAnalyse.getAaType().getAtDesignation() + "]")));
         model.getSubTitle().setX(-20);
         model.getSubTitle().setStyle("\"color:blue;\"");
 
