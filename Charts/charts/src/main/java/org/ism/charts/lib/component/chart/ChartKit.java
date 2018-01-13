@@ -24,7 +24,7 @@ import org.ism.charts.lib.util.WidgetBuilder;
 
 @FacesRenderer(componentFamily = Chart.COMPONENT_FAMILY,
         rendererType = Chart.RENDERER_TYPE)
-public class ChartKit extends CoreRenderer {
+public class ChartKit extends org.primefaces.renderkit.CoreRenderer {
 
     /**
      * <p>
@@ -41,8 +41,9 @@ public class ChartKit extends CoreRenderer {
 
         String selectedSerieIdParam = params.get(clientId + "_selectedSerieId");
         if (selectedSerieIdParam != null) {
-            if(!selectedSerieIdParam.trim().replace("null", "").isEmpty())
+            if (!selectedSerieIdParam.trim().replace("null", "").isEmpty()) {
                 chart.setSelectedSerieId(Integer.valueOf(selectedSerieIdParam));
+            }
         }
 
         //Restore toggle state
@@ -114,35 +115,6 @@ public class ChartKit extends CoreRenderer {
     }
 
     /**
-     * <p>
-     * Method manually encoded resources. In particular, it add specified
-     * functionnally used. The main highchart library is already include while
-     * calling this component as well as requeried library JQuery and specic
-     * resources of the component.
-     * </p>
-     *
-     * @param context <code>FaceContext</code> current context
-     * @param component  <code>UIComponent</code> current component
-     * @throws IOException exception
-     */
-//    @Override
-    protected void encodeResources(FacesContext context, UIComponent component) throws IOException {
-        Chart chart = (Chart) component;
-        // Style
-        //writeStyleResource(context, "/projsf-ch3/showOneDeck.css");
-
-//        // Script      
-//        if (chart.getEnabledJQuery()) {
-//            writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/jquery/3.1.1/js/jquery.min.js");
-//        }
-//        writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/6.0.4/code/highcharts.js");
-//        if (chart.isExporting()) {
-//            writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/vendor/highcharts/6.0.4/code/modules/exporting.js");
-//        }
-//        writeScriptResource(context, context.getExternalContext().getRequestServletPath() + "/ism/charts/charts.js");
-    }
-
-    /**
      *
      * @param context <code>FaceContext</code> current context
      * @param chart  <code>UIComponent</code> current component
@@ -185,22 +157,28 @@ public class ChartKit extends CoreRenderer {
         writer.write("$(document).ready(function() {");
         // script code
         writer.write(script);
-
-        WidgetBuilder wb = new WidgetBuilder(context);
-        writer.write("IChartsFaces.cw(\"");
-        writer.write("Chart");
-        writer.write("\",\"");
-        writer.write(chart.resolveWidgetVar());
-        writer.write("\",{");
-        writer.write("id:\"");
-        writer.write(clientId);
-        writer.write("\"");
-        encodeClientBehaviors(context, chart);
-        writer.write("}");
-        writer.write(");");
         writer.write("});");
         writer.endElement("script");
+//        
 
+//        WidgetBuilder wb = new WidgetBuilder(context);
+//        writer.write("IChartsFaces.cw(\"");
+//        writer.write("Chart");
+//        writer.write("\",\"");
+//        writer.write(chart.resolveWidgetVar());
+//        writer.write("\",{");
+//        writer.write("id:\"");
+//        writer.write(clientId);
+//        writer.write("\"");
+//        encodeClientBehaviors(context, chart);
+//        writer.write("}");
+//        writer.write(");");
+//        writer.write("});");
+//        writer.endElement("script");
+        org.primefaces.util.WidgetBuilder wb = getWidgetBuilder(context);
+        wb.init("Chart", chart.resolveWidgetVar(), clientId);
+        encodeClientBehaviors(context, chart);
+        wb.finish();
     }
 
     protected void encodeStateHolder(FacesContext context, Chart chart, String name, String value) throws IOException {
@@ -216,6 +194,7 @@ public class ChartKit extends CoreRenderer {
 
     /**
      * Unparse content object
+     *
      * @param selectedSerie JSON Object
      */
     public Options unparseObj(Chart chart, String selectedSerie) {

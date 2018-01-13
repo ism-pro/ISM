@@ -3,9 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.ism.charts.lib.component.tabview;
+package org.ism.charts.lib.component.fake;
 
 import javax.faces.application.ResourceDependencies;
+import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
 import javax.faces.component.UIPanel;
 
@@ -13,13 +14,29 @@ import javax.faces.component.UIPanel;
  *
  * @author r.hendrick
  */
-@ResourceDependencies({})
-@FacesComponent(value = Tab.COMPONENT_TYPE)
-public class Tab extends UIPanel {
+@ResourceDependencies({
+    ///////  CSS
 
-    public static final String COMPONENT_TYPE = "org.ism.component.Tab";
+    @ResourceDependency(library = "ism", name = "icharts/components.min.css")
+    ,@ResourceDependency(library = "webjars", name = "font-awesome/4.7.0/css/font-awesome.min-jsf.css")
+    ,@ResourceDependency(library = "webjars", name = "bootstrap/4.0.0-beta.2/css/bootstrap.min-jsf.css")
+    ,@ResourceDependency(library = "ism", name = "fake/fake.css")
+    ,
+    ////////  JS
+    
+    @ResourceDependency(library = "ism", name = "icharts/core.js")
+    ,@ResourceDependency(library = "ism", name = "icharts/components.js")
+    ,@ResourceDependency(library = "webjars", name = "popper.js/1.12.9/dist/umd/popper.min.js")
+    ,@ResourceDependency(library = "webjars", name = "bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js")
+    ,@ResourceDependency(library = "ism", name = "fake/fake.js")
+})
+
+@FacesComponent(value = Fake.COMPONENT_TYPE)
+public class Fake extends UIPanel {
+
+    public static final String COMPONENT_TYPE = "org.ism.component.Fake";
     public static final String COMPONENT_FAMILY = "org.ism.component";
-    public static final String RENDERER_TYPE = "org.ism.renderKit.Tab";
+    public static final String RENDERER_TYPE = "org.ism.renderKit.Fake";
 
     public enum PropertyKeys {
 
@@ -47,7 +64,7 @@ public class Tab extends UIPanel {
         }
     }
 
-    public Tab() {
+    public Fake() {
         setRendererType(null);
     }
 

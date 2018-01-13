@@ -60,31 +60,24 @@ import org.ism.charts.lib.util.Constants;
  *
  * @author r.hendrick
  */
-@ResourceDependencies({ ///////  CSS
-    // JQuery
-    // -
-    // Chart
+@ResourceDependencies({
+    @ResourceDependency(library = "primefaces", name = "components.css")
+    ,@ResourceDependency(library = "webjars", name = "font-awesome/4.7.0/css/font-awesome.min-jsf.css")
+    ,@ResourceDependency(library = "webjars", name = "bootstrap/4.0.0-beta.2/css/bootstrap.min-jsf.css")
+    ,@ResourceDependency(library = "ism", name = "charts/charts.min.css", target = "head")
 
-    @ResourceDependency(library = "ism", name = "icharts/components.min.css")
-    ,@ResourceDependency(library = "ism", name = "charts/charts.min.css")
-    ,
-    ////////  JS
-    // JQuery Dynamically load
-//    @ResourceDependency(library = "vendor", name = "jquery/jquery.js", target = "head")
-//    ,@ResourceDependency(library = "vendor", name = "jquery/jquery-plugins.js", target = "head")
-//    ,
-	
-    // Charts
-    @ResourceDependency(library = "ism", name = "icharts/core.js")
-    ,@ResourceDependency(library = "ism", name = "icharts/components.js")
-    ,
-    // Highcharts.js Dynamically load due to JQuery
-    @ResourceDependency(library = "vendor", name = "highcharts/6.0.4/code/highcharts.js")
-    ,@ResourceDependency(library = "vendor", name = "highcharts/6.0.4/code/modules/exporting.js")
-    ,@ResourceDependency(library = "ism", name = "charts/charts.min.js")
+    ,@ResourceDependency(library = "primefaces", name = "jquery/jquery.js")
+    ,@ResourceDependency(library = "primefaces", name = "jquery/jquery-plugins.js")
+    ,@ResourceDependency(library = "primefaces", name = "core.js")
+    ,@ResourceDependency(library = "primefaces", name = "components.js")
+    ,@ResourceDependency(library = "webjars", name = "popper.js/1.12.9/dist/umd/popper.min.js")
+    ,@ResourceDependency(library = "webjars", name = "bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js")
+    ,@ResourceDependency(library = "vendor", name = "highcharts/6.0.4/code/highcharts.js", target = "head")
+    ,@ResourceDependency(library = "vendor", name = "highcharts/6.0.4/code/modules/exporting.js", target = "head")
+    ,@ResourceDependency(library = "ism", name = "charts/charts.min.js", target = "head")
 })
 @FacesComponent(value = Chart.COMPONENT_TYPE)
-public class Chart extends UIPanel implements org.ism.charts.lib.component.api.Widget, javax.faces.component.behavior.ClientBehaviorHolder, org.ism.charts.lib.component.api.IChartsClientBehaviorHolder {
+public class Chart extends UIPanel implements org.primefaces.component.api.Widget, javax.faces.component.behavior.ClientBehaviorHolder, org.primefaces.component.api.PrimeClientBehaviorHolder {
 
     public static final String COMPONENT_TYPE = "org.ism.component.Chart";
     public static final String COMPONENT_FAMILY = "org.ism.component";
@@ -240,12 +233,12 @@ public class Chart extends UIPanel implements org.ism.charts.lib.component.api.W
     public void setSelectedSerieId(java.lang.Integer _selectedSerieId) {
         getStateHelper().put(PropertyKeys.selectedSerieId, _selectedSerieId);
     }
-    
-    public Options getSelectedSerieOptions(){
+
+    public Options getSelectedSerieOptions() {
         return (Options) getStateHelper().eval(PropertyKeys.selectedSerieOptions, null);
     }
-    
-    public void setSelectedSerieOptions(Options _selectedSerieOptions){
+
+    public void setSelectedSerieOptions(Options _selectedSerieOptions) {
         getStateHelper().put(PropertyKeys.selectedSerieOptions, _selectedSerieOptions);
     }
 

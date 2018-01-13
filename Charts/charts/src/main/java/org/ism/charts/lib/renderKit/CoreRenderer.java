@@ -96,7 +96,7 @@ public abstract class CoreRenderer extends Renderer {
     }
 
     protected String getResourceRequestPath(FacesContext context, String resourceName) {
-        Resource resource = context.getApplication().getResourceHandler().createResource(resourceName, "primefaces");
+        Resource resource = context.getApplication().getResourceHandler().createResource(resourceName, "ichartsfaces");
 
         return resource.getRequestPath();
     }
@@ -165,7 +165,7 @@ public abstract class CoreRenderer extends Renderer {
                     boolean chained = false;
 
                     if (size > 1 || hasEventValue) {
-                        builder.append("PrimeFaces.bcn(this,event,[");
+                        builder.append("IChartsFaces.bcn(this,event,[");
 
                         if (hasEventValue) {
                             builder.append("function(event){").append(eventValue).append("}");
@@ -280,7 +280,7 @@ public abstract class CoreRenderer extends Renderer {
 
             if (commandSize > 1) {
                 boolean first = true;
-                builder.append("PrimeFaces.bcn(this,event,[");
+                builder.append("IChartsFaces.bcn(this,event,[");
 
                 if (hasEvent) {
                     builder.append("function(event){").append(event).append("}");
@@ -430,7 +430,7 @@ public abstract class CoreRenderer extends Renderer {
 
         //append params
         if (!params.isEmpty()) {
-            request.append("PrimeFaces.addSubmitParam('").append(formId).append("',{");
+            request.append("IChartsFaces.addSubmitParam('").append(formId).append("',{");
 
             for (Iterator<String> it = params.keySet().iterator(); it.hasNext();) {
                 String key = it.next();
@@ -461,7 +461,7 @@ public abstract class CoreRenderer extends Renderer {
             request.append(";");
         }
 
-        request.append("PrimeFaces.onPost();");
+        request.append("IChartsFaces.onPost();");
 
         return request.toString();
     }
@@ -495,7 +495,7 @@ public abstract class CoreRenderer extends Renderer {
 
                     if (eventBehaviorsSize > 1) {
                         boolean chained = false;
-                        writer.write("PrimeFaces.bcnu(ext,event,[");
+                        writer.write("IChartsFaces.bcnu(ext,event,[");
 
                         for (int i = 0; i < eventBehaviorsSize; i++) {
                             ClientBehavior behavior = eventBehaviors.get(i);

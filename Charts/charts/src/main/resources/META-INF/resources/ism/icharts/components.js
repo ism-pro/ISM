@@ -1,306 +1,278 @@
-//
-//IChartsFaces.widget.Panel = IChartsFaces.widget.BaseWidget.extend({
-//    init: function (a) {
-//        this._super(a);
-//        this.panel = $(this.jqId + "-parent");
-//        this.container = $(this.jqId);
-//        console.log("Chart was call on init !");
-//        this.bindEvents()
-//    }, bindEvents: function () {
-//        if (this.cfg.toggleable) {
-//            this.bindToggler()
-//        }
-//        if (this.cfg.closable) {
-//            this.bindCloser()
-//        }
-//        if (this.cfg.hasMenu) {
-//            $(this.jqId + "_menu").on("click.panel", function (a) {
-//                a.preventDefault()
-//            })
-//        }
-//        this.header.find(".ui-panel-titlebar-icon").on("mouseover.panel", function () {
-//            $(this).addClass("ui-state-hover")
-//        }).on("mouseout.panel", function () {
-//            $(this).removeClass("ui-state-hover")
-//        }).on("click.panel", function (b) {
-//            var a = $(this).attr("href");
-//            if (!a || a == "#") {
-//                b.preventDefault()
-//            }
-//        })
-//    }, toggle: function () {
-//        if (this.cfg.collapsed) {
-//            this.expand();
-//            IChartsFaces.invokeDeferredRenders(this.id)
-//        } else {
-//            this.collapse()
-//        }
-//    }, expand: function () {
-//        this.toggleState(false, "ui-icon-plusthick", "ui-icon-minusthick");
-//        if (this.cfg.toggleOrientation === "vertical") {
-//            this.slideDown()
-//        } else {
-//            if (this.cfg.toggleOrientation === "horizontal") {
-//                this.slideRight()
-//            }
-//        }
-//    }, collapse: function () {
-//        this.toggleState(true, "ui-icon-minusthick", "ui-icon-plusthick");
-//        if (this.cfg.toggleOrientation === "vertical") {
-//            this.slideUp()
-//        } else {
-//            if (this.cfg.toggleOrientation === "horizontal") {
-//                this.slideLeft()
-//            }
-//        }
-//    }, slideUp: function () {
-//        this.content.slideUp(this.cfg.toggleSpeed, "easeInOutCirc")
-//    }, slideDown: function () {
-//        this.content.slideDown(this.cfg.toggleSpeed, "easeInOutCirc")
-//    }, slideLeft: function () {
-//        var a = this;
-//        this.originalWidth = this.jq.width();
-//        this.title.hide();
-//        this.toggler.hide();
-//        this.content.hide();
-//        this.jq.animate({width: "42px"}, this.cfg.toggleSpeed, "easeInOutCirc", function () {
-//            a.toggler.show();
-//            a.jq.addClass("ui-panel-collapsed-h")
-//        })
-//    }, slideRight: function () {
-//        var a = this, b = this.originalWidth || "100%";
-//        this.toggler.hide();
-//        this.jq.animate({width: b}, this.cfg.toggleSpeed, "easeInOutCirc", function () {
-//            a.jq.removeClass("ui-panel-collapsed-h");
-//            a.title.show();
-//            a.toggler.show();
-//            a.content.css({visibility: "visible", display: "block", height: "auto"})
-//        })
-//    }, toggleState: function (c, b, a) {
-//        this.toggler.children("span.ui-icon").removeClass(b).addClass(a);
-//        this.cfg.collapsed = c;
-//        this.toggleStateHolder.val(c);
-//        this.fireToggleEvent()
-//    }, fireToggleEvent: function () {
-//        if (this.cfg.behaviors) {
-//            var a = this.cfg.behaviors.toggle;
-//            if (a) {
-//                a.call(this)
-//            }
-//        }
-//    }, close: function () {
-//        if (this.visibleStateHolder) {
-//            this.visibleStateHolder.val(false)
-//        }
-//        var a = this;
-//        this.jq.fadeOut(this.cfg.closeSpeed, function (c) {
-//            if (a.cfg.behaviors) {
-//                var b = a.cfg.behaviors.close;
-//                if (b) {
-//                    b.call(a)
-//                }
-//            }
-//        })
-//    }, show: function () {
-//        var a = this;
-//        $(this.jqId).fadeIn(this.cfg.closeSpeed, function () {
-//            IChartsFaces.invokeDeferredRenders(a.id)
-//        });
-//        this.visibleStateHolder.val(true)
-//    }, bindToggler: function () {
-//        var a = this;
-//        this.toggler = $(this.jqId + "_toggler");
-//        this.toggleStateHolder = $(this.jqId + "_collapsed");
-//        this.toggler.click(function () {
-//            a.toggle()
-//        })
-//    }, bindCloser: function () {
-//        var a = this;
-//        this.closer = $(this.jqId + "_closer");
-//        this.visibleStateHolder = $(this.jqId + "_visible");
-//        this.closer.click(function (b) {
-//            a.close();
-//            b.preventDefault()
-//        })
-//    }});
-//var nobj = 3;
-//function simpleStringify(object) {
-//    var simpleObject = {};
-//    for (var prop in object) {
-//        /*
-//         if (!object.hasOwnProperty(prop)) {
-//         //console.log("==> property own");
-//         //continue;
-//         nobj--;
-//         if (nobj === 0) {
-//         nobj++;
-//         continue;
-//         }
-//         simpleObject[prop] = simpleStringify(object[prop].__proto__);
-//         }
-//         */
-//        if ((prop === 'chart') || (prop === 'series')) {
-//            continue;
-//        } else if (typeof (object[prop]) === 'object') {
-//            console.log("==> property is object on size = " + nobj);
-//            nobj--;
-//            if (nobj === 0) {
-//                nobj++;
-//                continue;
-//            }
-//            simpleObject[prop] = simpleStringify(object[prop]);
-//
-//        } else if (typeof (object[prop]) === 'function') {
-//            console.log("==> property is function");
-//            continue;
-//        } else {
-//            console.log(prop + " add");
-//            simpleObject[prop] = object[prop];
-//        }
-//    }
-//    return JSON.stringify(simpleObject); // returns cleaned up JSON
-//}
-//;
-//IChartsFaces.Charts = IChartsFaces.widget.BaseWidget.extend();
-//IChartsFaces.Charts.Serie = IChartsFaces.Charts.extend({
-//    init: function (a) {
-//        //this._super(a);
-//        this.serie = a;
-//    },
-//    toString: function () {
-//        //console.log(simpleStringify(this.serie));
-//        var obj = "{"
-//                + "animate:" + this.serie.animate + ","
-//                + "animationTimeout:" + this.serie.animationTimeout + ","
-//                + "barW:" + this.serie.barW + ","
-//                + "borderWidth:" + this.serie.borderWidth + ","
-//                //Skip chart
-//                + "checkboxOffset:" + this.serie.checkboxOffset + ","
-//                + "closestPointRange:" + this.serie.closestPointRange + ","
-//                + "closestPointRangePx:" + this.serie.closestPointRangePx + ","
-//                + "color:" + this.serie.color + ","
-//                + "colorCounter:" + this.serie.colorCounter + ","
-//                + "colorIndex:" + this.serie.colorIndex + ","
-//                + "columnIndex:" + this.serie.columnIndex + ","
-//                + "columnMetrics:{offset:" + this.serie.columnMetrics.offset + ",width:" + this.serie.columnMetrics.width + "},"
-//                + "cropStart:" + this.serie.cropStart + ","
-//                + "cropped:" + this.serie.cropped + ","
-//                + "data:[";
-//        var i = 0;
-//        for (; this.serie.data[i]; ) {
-//            if (i > 0) {
-//                obj += ",";
-//            }
-//            obj += simpleStringify(this.serie.data[i]);
-//            i++;
-//        }
-//        obj += "],"
-//                + "dataLabelsGroup:{" + simpleStringify(this.serie.dataLabelsGroup) + "},"
-//                + "dataMax:" + this.serie.dataMax + ","
-//                + "dataMin:" + this.serie.dataMin + ","
-//                + "dense:" + this.serie.dense + ","
-//                // Skip group
-//                + "hasRendered:" + this.serie.hasRendered + ","
-//                + "dataMin:" + this.serie.colorIndex + ","
-//                + "dense:" + this.serie.columnIndex + ","
-//                // skip hcEvents,
-//                + "index:" + this.serie.index + ","
-//                // skip invertGroups
-//                + "isDirty:" + this.serie.isDirty + ","
-//                + "isDirtyData:" + this.serie.isDirtyData + ","
-//                // Skip legendGroup
-//                + "legendItem:{" + simpleStringify(this.serie.legendItem) + "},"
-//                + "legendSymbol:{" + simpleStringify(this.serie.legendSymbol) + "},"
-//                // Skip linkedSerie
-//                + "markerGroup:{" + simpleStringify(this.serie.markerGroup) + "},"
-//                + "name:" + this.serie.name + ","
-//                + "options:{" + simpleStringify(this.serie.options) + "},"
-//                + "pointInterval:" + this.serie.pointInterval + ","
-//                + "pointXOffset:" + this.serie.pointXOffset + ","
-//                // Skip poiints
-//                + "processedXData:{" + simpleStringify(this.serie.processedXData) + "},"
-//                + "processedYData:{" + simpleStringify(this.serie.processedYData) + "},"
-//                + "selected:" + this.serie.selected + ","
-//                + "selectedSerieId:" + this.serie.selectedSerieId + ","
-//                + "sharedClipKey:" + this.serie.sharedClipKey + ","
-//                + "state:" + this.serie.state + ","
-//                + "tooltipOptions:{" + simpleStringify(this.serie.tooltipOptions) + "},"
-//                + "translatedThreshold:" + this.serie.translatedThreshold + ","
-//                + "userOptions:{" + simpleStringify(this.serie.userOptions) + "},"
-//                + "visible:" + this.serie.visible + ","
-//                // Skip xAxis
-//                + "xData:{" + simpleStringify(this.serie.xData) + "},"
-//                + "xIncrement:" + this.serie.xIncrement + ","
-//                // Skip yAxis
-//                + "yData:{" + simpleStringify(this.serie.yData) + "},"
-//                // Skip zoneAxis
-//                // Skip zones
-//                + "_hasTracking:" + this.serie._hasTracking + ","
-//                + "_i:" + this.serie._i + ","
-//                + "_legendItemPos:{" + simpleStringify(this.serie._legendItemPos) + "},"
-//                + "__proto__:{" + simpleStringify(this.serie.__proto__) + "}"
-//                + "}";
-//        console.log(obj);
-//        return obj;
-//    }
-//});
-//IChartsFaces.widget.Chart = IChartsFaces.widget.BaseWidget.extend({
-//
-//    init: function (a) {
-//        this._super(a);
-//        this.panel = $(this.jqId + "-parent");
-//        this.container = $(this.jqId);
-//        this.selectedSerieIdHolder = $(this.jqId + "_selectedSerieId");
-//        this.selectedSerieHolder = $(this.jqId + "_selectedSerie");
-//        var chart = $(this.jqId).highcharts();
-//        this.ichart = chart;
-//        // Bind all event
-//        this.bindEvents();
-//    },
-//    bindEvents: function () {
-//        this.bindChartClick();
-//    },
-//    /// 
-//    /// EVENT
-//    bindChartClick: function () {
-//        var a = this;
-//        console.log(this.ichart);
-//        if (this.ichart) {
-//            var ser = 0;
-//            for (; this.ichart.series[ser]; ) {
-//                var serie = this.ichart.series[ser];
-//                serie.selectedSerieId = ser;
-//                Highcharts.addEvent(serie, 'click', function (serie) {
-//                    //this.update({color: color});
-//                    // Save in js
-//                    this.selected = true;
-//                    var serieId = this.selectedSerieId;
-//                    // Serie Id Holder
-//                    a.selectedSerieIdHolder.val(serieId);
-//                    a.cfg.selectedSerieId = serieId;
-//                    // Serie Holder
-//                    console.log(this);
-//                    a.selectedSerieHolder.val(new IChartsFaces.Charts.Serie(this));
-//                    a.cfg.selectedSerie = this;
-//                    //console.log(this);
-//                    a.fireSerieEvent();
-//                });
-//                ser++;
-//            }
-//        }
-//    },
-//    /// 
-//    /// EVENT
-//    fireSerieEvent: function () {
-//        console.log("active serie :" + this.cfg.selectedSerieId);
-//        if (this.cfg.behaviors) {
-//            var a = this.cfg.behaviors.serieclick;
-//            if (a) {
-//                a.call(this);
-//            }
-//        }
-//    },
-//    /// 
-//    /// EVENT
-//
-//});
+IChartsFaces.widget.OverlayFiltersPanel = IChartsFaces.widget.BaseWidget.extend({
+    init: function (a) {
+        this._super(a);
+
+        this.content = this.jq.children("div.ui-overlaypanel-content");
+        this.cfg.my = this.cfg.my || "left top";
+        this.cfg.at = this.cfg.at || "left bottom";
+        this.cfg.showEvent = this.cfg.showEvent || "click.ui-overlaypanel";
+        this.cfg.hideEvent = this.cfg.hideEvent || "click.ui-overlaypanel";
+        this.cfg.dismissable = (this.cfg.dismissable === false) ? false : true;
+        if (this.cfg.showCloseIcon) {
+            this.closerIcon = $('<a href="#" class="ui-overlaypanel-close ui-state-default" href="#"><span class="ui-icon ui-icon-closethick"></span></a>').appendTo(this.jq);
+        }
+        if (this.jq.length > 1) {
+            $(document.body).children(this.jqId).remove();
+            this.jq = $(this.jqId);
+        }
+        if (this.cfg.appendToBody) {
+            this.jq.appendTo(document.body);
+        }
+        this.bindCommonEvents();
+        if (this.cfg.target) {
+            this.target = IChartsFaces.expressions.SearchExpressionFacade.resolveComponentsAsSelector(this.cfg.target);
+            this.bindTargetEvents();
+            this.setupDialogSupport();
+        }
+    },
+    bindTargetEvents: function () {
+        var d = this;
+        this.target.data("ichartsfaces-overlay-target", this.id).find("*").data("ichartsfaces-overlay-target", this.id);
+        if (this.cfg.showEvent === this.cfg.hideEvent) {
+            var b = this.cfg.showEvent;
+            this.target.on(b, function (f) {
+                d.toggle();
+            });
+        } else {
+            var a = this.cfg.showEvent + ".ui-overlaypanel", c = this.cfg.hideEvent + ".ui-overlaypanel";
+            this.target.off(a + " " + c).on(a, function (f) {
+                if (!d.isVisible()) {
+                    d.show();
+                    if (a === "contextmenu.ui-overlaypanel") {
+                        f.preventDefault();
+                    }
+                }
+            }).on(c, function (f) {
+                if (d.isVisible()) {
+                    d.hide();
+                }
+            });
+        }
+        d.target.off("keydown.ui-overlaypanel keyup.ui-overlaypanel").on("keydown.ui-overlaypanel", function (h) {
+            var g = $.ui.keyCode, f = h.which;
+            if (f === g.ENTER || f === g.NUMPAD_ENTER) {
+                h.preventDefault();
+            }
+        })
+                .on("keyup.ui-overlaypanel", function (h) {
+                    var g = $.ui.keyCode, f = h.which;
+                    if (f === g.ENTER || f === g.NUMPAD_ENTER) {
+                        d.toggle();
+                        h.preventDefault();
+                    }
+                });
+    },
+    bindCommonEvents: function () {
+        var c = this;
+        if (this.cfg.showCloseIcon) {
+            this.closerIcon.on("mouseover.ui-overlaypanel", function () {
+                $(this).addClass("ui-state-hover");
+            }).on("mouseout.ui-overlaypanel", function () {
+                $(this).removeClass("ui-state-hover");
+            }).on("click.ui-overlaypanel", function (d) {
+                c.hide();
+                d.preventDefault();
+            });
+        }
+        if (this.cfg.dismissable) {
+            var b = "mousedown." + this.id;
+            $(document.body).off(b).on(b, function (f) {
+                if (c.jq.hasClass("ui-overlay-hidden")) {
+                    return;
+                }
+                if (c.target) {
+                    var d = $(f.target);
+                    if (c.target.is(d) || c.target.has(d).length > 0) {
+                        return;
+                    }
+                }
+                var g = c.jq.offset();
+                if (f.pageX < g.left || f.pageX > g.left + c.jq.outerWidth() || f.pageY < g.top || f.pageY > g.top + c.jq.outerHeight()) {
+                    c.hide();
+                }
+            });
+        }
+        var a = "resize." + this.id;
+        $(window).off(a).on(a, function () {
+            if (c.jq.hasClass("ui-overlay-visible")) {
+                c.align();
+            }
+        });
+    },
+    toggle: function () {
+        if (!this.isVisible()) {
+            this.show();
+        } else {
+            this.hide();
+        }
+    },
+    show: function (a) {
+        if (!this.loaded && this.cfg.dynamic) {
+            this.loadContents(a);
+        } else {
+            this._show(a);
+        }
+    },
+    _show: function (b) {
+        var a = this;
+        this.align(b);
+        this.jq.removeClass("ui-overlay-hidden").addClass("ui-overlay-visible").css({display: "none", visibility: "visible"});
+        if (this.cfg.showEffect) {
+            this.jq.show(this.cfg.showEffect, {}, 200, function () {
+                a.postShow();
+            });
+        } else {
+            this.jq.show();
+            this.postShow();
+        }
+    },
+    align: function (e) {
+        var c = this.jq.css("position") === "fixed", d = $(window), a = c ? "-" + d.scrollLeft() + " -" + d.scrollTop() : null, b = e || this.cfg.target;
+        this.jq.css({
+            left: "",
+            top: "",
+            "z-index": ++IChartsFaces.zindex
+        }).position({
+            my: this.cfg.my,
+            at: this.cfg.at,
+            of: document.getElementById(b),
+            offset: a
+        });
+    },
+    hide: function () {
+        var a = this;
+        if (this.cfg.hideEffect) {
+            this.jq.hide(this.cfg.hideEffect, {}, 200, function () {
+                a.postHide();
+            });
+        } else {
+            this.jq.hide();
+            this.postHide();
+        }
+    },
+    postShow: function () {
+        if (this.cfg.onShow) {
+            this.cfg.onShow.call(this);
+        }
+        this.applyFocus();
+    },
+    postHide: function () {
+        this.jq.removeClass("ui-overlay-visible").addClass("ui-overlay-hidden").css({display: "block", visibility: "hidden"});
+        if (this.cfg.onHide) {
+            this.cfg.onHide.call(this);
+        }
+    },
+    setupDialogSupport: function () {
+        var a = this.target.closest(".ui-dialog");
+        if (a.length === 1) {
+            this.jq.css("position", "fixed");
+            if (!this.cfg.appendToBody) {
+                this.jq.appendTo(document.body);
+            }
+        }
+    },
+    loadContents: function (c) {
+        var b = this, a = {source: this.id, process: this.id, update: this.id, params: [{name: this.id + "_contentLoad", value: true}], onsuccess: function (f, d, e) {
+                IChartsFaces.ajax.Response.handle(f, d, e, {widget: b, handle: function (g) {
+                        this.content.html(g);
+                        this.loaded = true;
+                    }});
+                return true;
+            }, oncomplete: function () {
+                b._show(c);
+            }};
+        IChartsFaces.ajax.Request.handle(a);
+    },
+    isVisible: function () {
+        return this.jq.hasClass("ui-overlay-visible");
+    },
+    applyFocus: function () {
+        this.jq.find(":not(:submit):not(:button):input:visible:enabled:first").focus();
+    }
+});
+IChartsFaces.widget.Serie = IChartsFaces.widget.BaseWidget.extend({
+    init: function (a) {
+        //this._super(a);
+        this.serie = a;
+    },
+    toString: function () {
+        //console.log(simpleStringify(this.serie));
+        /*
+         var obj = "{"
+         + "animate:" + this.serie.animate + ","
+         + "animationTimeout:" + this.serie.animationTimeout + ","
+         + "barW:" + this.serie.barW + ","
+         + "borderWidth:" + this.serie.borderWidth + ","
+         //Skip chart
+         "checkboxOffset:" + this.serie.checkboxOffset + ","
+         + "closestPointRange:" + this.serie.closestPointRange + ","
+         + "closestPointRangePx:" + this.serie.closestPointRangePx + ","
+         + "color:" + this.serie.color + ","
+         + "colorCounter:" + this.serie.colorCounter + ","
+         + "colorIndex:" + this.serie.colorIndex + ","
+         + "columnIndex:" + this.serie.columnIndex + ","
+         //+ "columnMetrics:{offset:" + this.serie.columnMetrics.offset + ",width:" + this.serie.columnMetrics.width + "},"
+         + "cropStart:" + this.serie.cropStart + ","
+         + "cropped:" + this.serie.cropped + ","
+         + "data:[";
+         var i = 0;
+         for (; this.serie.data[i]; ) {
+         if (i > 0) {
+         obj += ",";
+         }
+         obj += simpleStringify(this.serie.data[i]);
+         i++;
+         }
+         obj += "],"
+         + "dataLabelsGroup:{" + simpleStringify(this.serie.dataLabelsGroup) + "},"
+         + "dataMax:" + this.serie.dataMax + ","
+         + "dataMin:" + this.serie.dataMin + ","
+         + "dense:" + this.serie.dense + ","
+         // Skip group
+         + "hasRendered:" + this.serie.hasRendered + ","
+         + "dataMin:" + this.serie.colorIndex + ","
+         + "dense:" + this.serie.columnIndex + ","
+         // skip hcEvents,
+         + "index:" + this.serie.index + ","
+         // skip invertGroups
+         + "isDirty:" + this.serie.isDirty + ","
+         + "isDirtyData:" + this.serie.isDirtyData + ","
+         // Skip legendGroup
+         + "legendItem:{" + simpleStringify(this.serie.legendItem) + "},"
+         + "legendSymbol:{" + simpleStringify(this.serie.legendSymbol) + "},"
+         // Skip linkedSerie
+         + "markerGroup:{" + simpleStringify(this.serie.markerGroup) + "},"
+         + "name:" + this.serie.name + ","
+         + "options:{" + simpleStringify(this.serie.options) + "},"
+         + "pointInterval:" + this.serie.pointInterval + ","
+         + "pointXOffset:" + this.serie.pointXOffset + ","
+         // Skip poiints
+         + "processedXData:{" + simpleStringify(this.serie.processedXData) + "},"
+         + "processedYData:{" + simpleStringify(this.serie.processedYData) + "},"
+         + "selected:" + this.serie.selected + ","
+         + "selectedSerieId:" + this.serie.selectedSerieId + ","
+         + "sharedClipKey:" + this.serie.sharedClipKey + ","
+         + "state:" + this.serie.state + ","
+         + "tooltipOptions:{" + simpleStringify(this.serie.tooltipOptions) + "},"
+         + "translatedThreshold:" + this.serie.translatedThreshold + ","
+         + "userOptions:{" + simpleStringify(this.serie.userOptions) + "},"
+         + "visible:" + this.serie.visible + ","
+         // Skip xAxis
+         + "xData:{" + simpleStringify(this.serie.xData) + "},"
+         + "xIncrement:" + this.serie.xIncrement + ","
+         // Skip yAxis
+         + "yData:{" + simpleStringify(this.serie.yData) + "},"
+         // Skip zoneAxis
+         // Skip zones
+         + "_hasTracking:" + this.serie._hasTracking + ","
+         + "_i:" + this.serie._i + ","
+         + "_legendItemPos:{" + simpleStringify(this.serie._legendItemPos) + "},"
+         + "__proto__:{" + simpleStringify(this.serie.__proto__) + "}"
+         + "}";*/
+        //console.log(this.serie.options);
+        //var obj = simpleStringify(this.serie.options);
+        var obj = JSON.stringify(this.serie.options);
+        //console.log(obj);
+        return obj;
+    }
+});

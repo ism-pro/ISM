@@ -18,6 +18,12 @@ public class ItemSelectEvent extends AbstractAjaxBehaviorEvent {
 
     private int seriesIndex;
 
+    public ItemSelectEvent(UIComponent source, Behavior behavior, int itemIndex) {
+        super(source, behavior);
+        this.itemIndex = itemIndex;
+        this.seriesIndex = 0;
+    }
+    
     public ItemSelectEvent(UIComponent source, Behavior behavior, int itemIndex, int seriesIndex) {
         super(source, behavior);
         this.itemIndex = itemIndex;

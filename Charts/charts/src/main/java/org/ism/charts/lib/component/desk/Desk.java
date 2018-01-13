@@ -1,30 +1,27 @@
 package org.ism.charts.lib.component.desk;
 
 import org.ism.charts.lib.component.desk.*;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import javax.el.MethodExpression;
 import javax.faces.application.ResourceDependencies;
 import javax.faces.application.ResourceDependency;
 import javax.faces.component.FacesComponent;
-import javax.faces.component.UINamingContainer;
 import javax.faces.component.UIPanel;
 import javax.faces.context.FacesContext;
-import javax.faces.event.AbortProcessingException;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.FacesEvent;
+import org.ism.charts.lib.component.tabview.Tab;
 import org.ism.charts.lib.event.CloseEvent;
-import org.ism.charts.lib.event.SelectEvent;
-import org.ism.charts.lib.event.SerieClickEvent;
+import org.ism.charts.lib.event.ItemSelectEvent;
+import org.ism.charts.lib.event.TabChangeEvent;
 import org.ism.charts.lib.event.ToggleEvent;
-import org.ism.charts.lib.event.UnselectEvent;
 import org.ism.charts.lib.model.Visibility;
-import org.ism.charts.lib.model.json.Options;
+import org.ism.charts.lib.util.ComponentUtils;
 import org.ism.charts.lib.util.Constants;
+import org.ism.charts.lib.util.Util;
 
 /**
  * <p>
@@ -38,14 +35,19 @@ import org.ism.charts.lib.util.Constants;
  */
 @ResourceDependencies({
     ///////  CSS
-    @ResourceDependency(library = "webjars", name = "font-awesome/4.7.0/css/font-awesome.min-jsf.css")
+
+    @ResourceDependency(library = "ism", name = "icharts/components.min.css")
+    ,@ResourceDependency(library = "webjars", name = "font-awesome/4.7.0/css/font-awesome.min-jsf.css")
     ,@ResourceDependency(library = "webjars", name = "bootstrap/4.0.0-beta.2/css/bootstrap.min-jsf.css")
     ,@ResourceDependency(library = "ism", name = "desk/desk.min.css")
     ,
     ////////  JS
-    @ResourceDependency(library = "webjars", name = "popper.js/1.12.9/dist/umd/popper.min.js")
+    
+    @ResourceDependency(library = "ism", name = "icharts/core.js")
+    ,@ResourceDependency(library = "ism", name = "icharts/components.js")
+    ,@ResourceDependency(library = "webjars", name = "popper.js/1.12.9/dist/umd/popper.min.js")
     ,@ResourceDependency(library = "webjars", name = "bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js")
-    ,@ResourceDependency(library = "ism", name = "desk/desk.min.js")
+    ,@ResourceDependency(library = "ism", name = "desk/desk.js")
 })
 
 @FacesComponent(value = Desk.COMPONENT_TYPE)
@@ -61,17 +63,26 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
     public static final String PARAM_VISIBLE = "_visible";
 
     // CSS
-    public static final String DESK = "c-desk w3-collapse w3-animate-left w3-white";
+    public static final String DESK = "c-desk"; //
     public static final String DESK_SIDEMENU = "c-sidemenu";
-    public static final String DESK_ACTIVETAB = "c-active";
+    public static final String DESK_MENU = "c-menu";
+    public static final String DESK_MENU_NAV = "c-menunav";
+    public static final String DESK_MENU_ACTIVE = "c-active";
 
-    public static final String DECK_ITEM = "desk-item";
-    public static final String DECK_ITEM_HEADER = "desk-item-header";
-    public static final String DECK_ITEM_CONTENT = "desk-item-content";
+    public static final String DESK_CONTENT_MENU = "c-contentmenu";
+    public static final String DESK_CONTENT_BAR = "c-content-bar";
+    public static final String DESK_CONTENT_BARTITLE = "c-content-barTitle";
+    public static final String DESK_CONTENT_BAR_TITLE = "c-content-bar-title";
+    public static final String DESK_CONTENT_BAR_BTNS = "c-content-barBtns";
+    public static final String DESK_CONTENT_BAR_BTN = "c-content-bar-btn";
+    public static final String DESK_CONTENT_DEF = "c-menu-def";
 
-    public static final String ID_HEADER = "_header";
-    public static final String ID_CONTENT = "_content";
-
+//    public static final String DECK_ITEM = "desk-item";
+//    public static final String DECK_ITEM_HEADER = "desk-item-header";
+//    public static final String DECK_ITEM_CONTENT = "desk-item-content";
+//
+//    public static final String ID_HEADER = "_header";
+//    public static final String ID_CONTENT = "_content";
     /// ////////////////////////////////////////////////////////////////////////
     ///
     ///
@@ -81,14 +92,24 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
     /// ////////////////////////////////////////////////////////////////////////
     protected enum PropertyKeys {
         closable,
+        closeSpeed,
+        closeTitle,
+        collapsed,
+        collapsable,
+        collapseSpeed,
+        collapseTitle,
+        headered,
         menu,
+        icon,
+        navigatorTitle,
+        navigatorTitled,
         style,
         styleClass,
         itemStyleClass,
         itemHeaderStyleClass,
         itemContentStyleClass,
         toggleable,
-        collapsed,
+        toggleTitle,
         visible,
         widgetVar;
 
@@ -145,11 +166,35 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
     ///
     /// ////////////////////////////////////////////////////////////////////////
     public java.lang.Boolean isClosable() {
-        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.closable, false);
+        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.closable, true);
     }
 
     public void setClosable(java.lang.Boolean closable) {
         getStateHelper().put(PropertyKeys.closable, closable);
+    }
+
+    public java.lang.Integer getCloseSpeed() {
+        return (java.lang.Integer) getStateHelper().eval(PropertyKeys.closeSpeed, 1000);
+    }
+
+    public void setCloseSpeed(java.lang.Integer closeSpeed) {
+        getStateHelper().put(PropertyKeys.closeSpeed, closeSpeed);
+    }
+
+    public java.lang.String getCloseTitle() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.closeTitle, null);
+    }
+
+    public void setCloseTitle(java.lang.String closeTitle) {
+        getStateHelper().put(PropertyKeys.closeTitle, closeTitle);
+    }
+
+    public java.lang.Boolean isCollapsable() {
+        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.collapsable, true);
+    }
+
+    public void setCollapsable(java.lang.Boolean collapsable) {
+        getStateHelper().put(PropertyKeys.collapsable, collapsable);
     }
 
     public java.lang.Boolean isCollapsed() {
@@ -160,12 +205,60 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
         getStateHelper().put(PropertyKeys.collapsed, collapsed);
     }
 
+    public java.lang.Integer getCollapseSpeed() {
+        return (java.lang.Integer) getStateHelper().eval(PropertyKeys.collapseSpeed, 150);
+    }
+
+    public void setCollapseSpeed(java.lang.Integer collapseSpeed) {
+        getStateHelper().put(PropertyKeys.collapseSpeed, collapseSpeed);
+    }
+
+    public java.lang.String getCollapseTitle() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.collapseTitle, null);
+    }
+
+    public void setCollapseTitle(java.lang.String collapseTitle) {
+        getStateHelper().put(PropertyKeys.collapseTitle, collapseTitle);
+    }
+
+    public java.lang.Boolean isHeadered() {
+        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.headered, true);
+    }
+
+    public void setHeadered(java.lang.Boolean headered) {
+        getStateHelper().put(PropertyKeys.headered, headered);
+    }
+
     public java.lang.Integer getMenu() {
         return (java.lang.Integer) getStateHelper().eval(PropertyKeys.menu, 0);
     }
 
     public void setMenu(java.lang.Integer menu) {
         getStateHelper().put(PropertyKeys.menu, menu);
+    }
+
+    public java.lang.String getIcon() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.icon, null);
+    }
+
+    public void setIcon(java.lang.String icon) {
+        getStateHelper().put(PropertyKeys.icon, icon);
+    }
+
+    public java.lang.String getNavigatorTitle() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.navigatorTitle, null);
+    }
+
+    public void setNavigatorTitle(java.lang.String navigatorTitle) {
+        getStateHelper().put(PropertyKeys.navigatorTitle, navigatorTitle);
+    }
+
+    public java.lang.Boolean isNavigatorTitled() {
+        return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.navigatorTitled, true);
+    }
+
+    public void setNavigatorTitled(java.lang.Boolean navigatorTitled) {
+        getStateHelper().put(PropertyKeys.navigatorTitled, navigatorTitled);
     }
 
     public java.lang.String getStyle() {
@@ -216,6 +309,14 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
         getStateHelper().put(PropertyKeys.toggleable, toggleable);
     }
 
+    public java.lang.String getToggleTitle() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.toggleTitle, null);
+    }
+
+    public void setToggleTitle(java.lang.String toggleTitle) {
+        getStateHelper().put(PropertyKeys.toggleTitle, toggleTitle);
+    }
+
     public boolean isVisible() {
         return (java.lang.Boolean) getStateHelper().eval(PropertyKeys.visible, true);
     }
@@ -241,7 +342,11 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
     /// ////////////////////////////////////////////////////////////////////////
     @Override
     public Object saveState(FacesContext context) {
-        return getStateHelper().saveState(context);
+        //return getStateHelper().saveState(context);
+        Object values[] = new Object[2];
+        values[0] = super.saveState(context);
+        values[1] = getMenu();
+        return (values);
     }
 
     /**
@@ -252,9 +357,11 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
      */
     @Override
     public void restoreState(FacesContext context, Object state) {
-        getStateHelper().restoreState(context, state);
+        //getStateHelper().restoreState(context, state);
+        Object values[] = (Object[]) state;
+        super.restoreState(context, values[0]);
+        setMenu((Integer) values[1]);
     }
-
     /// ////////////////////////////////////////////////////////////////////////
     ///
     ///
@@ -262,14 +369,16 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
     ///
     ///
     /// ////////////////////////////////////////////////////////////////////////
+    private final static String DEFAULT_EVENT = "itemSelect, tabChange, toggle, close";
     private static final Map<String, Class<? extends BehaviorEvent>> BEHAVIOR_EVENT_MAPPING = Collections.unmodifiableMap(new HashMap<String, Class<? extends BehaviorEvent>>() {
         {
+            put("itemSelect", ItemSelectEvent.class);
+            put("tabChange", TabChangeEvent.class);
             put("toggle", ToggleEvent.class);
             put("close", CloseEvent.class);
         }
     });
 
-    private final static String DEFAULT_EVENT = "toggle, close";
     private static final Collection<String> EVENT_NAMES = BEHAVIOR_EVENT_MAPPING.keySet();
 
     @Override
@@ -297,7 +406,16 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
         if (isSelfRequest(context)) {
             AjaxBehaviorEvent behaviorEvent = (AjaxBehaviorEvent) event;
 
-            if (eventName.equals("toggle")) {
+            if (eventName.equals("itemSelect")) {
+                Integer active = this.getMenu();
+                super.queueEvent(new ItemSelectEvent(this, behaviorEvent.getBehavior(), active));
+
+            } else if (eventName.equals("tabChange")) {
+                Integer active = this.getMenu();
+                Tab tab = (Tab) this.getChildren().get(active);
+                super.queueEvent(new TabChangeEvent(this, behaviorEvent.getBehavior(), tab));
+
+            } else if (eventName.equals("toggle")) {
                 boolean collapsed = Boolean.valueOf(params.get(clientId + "_collapsed"));
                 Visibility visibility = collapsed ? Visibility.HIDDEN : Visibility.VISIBLE;
 
@@ -333,13 +451,6 @@ public class Desk extends UIPanel implements org.ism.charts.lib.component.api.Wi
 
     @Override
     public String resolveWidgetVar() {
-        FacesContext context = getFacesContext();
-        String userWidgetVar = (String) getAttributes().get("widgetVar");
-
-        if (userWidgetVar != null) {
-            return userWidgetVar;
-        } else {
-            return "widget_" + getClientId(context).replaceAll("-|" + UINamingContainer.getSeparatorChar(context), "_");
-        }
+        return ComponentUtils.resolveWidgetVar(getFacesContext(), this);
     }
 }

@@ -13,6 +13,262 @@
     // =========================================================================
     // =========================================================================
     // ===================================================================== -->
+        
+    <tag>
+        <description><![CDATA[<p>
+            Main entry point of ribbon component. InputDate is based on UIComponentBase
+            Based on
+            <a href="https://eonasdan.github.io/bootstrap-datetimepicker/">
+            bootstrap-datetimepicker </a>
+            </p>]]>
+        </description>
+        <tag-name>desk</tag-name>
+        <component>
+            <component-type>org.ism.component.Desk</component-type>
+            <renderer-type>org.ism.renderKit.Desk</renderer-type>
+        </component>
+        
+        
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Closable</h3>
+                <p>
+                Closable allow to define if the menu desk can be closed !
+                </p>]]>
+            </description>
+            <name>closable</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Close Speed</h3>
+                <p>
+                Defined the speed on action close
+                Default: 1000 ms
+                </p>]]>
+            </description>
+            <name>closeSpeed</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[Title label for closer element of closable panel.]]></description>
+            <name>closeTitle</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>collapsable</h3>
+                <p>
+                Closable allow to define if the menu desk can be collapse !
+                </p>]]>
+            </description>
+            <name>collapsable</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Renders a toggleable desk as collapsed. Default is false.]]></description>
+            <name>collapsed</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Collapse Speed</h3>
+                <p>
+                Defined the speed on action collapse
+                Default: 1000 ms
+                </p>]]>
+            </description>
+            <name>collapseSpeed</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+               
+        <attribute>
+            <description><![CDATA[Title label for collapse element of collapse menu.]]></description>
+            <name>collapseTitle</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Headered</h3>
+                <p>
+                Enable tite title bar panel which containt header title and
+                collapser and closer button
+                
+                Default : true
+                </p>]]>
+            </description>
+            <name>headered</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Icon</h3>
+                    <p>
+                    Correspond to icon class
+                    Default : fa fa-navicon fa-2x
+                    </p>
+                ]]>
+            </description>
+            <name>icon</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Menu</h3>
+                <p>
+                Menu refere and define the current defined menu
+                </p>]]>
+            </description>
+            <name>menu</name>
+            <type>java.lang.Integer</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Navigator Titled</h3>
+                <p>
+                Enable the show or not of tooltip on navigator
+                
+                Default : true
+                </p>]]>
+            </description>
+            <name>navigatorTitled</name>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                <h3>Navigator Title</h3>
+                    <p>
+                    Text to bein desplay when tooltip is request on navigator
+                    Default: Agrandir/Réduire
+                    </p>
+                ]]>
+            </description>
+            <name>navigatorTitle</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                    <p>
+                    Style allow to specifie code css to be apply to component.
+                    </p>
+                ]]>
+            </description>
+            <name>style</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[<p>Style class of main component</p>]]></description>
+            <name>styleClass</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[<p>Style class of item component</p>]]></description>
+            <name>itemStyleClass</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[<p>Style class of item header component</p>]]>
+            </description>
+            <name>itemHeaderStyleClass</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[<p>Style class of item content component</p>]]>
+            </description>
+            <name>itemContentStyleClass</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Makes panel toggleable. Default is false.]]></description>
+            <name>toggleable</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        
+        <attribute>
+            <description><![CDATA[Title attribute for toggler element of toggleable panel.]]></description>
+            <name>toggleTitle</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Renders panel as hidden. Default is true.]]></description>
+            <name>visible</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[Name of the client side widget.]]></description>
+            <name>widgetVar</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        
+        <!-- UIComponent Base -->
+        <attribute>
+            <description><![CDATA[Unique identifier of the component in a namingContainer.]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Boolean value to specify the rendering of the component, when set to false component will not be rendered.]]></description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[An el expression referring to a server side UIComponent instance in a backing bean.]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+
+    </tag>
+    
+    
+    <!-- =======================================================================
+    // =========================================================================
+    // =========================================================================
+    // =========================================================================
+    // =========================================================================
+    // ===================================================================== -->
     
     <tag>
         <tag-name>chart</tag-name>
@@ -199,6 +455,88 @@
         
     </tag>
 
+
+    <!-- =======================================================================
+    // =========================================================================
+    // =========================================================================
+    // =========================================================================
+    // =========================================================================
+    // ===================================================================== -->
+    <tag>
+        <tag-name>fake</tag-name>
+        <description><![CDATA[Fake allow only to load resource in order to develop.]]></description>
+        <component>
+            <component-type>org.ism.component.Fake</component-type>
+        </component>
+        <attribute>
+            <description><![CDATA[Unique identifier of the component in a namingContainer.]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Boolean value to specify the rendering of the component, when set to false component will not be rendered.]]></description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[An el expression referring to a server side UIComponent instance in a backing bean.]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[An icon for the current tab.]]></description>
+            <name>faIcon</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Title text of the tab.]]></description>
+            <name>title</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Title container inner style.]]></description>
+            <name>titleStyle</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Title container style class.]]></description>
+            <name>titleStyleClass</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Disables tab element if true.]]></description>
+            <name>disabled</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Makes the tab closable by displaying a close icon.]]></description>
+            <name>closable</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Tooltip of the tab header.]]></description>
+            <name>titletip</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[]]></description>
+            <name>ariaLabel</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
     <!-- =======================================================================
     // =========================================================================
     // =========================================================================
@@ -327,6 +665,89 @@
             <name>showCloseIcon</name>
             <required>false</required>
             <type>java.lang.Boolean</type>
+        </attribute>
+    </tag>
+    
+
+    <!-- =======================================================================
+    // =========================================================================
+    // =========================================================================
+    // =========================================================================
+    // =========================================================================
+    // ===================================================================== -->
+    <tag>
+        <tag-name>tab</tag-name>
+        <description><![CDATA[Tab is a generic container component used by other PrimeFaces components such as tabView or accordionPanel.]]></description>
+        <component>
+            <component-type>org.ism.component.Tab</component-type>
+        </component>
+        <attribute>
+            <description><![CDATA[Unique identifier of the component in a namingContainer.]]></description>
+            <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Boolean value to specify the rendering of the component, when set to false component will not be rendered.]]></description>
+            <name>rendered</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[An el expression referring to a server side UIComponent instance in a backing bean.]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[An icon for the current tab.]]></description>
+            <name>faIcon</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Title text of the tab.]]></description>
+            <name>title</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Title container inner style.]]></description>
+            <name>titleStyle</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Title container style class.]]></description>
+            <name>titleStyleClass</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Disables tab element if true.]]></description>
+            <name>disabled</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Makes the tab closable by displaying a close icon.]]></description>
+            <name>closable</name>
+            <required>false</required>
+            <type>java.lang.Boolean</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[Tooltip of the tab header.]]></description>
+            <name>titletip</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        <attribute>
+            <description><![CDATA[]]></description>
+            <name>ariaLabel</name>
+            <required>false</required>
+            <type>java.lang.String</type>
         </attribute>
     </tag>
     <!-- Converter tags -->

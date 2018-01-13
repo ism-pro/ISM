@@ -199,7 +199,7 @@
                 if (h.length === 0) {
                     h = $('link[href*="' + b.RESOURCE_IDENTIFIER + '=theme.css"]');
                 }
-                var f = h.attr("href"), e = f.split("&")[0], d = e.split("ln=")[1], c = f.replace(d, "primefaces-" + g);
+                var f = h.attr("href"), e = f.split("&")[0], d = e.split("ln=")[1], c = f.replace(d, "ichartsfaces-" + g);
                 h.attr("href", c);
             }
         },
@@ -273,7 +273,7 @@
                 d = $('script[src*="' + b.RESOURCE_IDENTIFIER + '=core.js"]').attr("src");
             }
             d = d.replace("core.js", f);
-            d = d.replace("ln=primefaces", "ln=" + e);
+            d = d.replace("ln=ichartsfaces", "ln=" + e);
             if (c) {
                 var h = new RegExp("[?&]v=([^&]*)").exec(d)[1];
                 d = d.replace("v=" + h, "v=" + c);
@@ -330,7 +330,7 @@
                 if (f) {
                     f();
                 }
-                var e = d ? "primefaces.download_" + d : "primefaces.download";
+                var e = d ? "ichartsfaces.download_" + d : "ichartsfaces.download";
                 a.downloadMonitor = setInterval(function () {
                     var g = b.getCookie(e);
                     if (g === "true") {
