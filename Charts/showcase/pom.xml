@@ -21,9 +21,24 @@
     
     <dependencies>
         <dependency>
-            <groupId>org.ism.charts</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>charts</artifactId>
-            <version>1712.15</version>
+            <version>1712.20</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap</artifactId>
+            <version>4.0.0-beta.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.bower</groupId>
+            <artifactId>popper.js</artifactId>
+            <version>1.12.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>bootstrap-slider</artifactId>
+            <version>9.7.3</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
@@ -31,6 +46,15 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Font awesome require webjars and omnifaces -->
+        <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>font-awesome</artifactId>
+            <version>4.7.0</version>
+        </dependency>
+        
+        
+        
     </dependencies>
 
     <build>

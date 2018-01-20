@@ -1,0 +1,315 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ic="http://www.ism.org/charts"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="/tmpl/DeskWindow.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="bodyForm">
+                    <br/>
+                    <h4>Image - Cropper</h4>
+                    <hr />
+                    <hr />
+                    <br/>
+
+
+
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <br />
+
+
+                    <p:panelGrid columns="2" class="gridPanel">
+
+                        <p:outputLabel value="Image" />
+                        <h:panelGroup>
+
+                            <!-- 
+                            Start Input Cropper 
+                            -->
+                            <div id="inputCropper" class="container inputCropper">
+
+                                <!-- 
+                                Build Input Field text 
+                                -->
+                                <div class="ic-crop-input-name"
+                                     data-toggle="modal" data-target="#modalDialog">
+                                    <p:inputText id="crop-input-name-text"
+                                                 class="ic-crop-input-name-text"
+                                                 value="/img/a/a.jpg"
+                                                 placeholder="Nom du fichier"
+                                                 disabled="true"
+                                                 title="Charger une image"
+                                                 />
+                                    <div class="ic-crop-input-name-in"></div>
+                                </div>​
+
+
+                                <!--
+                                Build Overlay Image
+                                -->
+                                <div class="ic-crop-dropdown-img"
+                                     data-toggle="modal" data-target="#modalDialog">
+                                    <div class="ic-crop-container">
+                                        <h:graphicImage   alt="Aucune image définie"
+                                                          id="cropImg" class="ic-crop-img-cropped" 
+                                                          />
+                                    </div>
+                                </div>
+
+
+                                <!-- 
+                                Build Modal Window
+                                -->
+                                <div class="modal fade modalDialog" id="modalDialog" 
+                                     aria-hidden="true" aria-labelledby="modalDialog-label" 
+                                     role="dialog" tabindex="-1">
+
+                                    <!-- 
+                                    Build Large Modal dialog
+                                    -->
+                                    <div class="modal-dialog modal-lg">
+
+                                        <!-- 
+                                        Build content of modal dialog
+                                        -->
+                                        <div class="modal-content">
+
+                                            <!--
+                                            Build Window Title and Buttons
+                                            -->
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="modalDialog-label">Title</h4>
+                                                <button type="button" class="close" data-dismiss="modal">×</button>
+                                            </div>
+
+
+                                            <!--
+                                            Build Window Body
+                                            -->
+                                            <div class="modal-body">
+                                                <!-- 
+                                                Build Uploader and data
+                                                -->
+                                                <div class="area-upload">
+                                                    <input type="hidden" class="input-src" name="input-src" />
+                                                    <input type="hidden" class="input-data" name="input-data" />
+                                                    <div class="form-group custom-file">
+                                                        <label class="custum-file-label" for="input-img">Sélectionner une image</label>
+                                                        <input type="file" class="form-control-file-sm input-img" id="input-img" name="input-img-file" placeholder="Fichier image" />
+                                                    </div>
+                                                </div>
+
+
+                                                <!-- 
+                                                Build Wrapper  and previews
+                                                -->
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <div class="img-wrapper"></div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="img-preview preview-lg"></div>
+
+                                                        <div id="sizerContainer" class="container sizerContainer" style="float: right;">
+                                                            <div class="row sizerContainerSpacer" >
+                                                                <div class="input-group input-group-sm mb-1">
+                                                                    <label class="input-group-addon " for="dataX">X</label>
+                                                                    <input class="form-control" id="dataX" type="text" placeholder="x"/>
+                                                                    <span class="input-group-addon">px</span>
+                                                                </div>
+                                                                <div class="input-group input-group-sm mb-1">
+                                                                    <label class="input-group-addon" for="dataY">Y</label>
+                                                                    <input class="form-control" id="dataY" type="text" placeholder="y"/>
+                                                                    <span class="input-group-addon">px</span>
+                                                                </div>
+                                                                <div class="input-group input-group-sm mb-1">
+                                                                    <label class="input-group-addon" for="dataWidth">L</label>
+                                                                    <input class="form-control" id="dataWidth" type="text" placeholder="width"/>
+                                                                    <span class="input-group-addon">px</span>
+                                                                </div>
+                                                                <div class="input-group input-group-sm mb-1">
+                                                                    <label class="input-group-addon" for="dataHeight">H</label>
+                                                                    <input class="form-control" id="dataHeight" type="text" placeholder="height"/>
+                                                                    <span class="input-group-addon">px</span>
+                                                                </div>
+                                                                <div class="input-group input-group-sm mb-1">
+                                                                    <label class="input-group-addon" for="dataRotate">R</label>
+                                                                    <input class="form-control" id="dataRotate" type="text" placeholder="rotate"/>
+                                                                    <span class="input-group-addon">°</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--
+                                                Build Controller
+                                                -->
+                                                <div class="row ic-btn-control">
+                                                    <div class="col-md-9">
+                                                        <div class="btn-group optDragMode">
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle"
+                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                    title="Mode de la souris sur l'image" >
+                                                                <span class="fa fa-arrows"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu btn-sm">
+                                                                <a class="dropdown-item" data-method="setDragMode" data-option="none" title="Désactiver les modes">Désactiver</a>
+                                                                <a class="dropdown-item" data-method="setDragMode" data-option="crop" title="Active le mode par découpe">Découper</a>
+                                                                <a class="dropdown-item" data-method="setDragMode" data-option="move" title="Active le mode par placement">Placer</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="btn-group optRotateLeft" >
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
+                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                    title="Rotations anti-horaire" >
+                                                                <span class="fa fa-rotate-left"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu btn-sm" >
+                                                                <a class="dropdown-item" data-method="rotate" data-option="-90" title="Rotation anti-horaire de -90°">-90° degré</a>
+                                                                <a class="dropdown-item" data-method="rotate" data-option="-45" title="Rotation anti-horaire de -45°">-45° degré</a>
+                                                                <a class="dropdown-item" data-method="rotate" data-option="-30" title="Rotation anti-horaire de -30°">-30° degré</a>
+                                                                <a class="dropdown-item" data-method="rotate" data-option="-15" title="Rotation anti-horaire de -10°">-15° degré</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="btn-group optRotateRight" >
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
+                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                    title="Rotations horaire" >
+                                                                <span class="fa fa-rotate-right"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu btn-sm" >
+                                                                <a class="dropdown-item" data-method="rotate" data-option="90" title="Rotation anti-horaire de +90°">+90° degré</a>
+                                                                <a class="dropdown-item" data-method="rotate" data-option="45" title="Rotation anti-horaire de +45°">+45° degré</a>
+                                                                <a class="dropdown-item" data-method="rotate" data-option="30" title="Rotation anti-horaire de +30°">+30° degré</a>
+                                                                <a class="dropdown-item" data-method="rotate" data-option="15" title="Rotation anti-horaire de +15°">+15° degré</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="btn-group optZoomer" >
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
+                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                    title="Options de zoom" >
+                                                                <span class="fa fa-search" style="padding-right:2px;"></span>
+                                                                <input id="inputZoomerValue" type="text" disabled="true"
+                                                                       class="inputZoomerValue smaller" name="inputZoomerValue"/>
+                                                            </button>
+                                                            <div class="dropdown-menu btn-sm" >
+                                                                <div id="inputZoomer" class="inputZoomer">
+                                                                    <div id="inputZoomerHandler"  class="ui-slider-handle inputZoomerHandler" ></div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="btn-group optCropper" >
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
+                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                    title="Options d'image" >
+                                                                <span class="fa fa-gear"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu btn-sm" >
+                                                                <a class="dropdown-item" data-method="crop" data-option="null" title="Affiche la zonne de découpage">Activer le cadre</a>
+                                                                <a class="dropdown-item" data-method="clear" data-option="null" title="Retire la zone de découpage">Retirer le cadre</a>
+                                                                <a class="dropdown-item" data-method="enable" data-option="null" title="Activer l'édition">Autoriser l'édition</a>
+                                                                <a class="dropdown-item" data-method="disable" data-option="null" title="Désactiver l'édition">Arrêter l'édition</a>
+                                                                <a class="dropdown-item" data-method="reset" data-option="null" title="Réinitialise l'édition">Initialiser image</a>
+                                                                <a class="dropdown-item" data-method="destroy" data-option="null" title="Supprimer l'image blob">Supprimer image</a>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="btn-group optApsectRatio" >
+                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
+                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                                                    title="Options d'image" >
+                                                                <span class="fa fa-window-restore"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu btn-sm" >
+                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="1.7777777777777777777777777777778" title="Cinéma">Cinéma [16:9]</a>
+                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="1.3333333333333333333333333333333" title="Photo">Photographie [4:3]</a>
+                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="1" title="Caméra">Caméra [1:1]</a>
+                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="0.66666666666666666666666666666667" title="Avatar">Avatar [2:3]</a>
+                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="null" title="Libérer le crop">Cadre libre</a>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <button type="button" class="btn btn-primary btn-apply"  data-dismiss="modal">OK</button>
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- Loading state -->
+                                        <div class="loading" aria-label="Loading" role="img" tabindex="-1"></div>
+                                    </div> <!-- End modal dialog -->
+                                </div>
+
+                            </div>
+
+
+
+                        </h:panelGroup>
+
+
+                    </p:panelGrid>
+
+                    <br/>
+                    <br/><br/><br/><br/>
+                    <ic:cropAvatar />
+
+
+
+                    <button type="button" 
+                            class="btn btn-primary sizerPopper" 
+                            data-placement="top"  >
+                        <span class="fa fa-crop"></span>
+                    </button>
+
+
+                </h:form>
+
+
+
+
+
+
+                <style>
+                    .gridPanel{ width: 100%;}
+                    .gridField{}
+                    .gridContent{ width: 100%;}
+                </style>
+                <script  type="text/javascript">
+
+
+                    $(function () {
+                        PrimeFaces.cw("InputCropper", "widget_inputCropper", {id: "inputCropper", stateful: false});
+                    });
+                </script>
+
+
+
+
+
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

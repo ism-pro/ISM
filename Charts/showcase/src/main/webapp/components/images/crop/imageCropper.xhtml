@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ic="http://www.ism.org/charts"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="/tmpl/DeskWindow.xhtml">
+
+            <ui:define name="content">
+
+
+
+
+                <!--
+                <h:outputStylesheet library="ism" name="crop/cropAvatar.css" />
+
+               
+                <h:outputScript library="ism" name="crop/cropAvatar.js" />
+                -->
+
+
+                <h:form id="bodyForm">
+                    <br/>
+                    <h4>Image - ImageCropper</h4>
+                    <hr />
+                    <hr />
+                    <br/>
+
+
+                    
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <h:panelGrid columns="2" >
+                        <p:imageCropper 
+                            value="#{cropperView.croppedImage}" 
+                            image="#{request.requestURL.substring(0, request.requestURL.length() - request.requestURI.length())}#{request.contextPath}/img/a/a.jpg" 
+                            boxWidth="340"
+                            boxHeight="480"
+                            minSize="50,100"
+                            initialCoords="150,150,10000,10000"/>
+                        <h:panelGroup id="cropped">
+                            <p:graphicImage rendered="#{not empty cropperView.newImageName}"  
+                                            style="max-width: 340px;max-width: 480;"
+                                            width="344px"
+                                            height="258px" 
+                                            url="#{request.requestURL.substring(0, request.requestURL.length() - request.requestURI.length())}#{request.contextPath}/img/tmp/#{cropperView.newImageName}.jpg" />
+                            <br />
+                            <p:outputLabel value="#{cropperView.newImageName}" style="float:left;position: relative;top:10;" />
+                        </h:panelGroup>
+                    </h:panelGrid>
+                    <br />
+                    <p:commandButton value="Crop" action="#{cropperView.handleCrop()}" update="cropped msgs" icon="ui-icon-scissors"/>
+
+
+
+
+
+                    
+
+                </h:form>
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

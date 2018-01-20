@@ -10,24 +10,26 @@ import java.util.ArrayList;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import org.ism.charts.lib.model.properties.ChartType;
-import org.ism.charts.lib.model.ChartModel;
-import org.ism.charts.lib.model.properties.Align;
-import org.ism.charts.lib.model.properties.DataLabels;
-import org.ism.charts.lib.model.series.Data;
-import org.ism.charts.lib.model.series.Legend;
-import org.ism.charts.lib.model.series.PlotOptions;
-import org.ism.charts.lib.model.series.Series;
-import org.ism.charts.lib.model.series.ToolTip;
-import org.ism.charts.lib.model.series.type.PieSerie;
+import org.ism.model.properties.ChartType;
+import org.ism.model.ChartModel;
+import org.ism.model.details.Title;
+import org.ism.model.properties.Align;
+import org.ism.model.properties.DataLabels;
+import org.ism.model.properties.Style;
+import org.ism.model.series.Data;
+import org.ism.model.series.Legend;
+import org.ism.model.series.PlotOptions;
+import org.ism.model.series.Series;
+import org.ism.model.series.ToolTip;
+import org.ism.model.series.type.PieSerie;
 
 /**
  *
  * @author r.hendrick
  */
-@ManagedBean(name = "pie")
+@ManagedBean(name = "pieController")
 @SessionScoped
-public class Pie implements Serializable {
+public class PieController implements Serializable {
 
     private ChartModel pieModel;
 
@@ -42,7 +44,7 @@ public class Pie implements Serializable {
         model.getChart().setPlotShadow(false);
         
         // Setup
-        model.getTitle().setText("Browser market shares January, 2015 to May, 2015");
+        model.setTitle(new Title("Browser market shares January, 2015 to May, 2015"));
 
         // Setup Tooltip
         model.setToolTip(new ToolTip());
@@ -56,7 +58,7 @@ public class Pie implements Serializable {
         model.getPlotOptions().setDataLabels(new DataLabels());
         model.getPlotOptions().getDataLabels().setEnabled(true);
         model.getPlotOptions().getDataLabels().setFormat("<b>{point.name}</b>: {point.percentage:.1f} %");
-        model.getPlotOptions().getDataLabels().setStyle("{color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'}");
+        model.getPlotOptions().getDataLabels().setStyle(new Style("(Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'"));
 
         // Setup Legend
         model.setLegend(new Legend());

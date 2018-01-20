@@ -11,27 +11,36 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import org.ism.charts.lib.model.properties.ChartType;
-import org.ism.charts.lib.model.ChartModel;
-import org.ism.charts.lib.model.axis.PlotLines;
-import org.ism.charts.lib.model.properties.Align;
-import org.ism.charts.lib.model.properties.DataLabels;
-import org.ism.charts.lib.model.series.Data;
-import org.ism.charts.lib.model.series.Legend;
-import org.ism.charts.lib.model.series.type.LineSerie;
-import org.ism.charts.lib.model.series.PlotOptions;
-import org.ism.charts.lib.model.series.Series;
-import org.ism.charts.lib.model.series.ToolTip;
+import javax.faces.bean.SessionScoped;
+import org.ism.event.SerieClickEvent;
+import org.ism.model.properties.ChartType;
+import org.ism.model.ChartModel;
+import org.ism.model.axis.PlotLines;
+import org.ism.model.details.SubTitle;
+import org.ism.model.details.Title;
+import org.ism.model.json.Options;
+import org.ism.model.properties.Align;
+import org.ism.model.properties.DataLabels;
+import org.ism.model.series.Data;
+import org.ism.model.series.Legend;
+import org.ism.model.series.type.LineSerie;
+import org.ism.model.series.PlotOptions;
+import org.ism.model.series.Series;
+import org.ism.model.series.ToolTip;
 
 /**
  *
  * @author r.hendrick
  */
-@ManagedBean(name = "line")
-public class Line implements Serializable {
+@ManagedBean(name = "lineController")
+@SessionScoped
+public class LineController implements Serializable {
 
     private ChartModel basicLineModel;
     private ChartModel withDataLabel;
+
+    private String outputMessage = "Empty";
+    private Options options;
 
     @PostConstruct
     public void init() {
@@ -46,10 +55,10 @@ public class Line implements Serializable {
         ChartModel model = new ChartModel();
         model.getChart().setType(ChartType.LINE);
         // Seutp Title
-        model.getTitle().setText("Monthly Average Temperature");
+        model.setTitle(new Title("Monthly Average Temperature"));
         model.getTitle().setX(-20);
         // Setup SubTitle
-        model.getSubTitle().setText("Source: WorldClimate.com");
+        model.setSubTitle(new SubTitle("Source: WorldClimate.com"));
         model.getSubTitle().setX(-20);
         // Setup xAxis
         List<String> xAxis = new ArrayList<>();
@@ -61,17 +70,23 @@ public class Line implements Serializable {
         model.getyAxis().getPlotLines().setValue(0);
         model.getyAxis().getPlotLines().setWidth(1);
         model.getyAxis().getPlotLines().setColor("#808080");
-        
+
         // Setup Tooltip
         model.setToolTip(new ToolTip());
         model.getToolTip().setValueSuffix("°C");
-        
+
         // Setup Legend
         model.setLegend(new Legend());
         model.getLegend().setLayout(Align.VERTICAL);
         model.getLegend().setAlign(Align.RIGHT);
         model.getLegend().setVerticalAlign(Align.MIDDLE);
         model.getLegend().setBorderWidth(0);
+        
+        // Setup PlotOptions
+        model.setPlotOptions(new PlotOptions());
+        //model.getPlotOptions().setAllowPointSelect(true);
+        model.getPlotOptions().setLineWidth(1);
+        
 
         // Series
         List<Object> lTokyo = new ArrayList<>();
@@ -98,16 +113,16 @@ public class Line implements Serializable {
         ChartModel model = new ChartModel();
         model.getChart().setType(ChartType.LINE);
         // Seutp Title
-        model.getTitle().setText("Monthly Average Temperature");
+        model.setTitle(new Title("Monthly Average Temperature"));
         model.getTitle().setX(-20);
         // Setup SubTitle
-        model.getSubTitle().setText("Source: WorldClimate.com");
+        model.setSubTitle(new SubTitle("Source: WorldClimate.com"));
         model.getSubTitle().setX(-20);
         // Setup xAxis
         List<String> xAxis = new ArrayList<>();
         Collections.addAll(xAxis, "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
         model.getxAxis().setCategories(xAxis);
-        
+
         // Setup yAxis
         model.getyAxis().getTitle().setText("Temperature (°C)");
         model.getyAxis().setPlotLines(new PlotLines());
@@ -145,12 +160,44 @@ public class Line implements Serializable {
         withDataLabel = model;
     }
 
+    //
+    //
+    //
+    //
+    //
+    public void handleSerieClick(SerieClickEvent event) {
+        Integer index = event.getIndex();
+        options =  event.getOptions();
+        outputMessage = "Selected serei id  = " + index;
+    }
+
+    //
+    //
+    //
+    //
+    //
     public ChartModel getBasicLineModel() {
         return basicLineModel;
     }
 
     public ChartModel getWithDataLabel() {
         return withDataLabel;
+    }
+
+    public String getOutputMessage() {
+        return outputMessage;
+    }
+
+    public void setOutputMessage(String outputMessage) {
+        this.outputMessage = outputMessage;
+    }
+
+    public Options getOptions() {
+        return options;
+    }
+
+    public void setOptions(Options options) {
+        this.options = options;
     }
     
     

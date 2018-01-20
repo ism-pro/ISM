@@ -11,26 +11,33 @@ import java.util.Collections;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
-import org.ism.charts.lib.model.properties.ChartType;
-import org.ism.charts.lib.model.ChartModel;
-import org.ism.charts.lib.model.axis.AxisTitle;
-import org.ism.charts.lib.model.properties.Align;
-import org.ism.charts.lib.model.properties.DataLabels;
-import org.ism.charts.lib.model.series.Data;
-import org.ism.charts.lib.model.series.Legend;
-import org.ism.charts.lib.model.series.PlotOptions;
-import org.ism.charts.lib.model.series.Series;
-import org.ism.charts.lib.model.series.ToolTip;
-import org.ism.charts.lib.model.series.type.BarSerie;
+import javax.faces.bean.SessionScoped;
+import org.ism.event.SerieClickEvent;
+import org.ism.model.properties.ChartType;
+import org.ism.model.ChartModel;
+import org.ism.model.axis.AxisTitle;
+import org.ism.model.details.SubTitle;
+import org.ism.model.details.Title;
+import org.ism.model.properties.Align;
+import org.ism.model.properties.DataLabels;
+import org.ism.model.series.Data;
+import org.ism.model.series.Legend;
+import org.ism.model.series.PlotOptions;
+import org.ism.model.series.Series;
+import org.ism.model.series.ToolTip;
+import org.ism.model.series.type.BarSerie;
 
 /**
  *
  * @author r.hendrick
  */
-@ManagedBean(name = "bar")
-public class Bar implements Serializable {
+@ManagedBean(name = "barController")
+@SessionScoped
+public class BarController implements Serializable {
 
     private ChartModel basicBar;
+    
+    private String outputMessage = "Empty";
 
     @PostConstruct
     public void init() {
@@ -41,12 +48,11 @@ public class Bar implements Serializable {
         ChartModel model = new ChartModel();
         model.getChart().setType(ChartType.BAR);
         // Seutp Title
-        model.getTitle().setText("Historic World Population by Region");
-        //model.getTitle().setX(-20);
+        model.setTitle(new Title("Historic World Population by Region"));
+
         // Setup SubTitle
-        model.getSubTitle().setText("Source: <a href=\"https://en.wikipedia.org/wiki/World_population\">Wikipedia.org</a>");
-        //model.getSubTitle().setX(-20);
-        
+        model.setSubTitle(new SubTitle("Source: <a href=\"https://en.wikipedia.org/wiki/World_population\">Wikipedia.org</a>"));
+
         // Setup xAxis
         List<String> xAxis = new ArrayList<String>();
         Collections.addAll(xAxis, "Africa", "America", "Asia", "Europe", "Oceania");
@@ -98,6 +104,22 @@ public class Bar implements Serializable {
         basicBar = model;
     }
 
+    //
+    //
+    //
+    //
+    //
+    public void handleSerieClick(SerieClickEvent event) {
+//        Integer selectedSerieId = Integer.valueOf(event.getObject().toString());
+  //      outputMessage = "Selected serei id  = " + selectedSerieId ;
+    }
+
+
+    //
+    //
+    //
+    //
+    //
     public ChartModel getBasicBar() {
         return basicBar;
     }
@@ -106,4 +128,13 @@ public class Bar implements Serializable {
         this.basicBar = basicBar;
     }
 
+    public String getOutputMessage() {
+        return outputMessage;
+    }
+
+    public void setOutputMessage(String outputMessage) {
+        this.outputMessage = outputMessage;
+    }
+
+    
 }
