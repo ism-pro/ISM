@@ -130,6 +130,9 @@ label.btn {
     min-width: 3rem;
 }
 
+.modalDialog .dropdown-item {
+    cursor: pointer;
+}
 /** ***************************************************************************
  *
  ******************************************************************************/
@@ -150,15 +153,33 @@ label.btn {
 
 
 .inputZoomerHandler {
-
+    font-weight: bold;
+    font-size: 0.72em;
 }
 .inputZoomerValue {
     text-align: center;
     width: 54px;
     font-size: 0.72em;
 }
+.inputRoterHandler {
+    font-weight: bold;
+    font-size: 0.72em;
+}
+.inputRoterValue {
+    text-align: center;
+    width: 54px;
+    font-size: 0.72em;
+}
 
-
+.splitContextRow {
+    margin:0px;
+    padding:0px;
+}
+.splitContextCol{
+    margin:0px;
+    padding:0px;
+    text-align: center; 
+}
 /* ******************************
 
 Crop Avatar
@@ -293,144 +314,106 @@ Crop Avatar
     }
 }
 
-.footer {
-    font-size: .875rem;
-    overflow: hidden;
+
+/** ***************************************************************************
+ *
+ ******************************************************************************/
+.modalDialog .dropdown-header{
+    padding: .2rem 0.5rem !important;
+    margin: 0px;
+}
+.modalDialog .dropdown-item {
+    padding: .2rem 0.75rem !important;
+    margin: 0px;
+    font-size: 0.75em;
 }
 
-.heart {
-    color: #ddd;
-    display: block;
-    height: 2rem;
-    line-height: 2rem;
-    margin-bottom: 0;
-    margin-top: 1rem;
+
+.modalDialog .tooltip-inner {
+    max-width: 250px;
+    /* If max-width does not work, try using width instead */
+    width: 250px; 
+}
+
+.modalDialog .txt-md{
+    padding: .2rem 0.75rem !important;
+    font-size: 0.75em;
+}
+.modalDialog .txt-al{
+   text-align: left;
+}
+.modalDialog .txt-ar{
+   text-align: right;
+}
+.modalDialog .txt-c{
+   text-align: center;
+}
+
+.toggle-on, .toggle-off{
+/*    position: inherit!important;
+    top:inherit!important;*/
+ 
+   font-size: 7pt!important;
+}
+
+
+
+/** ***************************************************************************
+ *
+ ******************************************************************************/
+
+.switch {
     position: relative;
-    text-align: center;
-    width: 100%;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
 }
 
-.heart:hover {
-    color: #ff4136;
-}
+.switch input {display:none;}
 
-.heart::before {
-    border-top: 1px solid #eee;
-    content: " ";
-    display: block;
-    height: 0;
-    left: 0;
+.slider {
     position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
     right: 0;
-    top: 50%;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
-.heart::after {
-    background-color: #fff;
-    content: "♥";
-    padding-left: .5rem;
-    padding-right: .5rem;
-    position: relative;
-    z-index: 1;
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
-
-
-
-
-
-
-
-
-
-.docs-buttons > .btn,
-.docs-buttons > .btn-group,
-.docs-buttons > .form-control {
-    margin-bottom: .5rem;
-    margin-right: .25rem;
+input:checked + .slider {
+    background-color: #2196F3;
 }
 
-.docs-toggles > .btn,
-.docs-toggles > .btn-group,
-.docs-toggles > .dropdown {
-    margin-bottom: .5rem;
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
 }
 
-.docs-tooltip {
-    display: block;
-    margin: -.5rem -.75rem;
-    padding: .5rem .75rem;
+input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
 }
 
-.docs-tooltip > .icon {
-    margin: 0 -.25rem;
-    vertical-align: top;
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
 }
 
-.tooltip-inner {
-    white-space: normal;
+.slider.round:before {
+    border-radius: 50%;
 }
-
-.btn-upload .tooltip-inner,
-.btn-toggle .tooltip-inner {
-    white-space: nowrap;
-}
-
-.btn-toggle {
-    padding: .5rem;
-}
-
-.btn-toggle > .docs-tooltip {
-    margin: -.5rem;
-    padding: .5rem;
-}
-
-@media (max-width: 400px) {
-    .btn-group-crop {
-        margin-right: -1rem!important;
-    }
-
-    .btn-group-crop > .btn {
-        padding-left: .5rem;
-        padding-right: .5rem;
-    }
-
-    .btn-group-crop .docs-tooltip {
-        margin-left: -.5rem;
-        margin-right: -.5rem;
-        padding-left: .5rem;
-        padding-right: .5rem;
-    }
-}
-
-.docs-options .dropdown-menu {
-    width: 100%;
-}
-
-.docs-options .dropdown-menu > li {
-    font-size: .875rem;
-    padding-left: 1rem;
-    padding-right: 1rem;
-}
-
-.docs-options .dropdown-menu > li:hover {
-    background-color: #f7f7f7;
-}
-
-.docs-options .dropdown-menu > li > label {
-    display: block;
-}
-
-.docs-cropped .modal-body {
-    text-align: center;
-}
-
-.docs-cropped .modal-body > img,
-.docs-cropped .modal-body > canvas {
-    max-width: 100%;
-}
-
-
-
-
-

@@ -22,10 +22,16 @@
 
                     <link href="../../../resources/ism/crop/cropper/css/cropper.css" rel="stylesheet" type="text/css"/>
                     <h:outputStylesheet library="ism" name="crop/inputCropperEditor.css" />
+                    <h:outputStylesheet library="vendor" name="bootstrap-touchspin/jquery.bootstrap-touchspin.min.css" />
+                    <h:outputStylesheet library="vendor" name="bootstrap-toggle/css/bootstrap-toggle.min.css" />
 
 
                     <script src="../../../resources/ism/crop/cropper/js/cropper.js" type="text/javascript"></script>
                     <h:outputScript library="ism" name="crop/inputCropperEditor.js" />
+                    <h:outputScript library="vendor" name="bootstrap-touchspin/jquery.bootstrap-touchspin.min.js" />
+                    <h:outputScript library="vendor" name="bootstrap-toggle/js/bootstrap-toggle.min.js" />
+
+
 
 
                     <p:growl id="msgs" showDetail="true"/>
@@ -41,7 +47,9 @@
                             <!-- 
                             Start Input Cropper 
                             -->
-                            <div id="inputCropperEditor" class="container inputCropper">
+
+
+                            <div id="inputCropperEditor" class="container inputCropper" for="crop-input-name-text">
 
                                 <!-- 
                                 Build Input Field text 
@@ -75,7 +83,7 @@
                                 <!-- 
                                 Build Modal Window
                                 -->
-                                <div class="modal fade modalDialog" id="modalDialog" 
+                                <div class="modal  modalDialog" id="modalDialog" 
                                      aria-hidden="true" aria-labelledby="modalDialog-label" 
                                      role="dialog" tabindex="-1">
 
@@ -107,12 +115,11 @@
                                                 -->
                                                 <div class="row">
                                                     <div class="col-md-9">
-                                                        <div class="img-wrapper">
-                                                            <h:graphicImage    /></div>
+                                                        <div class="img-wrapper"  />
                                                     </div>
 
                                                     <div class="col-md-3">
-                                                        <!-- <h3>Preview:</h3> -->
+                                                        <!-- <h3>Preview:</h3> -->                                                           
                                                         <div class="docs-preview clearfix">
                                                             <div class="img-preview preview-lg"></div>
                                                             <div class="img-preview preview-md"></div>
@@ -164,131 +171,247 @@
                                                 <!--
                                                 Build Controller
                                                 -->
+
                                                 <div class="row ic-btn-control">
                                                     <div class="col-md-9 docs-buttons">
 
-                                                        <!-- 
-                                                        Build Uploader and data
-                                                        -->
-                                                        <div class="btn-group optDragMode">
-                                                            <div class="area-upload btn-upload">
+                                                        <label  class="btn btn-sm btn-primary btn-upload" for="input-img-upload" title="Upload image file">
+                                                            <span id="input-img-upload-label" class="docs-tooltip" data-toggle="tooltip" data-animation="true" data-placement="top"  title="Charger une image depuis une source">
                                                                 <input type="hidden" class="input-src" name="input-src" />
                                                                 <input type="hidden" class="input-data" name="input-data" />
-                                                                <div class="form-group custom-file">
-                                                                    <label class="custum-file-label" for="input-img">Sélectionner une image</label>
-                                                                    <input type="file" class="form-control-file-sm input-img" id="input-img" name="input-img-file" placeholder="Fichier image" />
+
+                                                                <input type="file" class="sr-only input-img-upload" id="input-img-upload"  name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" />
+                                                                <span  class="fa fa-upload"></span>
+                                                            </span>
+                                                        </label>
+
+                                                        <div class="btn-group dropup optOptions" data-container=".optOptionsBtn" data-placement="bottom" data-toggle="tooltip" title="Contrôle des modes vue/image">
+                                                            <div class="dropdown dropup " >
+                                                                <button class="btn btn-outline-dark btn-sm dropdown-toggle optOptionsBtn"  type="button" aria-haspopup="true" aria-expanded="false"
+                                                                        data-toggle="dropdown" >
+                                                                    <span class="fa fa-eye" ></span>
+                                                                </button>
+
+                                                                <div class="dropdown-menu">
+                                                                    <h6 class="dropdown-header">Contrôle Vue</h6>
+                                                                    <label class="dropdown-item"  title="Permet un rognage libre" data-toggle="tooltip" data-placement="right">
+                                                                        <input type="radio" class="sr-only" id="viewMode0" name="viewMode" value="0" checked="true" />
+                                                                        [<span class="fa fa-eye-slash"/>] Rognage Libre
+                                                                    </label>
+                                                                    <label class="dropdown-item"  title="Permet le rognage sur l'image" data-toggle="tooltip" data-placement="right">
+                                                                        <input type="radio" class="sr-only" id="viewMode1" name="viewMode" value="1" checked="true" />
+                                                                        [<span class="fa fa-circle-thin"/>] Rognage à l'image
+                                                                    </label>
+                                                                    <label class="dropdown-item"  title="Permet le rognage dans l'espace" data-toggle="tooltip" data-placement="right">
+                                                                        <input type="radio" class="sr-only" id="viewMode2" name="viewMode" value="2" checked="true" />
+                                                                        [<span class="fa fa-circle-o"/>] Rognage à l'espace
+                                                                    </label>
+                                                                    <label class="dropdown-item"  title="Permet le rognage dans les limtes" data-toggle="tooltip" data-placement="right">
+                                                                        <input type="radio" class="sr-only" id="viewMode3" name="viewMode" value="3" checked="true" />
+                                                                        [<span class="fa fa-circle"/>] Rognage au limite
+                                                                    </label>
+
+                                                                    <div class="dropdown-divider"></div>
+
+                                                                    <h6 class="dropdown-header">Contrôle sur image</h6>
+                                                                    <a class="dropdown-item setDragMode" data-method="setDragMode" data-option="none" title="Désactiver les modes"  data-toggle="tooltip" data-placement="right">
+                                                                        [<span class="fa fa-toggle-off"/>] Désactiver</a>
+                                                                    <a class="dropdown-item setDragMode" data-method="setDragMode" data-option="crop" title="Active le mode par rognage"  data-toggle="tooltip" data-placement="right">
+                                                                        [<span class="fa fa-crop"/>] Rogner</a>
+                                                                    <a class="dropdown-item setDragMode" data-method="setDragMode" data-option="move" title="Active le mode par placement"  data-toggle="tooltip" data-placement="right">
+                                                                        [<span class="fa fa-arrows"/>] Placer</a>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="btn-group optUploadFile">
-                                                            <label class="btn btn-primary btn-upload" for="input-img-upload" title="Upload image file">
-                                                                <span class="docs-tooltip" data-toggle="tooltip" data-animation="false" title="Import image with Blob URLs">
-                                                                    <input type="file" class="sr-only input-img-upload" id="input-img-upload"  name="file" accept=".jpg,.jpeg,.png,.gif,.bmp,.tiff" />
-                                                                    <span class="fa fa-upload"></span>
-                                                                </span>
-                                                            </label>
-                                                        </div>
 
-
-
-
-
-                                                        <div class="btn-group optDragMode">
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle"
-                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                                    title="Mode de la souris sur l'image" >
-                                                                <span class="fa fa-plus"></span>
-                                                            </button>
-                                                            <div class="dropdown-menu btn-sm">
-                                                                <a class="dropdown-item" data-method="setDragMode" data-option="none" title="Désactiver les modes">
-                                                                    [<span class="fa fa-toggle-off"/>] Désactiver</a>
-                                                                <a class="dropdown-item" data-method="setDragMode" data-option="crop" title="Active le mode par rognage">
-                                                                    [<span class="fa fa-crop"/>] Rogner</a>
-                                                                <a class="dropdown-item" data-method="setDragMode" data-option="move" title="Active le mode par placement">
-                                                                    [<span class="fa fa-arrows"/>] Placer</a>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="btn-group optRotateLeft" >
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
-                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                                    title="Rotations anti-horaire" >
+                                                        <div class="btn-group dropup optRotate" data-container=".optRotateBtn" data-placement="bottom" data-toggle="tooltip" title="Contrôleur de rotation de l'image">
+                                                            <button class="btn btn-outline-dark btn-sm dropdown-toggle optRotateBtn" type="button" aria-haspopup="true" aria-expanded="false"
+                                                                    data-toggle="dropdown" >
                                                                 <span class="fa fa-rotate-left"></span>
                                                             </button>
-                                                            <div class="dropdown-menu btn-sm" >
-                                                                <a class="dropdown-item" data-method="rotate" data-option="-90" title="Rotation anti-horaire de -90°">-90° degré</a>
-                                                                <a class="dropdown-item" data-method="rotate" data-option="-45" title="Rotation anti-horaire de -45°">-45° degré</a>
-                                                                <a class="dropdown-item" data-method="rotate" data-option="-30" title="Rotation anti-horaire de -30°">-30° degré</a>
-                                                                <a class="dropdown-item" data-method="rotate" data-option="-15" title="Rotation anti-horaire de -10°">-15° degré</a>
+
+                                                            <div class="dropdown-menu dropup btn-sm" >
+                                                                <h6 class="dropdown-header">Rotation Prédéfinie</h6>
+                                                                <div class="row splitContextRow">
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <h6 class="dropdown-header"  ><span class="fa fa-rotate-left" /></h6>
+
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="rotate" data-option="-90" title="Rotation anti-horaire de -90°">-90° degré</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="rotate" data-option="-45" title="Rotation anti-horaire de -45°">-45° degré</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="rotate" data-option="-30" title="Rotation anti-horaire de -30°">-30° degré</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="rotate" data-option="-15" title="Rotation anti-horaire de -10°">-15° degré</a>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <h6 class="dropdown-header"   ><span class="fa fa-rotate-right" /></h6>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="rotate" data-option="90" title="Rotation horaire de +90°">+90° degré</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="rotate" data-option="45" title="Rotation horaire de +45°">+45° degré</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="rotate" data-option="30" title="Rotation horaire de +30°">+30° degré</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="rotate" data-option="15" title="Rotation horaire de +15°">+15° degré</a>
+
+                                                                    </div>
+                                                                </div>
+
+
+
+
+                                                                <div class="dropdown-divider"></div>
+                                                                <h6 class="dropdown-header">Rotation Glissante</h6>
+                                                                <label   title="Activer la cellule. Tourner l'image avec la roulette de la souris" data-toggle="tooltip" data-html="true" data-placement="right">
+                                                                    <input type="text" class="input-sm inputSpin inputRotateSpin"  data-method="rotate"   name="rotate" value="180" />
+                                                                </label>
+
+                                                                <div id="inputRoter" class="inputRoter" data-toggle="tooltip" data-placement="right" title="Exécuter une rotation de l'image">
+                                                                    <input id="inputRoterValue" type="hidden"  disabled="true"
+                                                                           class="inputRoterValue smaller" name="inputRoterValue"/>
+                                                                    <div id="inputRoterHandler"  class="ui-slider-handle inputRoterHandler" ></div>
+                                                                </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="btn-group optRotateRight" >
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
-                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                                    title="Rotations horaire" >
-                                                                <span class="fa fa-rotate-right"></span>
-                                                            </button>
-                                                            <div class="dropdown-menu btn-sm" >
-                                                                <a class="dropdown-item" data-method="rotate" data-option="90" title="Rotation anti-horaire de +90°">+90° degré</a>
-                                                                <a class="dropdown-item" data-method="rotate" data-option="45" title="Rotation anti-horaire de +45°">+45° degré</a>
-                                                                <a class="dropdown-item" data-method="rotate" data-option="30" title="Rotation anti-horaire de +30°">+30° degré</a>
-                                                                <a class="dropdown-item" data-method="rotate" data-option="15" title="Rotation anti-horaire de +15°">+15° degré</a>
-                                                            </div>
-                                                        </div>
 
-                                                        <div class="btn-group optZoomer" >
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
-                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                                    title="Options de zoom" >
-                                                                <span class="fa fa-search" style="padding-right:2px;"></span>
-                                                                <input id="inputZoomerValue" type="text" disabled="true"
-                                                                       class="inputZoomerValue smaller" name="inputZoomerValue"/>
+
+                                                        <div class="btn-group dropup optZoomer" data-container=".optZoomerBtn" data-placement="bottom" data-toggle="tooltip" title="Contrôleur du zoom de l'image" >
+                                                            <button  class="btn btn-outline-dark btn-sm dropdown-toggle optZoomerBtn" type="button" aria-haspopup="true" aria-expanded="false"
+                                                                     data-toggle="dropdown" >
+                                                                <span class="fa fa-search-plus" style="padding-right:2px;" ></span>
+
                                                             </button>
-                                                            <div class="dropdown-menu btn-sm" >
-                                                                <div id="inputZoomer" class="inputZoomer">
+                                                            <div class="dropdown-menu dropup btn-sm" >
+                                                                <div class="row splitContextRow">
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <h6 class="dropdown-header"   ><span class="fa fa-search-plus" /></h6>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="zoom" data-option="0.75"  title="Zoomer de 75%">+75%</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="zoom" data-option="0.5"   title="Zoomer de 50%">+50%</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="zoom" data-option="0.25"  title="Zoomer de 25%">+25%</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="left" data-method="zoom" data-option="0.1"   title="Zoomer de 10%">+10%</a>
+
+                                                                    </div>
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <h6 class="dropdown-header"><span class="fa fa-search-minus" /></h6>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="zoom" data-option="-0.75" title="Dé-zoomer de 75%">-75%</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="zoom" data-option="-0.5" title="Dé-zoomer de 50%">-50%</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="zoom" data-option="-0.25" title="Dé-zoomer de 25%">-25%</a>
+                                                                        <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="zoom" data-option="-0.1" title="Dé-zoomer de 10%">-10%</a>
+                                                                    </div>
+                                                                </div>
+                                                                <a class="dropdown-item" data-toggle="tooltip" data-placement="right" data-method="zoomTo" data-option="reset"  title="Zoomer à l'initiale">Réinitialiser Zoom</a>
+
+
+
+                                                                <div class="dropdown-divider" />
+                                                                <h6 class="dropdown-header">Zoom</h6>
+                                                                <label   title="Activer la cellule. Zoomer l'image avec la roulette de la souris" data-toggle="tooltip" data-placement="right">
+                                                                    <input type="text" class="input-sm inputSpin inputZoomerSpin" data-method="zoom"   name="zoom" value="0" />
+                                                                </label>
+
+                                                                <div id="inputZoomer" class="inputZoomer" data-toggle="tooltip" data-placement="right" title="Exécuter un zoom de l'image">
+                                                                    <input id="inputZoomerValue" type="hidden"  disabled="true"
+                                                                           class="inputZoomerValue smaller" name="inputZoomerValue"/>
                                                                     <div id="inputZoomerHandler"  class="ui-slider-handle inputZoomerHandler" ></div>
                                                                 </div>
                                                             </div>
                                                         </div>
 
-                                                        <div class="btn-group optCropper" >
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
-                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                                    title="Options d'image" >
+
+                                                        <div class="btn-group  dropup  optCropper" data-container=".optCropperBtn" data-placement="bottom" data-toggle="tooltip" title="Contrôleur d'édition image" >
+                                                            <button class="btn btn-outline-dark btn-sm dropdown-toggle optCropperBtn" type="button" aria-haspopup="true" aria-expanded="false"
+                                                                    data-toggle="dropdown" >
                                                                 <span class="fa fa-gear"></span>
                                                             </button>
-                                                            <div class="dropdown-menu btn-sm" >
-                                                                <a class="dropdown-item" data-method="crop" data-option="null" title="Affiche la zonne de découpage">Activer le cadre</a>
-                                                                <a class="dropdown-item" data-method="clear" data-option="null" title="Retire la zone de découpage">Retirer le cadre</a>
-                                                                <a class="dropdown-item" data-method="enable" data-option="null" title="Activer l'édition">Autoriser l'édition</a>
-                                                                <a class="dropdown-item" data-method="disable" data-option="null" title="Désactiver l'édition">Arrêter l'édition</a>
-                                                                <a class="dropdown-item" data-method="reset" data-option="null" title="Réinitialise l'édition">Initialiser image</a>
-                                                                <a class="dropdown-item" data-method="destroy" data-option="null" title="Supprimer l'image blob">Supprimer image</a>
+                                                            <div class="dropdown-menu dropup  btn-sm" >
+                                                                <div class="row splitContextRow" data-toggle="tooltip" data-placement="right" title="Affiche ou non le cadre de rognage">
+                                                                    <div class="col-sm-6 splitContextCol txt-md txt-al">
+                                                                        Cadrage
+                                                                    </div>
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <input class="form-control inputCropperCrop"  type="checkbox" checked="true" data-method="crop" data-toggle="toggle" data-size="mini" data-width="75%"  data-height="24" data-onstyle="success" data-offstyle="danger" />
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row splitContextRow" data-toggle="tooltip" data-placement="right" title="Permet ou non l'editon de l'image">
+                                                                    <div class="col-sm-6 splitContextCol txt-md txt-al">
+                                                                        Edition
+                                                                    </div>
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <input class="form-control inputCropperEdition" type="checkbox" checked="true" data-method="edition" data-toggle="toggle" data-size="mini" data-width="75%"  data-height="24" data-onstyle="success" data-offstyle="danger"/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="dropdown-divider" />
+                                                                <a class="dropdown-item" data-method="reset" data-option="null" title="Ré-initialiser l'image en cours"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-refresh"/>] Ré-initialiser</a>
+                                                                <a class="dropdown-item" data-method="destroy" data-option="null" title="Supprimer l'édition en cours"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-trash-o"/>] Supprimer image</a>
                                                             </div>
                                                         </div>
 
-                                                        <div class="btn-group optApsectRatio" >
-                                                            <button class="btn btn-secondary btn-sm dropdown-toggle" 
-                                                                    type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                                                                    title="Options d'image" >
+                                                        <div class="btn-group dropup  optApsectRatio" data-container=".optApsectRatioBtn" data-placement="bottom" data-toggle="tooltip" title="Contrôleur du zoom de l'image" >
+                                                            <button class="btn btn-outline-dark btn-sm dropdown-toggle optApsectRatioBtn" type="button" aria-haspopup="true" aria-expanded="false"
+                                                                    data-toggle="dropdown" >
                                                                 <span class="fa fa-window-restore"></span>
                                                             </button>
-                                                            <div class="dropdown-menu btn-sm" >
-                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="1.7777777777777777777777777777778" title="Cinéma">Cinéma [16:9]</a>
-                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="1.3333333333333333333333333333333" title="Photo">Photographie [4:3]</a>
-                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="1" title="Caméra">Caméra [1:1]</a>
-                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="0.66666666666666666666666666666667" title="Avatar">Avatar [2:3]</a>
-                                                                <a class="dropdown-item" data-method="setAspectRatio" data-option="null" title="Libérer le crop">Cadre libre</a>
+                                                            <div class="dropdown-menu dropup  btn-sm" >
+                                                                <a class="dropdown-item setAspectRatio" data-method="setAspectRatio" data-option="1.7777777777777777777777777777778" title="Rognage CINEMA"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-camera"/>] Cinéma [16:9]</a>
+                                                                <a class="dropdown-item setAspectRatio" data-method="setAspectRatio" data-option="1.3333333333333333333333333333333" title="Rognage PHOTO"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-photo"/>] Photographie [4:3]</a>
+                                                                <a class="dropdown-item setAspectRatio" data-method="setAspectRatio" data-option="1" title="Rognage CAMERA"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-camera-retro"/>] Caméra [1:1]</a>
+                                                                <a class="dropdown-item setAspectRatio" data-method="setAspectRatio" data-option="0.66666666666666666666666666666667" title="Rognage BADGE"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-id-badge"/>] BADGE [2:3]</a>
+                                                                <a class="dropdown-item setAspectRatio" data-method="setAspectRatio" data-option="null" title="Rognage libre"  data-toggle="tooltip" data-placement="right">
+                                                                    [<span class="fa fa-delicious"/>] Cadrage LIBRE</a>
+
                                                             </div>
                                                         </div>
 
+                                                        <div class="btn-group dropup  optFlip" data-container=".optFlipBtn" data-placement="bottom" data-toggle="tooltip" title="Contrôleur Taille/Place Image" >
+                                                            <button class="btn btn-outline-dark btn-sm dropdown-toggle optFlipBtn" type="button" aria-haspopup="true" aria-expanded="false"
+                                                                    data-toggle="dropdown" >
+                                                                <span class="fa fa-arrows-alt"></span>
+                                                            </button>
+                                                            <div class="dropdown-menu dropup  btn-sm" >
+                                                                <h6 class="dropdown-header">Mirroire</h6>
+                                                                <div class="row splitContextRow">
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <a class="dropdown-item flipOption" data-method="scaleX" data-option="-1" title="Miroire horizontale"  data-toggle="tooltip" data-placement="left">
+                                                                            [<span class="fa fa-angle-double-left"/>] Horiz.</a>
+                                                                    </div>
+                                                                    <div class="col-sm-6 splitContextCol">
+                                                                        <a class="dropdown-item flipOption" data-method="scaleY" data-option="-1" title="Miroire Verticale"  data-toggle="tooltip" data-placement="right">
+                                                                            [<span class="fa fa-angle-double-up"/>] Vertic.</a>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="dropdown-divider" />
+                                                                <h6 class="dropdown-header">Mouvement</h6>
+                                                                <div class="btn-group btn">
+                                                                    <button class="dropdown-item moveOption fa fa-arrow-left" type="button" data-method="move" data-option="-10" data-second-option="0" title="Déplacement à gauche de 10px"  data-toggle="tooltip" data-placement="left"/>
+                                                                    <button class="dropdown-item moveOption fa fa-arrow-right" type="button"  data-method="move" data-option="10" data-second-option="0"  title="Déplacement à droite de 10px"  data-toggle="tooltip" data-placement="left"/>
+                                                                    <button class="dropdown-item moveOption fa fa-arrow-up" type="button"  data-method="move" data-option="0" data-second-option="-10"  title="Déplacement en dessous de 10px"  data-toggle="tooltip" data-placement="right"/>
+                                                                    <button class="dropdown-item moveOption fa fa-arrow-down" type="button"  data-method="move" data-option="0" data-second-option="10" title="Déplacement au dessus de 10px"  data-toggle="tooltip" data-placement="right"/>
+                                                                </div>
+
+
+                                                                <div class="dropdown-divider" />
+                                                                <h6 class="dropdown-header">Mise à l'échelle</h6>
+                                                                <label   title="Activer la cellule. Etirer horizontallement l'image avec la roulette de la souris" data-toggle="tooltip" data-placement="right">
+                                                                    <input type="text" class="input-sm inputSpin inputScaleXSpin" data-method="scaleX"   name="scaleX" value="1" />
+                                                                </label>
+                                                                <label   title="Activer la cellule. Etirer verticalement l'image avec la roulette de la souris" data-toggle="tooltip" data-placement="right">
+                                                                    <input type="text" class="input-sm inputSpin inputScaleYSpin" data-method="scaleY"   name="scaleY" value="1" />
+                                                                </label>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-primary btn-apply btn-sm" style="float: right" data-dismiss="modal"
+                                                                data-method="getCroppedCanvas" data-option="{ &quot;maxWidth&quot;: 4096, &quot;maxHeight&quot;: 4096 }"
+                                                                >OK</button>
 
                                                     </div>
                                                     <div class="col-md-3">
-                                                        <button type="button" class="btn btn-primary btn-apply"  data-dismiss="modal">OK</button>
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -300,6 +423,23 @@
 
                             </div>
 
+                            <div class="modal fade docs-cropped" id="getCroppedCanvasModal" aria-hidden="true" aria-labelledby="getCroppedCanvasTitle" role="dialog" tabindex="-1">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="getCroppedCanvasTitle">Cropped</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body"></div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.jpg">Download</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div><!-- /.modal -->
 
 
                         </h:panelGroup>
@@ -310,6 +450,10 @@
                     <br/>
                     <br/><br/><br/><br/>
                     <ic:fake />
+
+
+
+
 
                 </h:form>
 
@@ -322,21 +466,14 @@
                     .gridPanel{ width: 100%;}
                     .gridField{}
                     .gridContent{ width: 100%;}
+
+
                 </style>
                 <script  type="text/javascript">
-
-
                     $(function () {
                         PrimeFaces.cw("InputCropperEditor", "widget_inputCropperEditor", {id: "inputCropperEditor", stateful: false});
                     });
                 </script>
-
-
-
-
-
-
-
 
             </ui:define>
 
