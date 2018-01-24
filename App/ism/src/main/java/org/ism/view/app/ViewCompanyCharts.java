@@ -17,16 +17,16 @@ import org.ism.jsf.app.IsmNcrstateController;
 import org.ism.jsf.hr.StaffController;
 import org.ism.jsf.smq.nc.NonConformiteRequestController;
 import org.ism.listener.SessionCounterListener;
-import org.ism.charts.lib.model.ChartModel;
-import org.ism.charts.lib.model.details.Title;
-import org.ism.charts.lib.model.properties.ChartType;
-import org.ism.charts.lib.model.properties.DataLabels;
-import org.ism.charts.lib.model.properties.Style;
-import org.ism.charts.lib.model.series.Data;
-import org.ism.charts.lib.model.series.PlotOptions;
-import org.ism.charts.lib.model.series.Series;
-import org.ism.charts.lib.model.series.ToolTip;
-import org.ism.charts.lib.model.series.type.PieSerie;
+import org.ism.model.ChartModel;
+import org.ism.model.details.Title;
+import org.ism.model.properties.ChartType;
+import org.ism.model.properties.DataLabels;
+import org.ism.model.properties.Style;
+import org.ism.model.series.Data;
+import org.ism.model.series.PlotOptions;
+import org.ism.model.series.Series;
+import org.ism.model.series.ToolTip;
+import org.ism.model.series.type.PieSerie;
 
 /**
  * <h2>ViewCompanyCharts</h2>

@@ -9,88 +9,147 @@ and open the template in the editor.
 */
 
 /*** MARGIN            ************************************************** ***/
+imargin-top-05{ margin-top: 5px;}
+imargin-top-10{ margin-top: 10px;}
+imargin-top-15{ margin-top: 15px;}
+imargin-top-20{ margin-top: 20px;}
+imargin-top-25{ margin-top: 25px;}
+imargin-top-30{ margin-top: 30px;}
+imargin-top-35{ margin-top: 35px;}
+imargin-top-40{ margin-top: 40px;}
+imargin-top-45{ margin-top: 45px;}
+imargin-top-50{ margin-top: 50px;}
 
+imargin-bottom-05{ margin-bottom: 5px;}
+imargin-bottom-10{ margin-bottom: 10px;}
+imargin-bottom-15{ margin-bottom: 15px;}
+imargin-bottom-20{ margin-bottom: 20px;}
+imargin-bottom-25{ margin-bottom: 25px;}
+imargin-bottom-30{ margin-bottom: 30px;}
+imargin-bottom-35{ margin-bottom: 35px;}
+imargin-bottom-40{ margin-bottom: 40px;}
+imargin-bottom-45{ margin-bottom: 45px;}
+imargin-bottom-50{ margin-bottom: 50px;}
 
 /*** PADDING            ************************************************** ***/
+ipadding-top-05{ padding-top: 5px;}
+ipadding-top-10{ padding-top: 10px;}
+ipadding-top-15{ padding-top: 15px;}
+ipadding-top-20{ padding-top: 20px;}
+ipadding-top-25{ padding-top: 25px;}
+ipadding-top-30{ padding-top: 30px;}
+ipadding-top-35{ padding-top: 35px;}
+ipadding-top-40{ padding-top: 40px;}
+ipadding-top-45{ padding-top: 45px;}
+ipadding-top-50{ padding-top: 50px;}
+
+ipadding-bottom-05{ padding-bottom: 5px;}
+ipadding-bottom-10{ padding-bottom: 10px;}
+ipadding-bottom-15{ padding-bottom: 15px;}
+ipadding-bottom-20{ padding-bottom: 20px;}
+ipadding-bottom-25{ padding-bottom: 25px;}
+ipadding-bottom-30{ padding-bottom: 30px;}
+ipadding-bottom-35{ padding-bottom: 35px;}
+ipadding-bottom-40{ padding-bottom: 40px;}
+ipadding-bottom-45{ padding-bottom: 45px;}
+ipadding-bottom-50{ padding-bottom: 50px;}
 
 
 
-/*** MANAGING TEAL       ************************************************** ***/
-.teal > div.huge {
+/*** TEAL            ************************************************** ***/
+.teal .card-header {
+    padding: 0.125rem 0.25rem;
+}
+.teal .card-footer {
+    padding: 0.125rem 0.25rem;
+}
+.teal .card {
+    border-radius: 2px;
+}
+
+
+.teal .huge {
     font-size: 24px;
 }
-.teal > div.title {
+.teal .title {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 14px;
 }
+/*** MANAGING TEAL       ************************************************** ***/
+
 
 /** === ORANGE TEAL **/
-.panel-orange {
+.card-orange {
     border-color: #ff9800!important;
 }
-.panel-orange > .panel-heading {
+.card-orange > .card-header {
     border-color: #ff9800;
     color: white;
     background-color: #ff9800;
 }
-.panel-orange > a {
+.card-orange > a {
     color: #ff9800;
 }
-.panel-orange > a:hover {
+.card-orange > a:hover {
     color: #9c27b0;
 }
 
 
 /** === BLUE TEAL **/
-.panel-blue {
+.card-blue {
     border-color: #2196f3!important;
 }
-.panel-blue > .panel-heading {
+.card-blue > .card-header {
     border-color: #2196f3;
     color: white;
     background-color: #2196f3;
 }
-.panel-blue > a {
+.card-blue > a {
     color: #2196f3;
 }
-.panel-blue > a:hover {
+.card-blue > a:hover {
     color: #9c27b0;
 }
 
 /** === GREEN DARK TEAL **/
-.panel-green-dark {
+.card-green-dark {
     border-color: #009688!important;
 }
-.panel-green-dark > .panel-heading {
+.card-green-dark > .card-header {
     border-color: #009688;
     color: white;
     background-color: #009688;
 }
-.panel-green-dark > a {
+.card-green-dark > a {
     color: #009688;
 }
-.panel-green-dark > a:hover {
+.card-green-dark > a:hover {
     color: #9c27b0;
 }
 
 /** === RED PURE TEAL **/
-.panel-red-pure {
+.card-red-pure {
     border-color: #f44336!important;
 }
-.panel-red-pure > .panel-heading {
+.card-red-pure > .card-header {
     border-color: #f44336;
     color: white;
     background-color: #f44336;
 }
-.panel-red-pure > a {
+.card-red-pure > a {
     color: #f44336;
 }
-.panel-red-pure > a:hover {
+.card-red-pure > a:hover {
     color: #9c27b0;
 }
 
 
 
+/***                     ************************************************** ***/
+/***                     ************************************************** ***/
+/*** MANAGING TEAL       ************************************************** ***/
+/***                     ************************************************** ***/
+/***                     ************************************************** ***/
 /** LOGIN PAGE **/
 .login-logo,.register-logo{
     font-size:35px;
@@ -124,21 +183,6 @@ and open the template in the editor.
 /*** RE WRITE BOOTSTRAP   ************************************************ ***/
 
 
-.row {
-    /* margin-right: -15px; */
-    /* margin-left: -15px; */
-    margin-right: auto;
-    margin-left: auto;
-}
-
-.col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
-    padding-right: 0px;
-    padding-left: 0px;
-}
-
-.panel {
-    border-radius: 2px;
-}
 
 
 

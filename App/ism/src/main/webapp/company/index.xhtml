@@ -16,256 +16,245 @@
 
             <h:form id="bodyForm">
 
+                <div class="container-fluid">
 
-                <!-- ====================================================== -->
-                <!-- ====================================================== -->
-                <!-- row 1  =============================================== -->
-                <!-- ====================================================== -->
-                <!-- ====================================================== -->
-                <div class="row">
                     <!-- ====================================================== -->
+                    <!-- row 1  =============================================== -->
                     <!-- ====================================================== -->
-                    <!-- COLUMN 1   =========================================== -->
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-orange ">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-users fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right teal">
-                                        <div class="huge">#{viewSessionCounter.activeStaff.size()} / #{staffController.items.size()}</div>
-                                        <div class="title">Utilisateurs</div>
+                    <div class="row teal ">
+                        <!-- ====================================================== -->
+                        <!-- COLUMN 1   =========================================== -->
+                        <!-- ====================================================== -->
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 pr-2">
+                            <div class="card card-orange">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-md-3">
+                                            <i class="fa fa-users fa-4x"></i>
+                                        </div>
+                                        <div class="col-xs-9 col-md-9  text-right">
+                                            <div class="huge">#{viewSessionCounter.activeStaff.size()} / #{staffController.items.size()}</div>
+                                            <div class="title">Utilisateurs</div>
+                                        </div>
                                     </div>
                                 </div>
+                                <p:commandLink action="/company/hr/staffManager/List.xhtml?faces-redirect=true">
+                                    <div class="card-footer">
+                                        <span class="pull-left">Voir Plus</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </p:commandLink>
                             </div>
-                            <p:commandLink action="/company/hr/staffManager/List.xhtml?faces-redirect=true">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Voir Plus</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </p:commandLink>
                         </div>
+
+                        <!-- ====================================================== -->
+                        <!-- COLUMN 2   =========================================== -->
+                        <!-- ====================================================== -->
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6 px-2">
+                            <div class="card card-blue">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-md-3">
+                                            <i class="fa fa-eye fa-4x"></i>
+                                        </div>
+                                        <div class="col-xs-9 col-md-9 text-right">
+                                            <div class="huge">#{processusController.approuvedItems.size()}</div>
+                                            <div class="title">Processus</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p:commandLink action="/company/smq/processus/List.xhtml?faces-redirect=true">
+                                    <div class="card-footer">
+                                        <span class="pull-left">Voir Plus</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </p:commandLink>
+                            </div>
+                        </div>
+
+
+                        <!-- ====================================================== -->
+                        <!-- COLUMN 3   =========================================== -->
+                        <!-- ====================================================== -->
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6  px-2">
+                            <div class="card card-green-dark">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-md-3">
+                                            <i class="fa fa-file-pdf-o fa-4x"></i>
+                                        </div>
+                                        <div class="col-xs-9 col-md-9 text-right">
+                                            <div class="huge">#{docExplorerController.items.size()}</div>
+                                            <div class="title">Documentations</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p:commandLink action="/company/smq/docExplorer/List.xhtml?faces-redirect=true">
+                                    <div class="card-footer">
+                                        <span class="pull-left">Voir Plus</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </p:commandLink>
+                            </div>
+                        </div>
+
+                        <!-- ====================================================== -->
+                        <!-- COLUMN 4   =========================================== -->
+                        <!-- ====================================================== -->
+                        <div class="col-xl-3 col-lg-3 col-md-3 col-sm-6  pl-2 ">
+                            <div class="card card-red-pure">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-xs-3 col-md-3">
+                                            <i class="fa fa-thumbs-o-down fa-4x"></i>
+                                        </div>
+                                        <div class="col-xs-9 col-md-9 text-right">
+                                            <div class="huge">#{nonConformiteRequestController.items.size()}</div>
+                                            <div class="title">Non conformités</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <p:commandLink action="/company/smq/nc/Request/List.xhtml?faces-redirect=true">
+                                    <div class="card-footer">
+                                        <span class="pull-left">Voir Plus</span>
+                                        <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </p:commandLink>
+                            </div>
+                        </div>
+
                     </div>
 
+
+
+
+
                     <!-- ====================================================== -->
+                    <!-- row 2  =============================================== -->
                     <!-- ====================================================== -->
-                    <!-- COLUMN 2   =========================================== -->
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-blue">
-                            <div class="panel-heading">
+                    <div class="row mt-3"> 
+                        <!-- ====================================================== -->
+                        <!-- COLUMN 1   =========================================== -->
+                        <!-- ====================================================== -->
+                        <div class="col-lg-8 col-md-8">
+                            <div class="jumbotron px-4 border-dark pr-2">
+                                <h1 class="display-4">Bonjour #{staffAuthController.staff.stFirstname} #{staffAuthController.staff.stLastname}</h1>
+                                <p class="lead">Trouvez ci-dessous la situation de votre processus <span style="font-weight: bold;">ISO9001:2015</span>.</p>
+                                <hr class="my-4"/>
                                 <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-eye fa-5x"></i>
+                                    <div class="col-lg-9 col-md-7 pr-2">
+                                        <div class="card ">
+                                            <div class="card-header text-white bg-info">Votre situation des non conformités</div>
+                                            <div class="card-body">
+                                                <p:dataTable id="dtNCState1" rendered="#{staffAuthController.staff.stProcessus==null?false:true}"
+                                                             value="#{ismNcrstateController.items}"
+                                                             var="ncstate"
+                                                             class="table table-condensed"
+                                                             >
+                                                    <p:column headerText="#{ism.NonConformiteUniteField_ncuId}"
+                                                              width="32"
+                                                              >
+                                                        <h:outputText value="#{ncstate.id}"/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Etat">
+                                                        <h:outputText value="#{ncstate.istate} - #{ncstate.statename}"/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Situation">
+                                                        <div class="progress progress-xs  progress-striped active">
+                                                            <div class="progress-bar progress-bar-success" role="progressbar" 
+                                                                 aria-valuenow="#{viewIndex.countStaffNC(ncstate.istate)}"
+                                                                 aria-valuemin="0" aria-valuemax="100" 
+                                                                 style="width:#{ncstate.id lt 4 ? viewIndex.indicOpenStaffNC(ncstate.istate) : viewIndex.indicClosedStaffNC(ncstate.istate)}%">
+                                                                <span style="color: #2d62b0">#{ncstate.id lt 4 ? viewIndex.indicOpenStaffNC(ncstate.istate):viewIndex.indicClosedStaffNC(ncstate.istate)}%</span>
+                                                            </div>
+
+
+                                                        </div>
+                                                    </p:column>
+
+                                                    <p:column headerText="Label" width="64">
+                                                        <span class="badge bg-yellow">#{viewIndex.countStaffNC(ncstate.istate)}</span>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+
+                                        </div><!-- /.card-body -->
                                     </div>
-                                    <div class="col-xs-9 text-right teal">
-                                        <div class="huge">#{processusController.approuvedItems.size()}</div>
-                                        <div class="title">Processus</div>
+
+                                    <div  class="col-lg-3 col-md-5 pl-2"> 
+                                        <div class="card">
+                                            <div class="card-header text-white bg-info">Documentation</div>
+                                            <div class="card-body">
+                                                <ic:chart id="chartBarStaffDocModel" type="column" rendered="#{staffAuthController.staff.stProcessus==null?false:true}"
+                                                          style="width: 100%"
+                                                          exporting="true"
+                                                          model="#{docExplorerChartView.barChartDocStaffModel}" />
+                                            </div>
+
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
-                            <p:commandLink action="/company/smq/processus/List.xhtml?faces-redirect=true">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Voir Plus</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </p:commandLink>
+
                         </div>
-                    </div>
 
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <!-- COLUMN 3   =========================================== -->
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green-dark">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-file-pdf-o fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right teal">
-                                        <div class="huge">#{docExplorerController.items.size()}</div>
-                                        <div class="title">Documentations</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p:commandLink action="/company/smq/docExplorer/List.xhtml?faces-redirect=true">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Voir Plus</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </p:commandLink>
-                        </div>
-                    </div>
+                        <!-- ====================================================== -->
+                        <!-- ====================================================== -->
+                        <!-- COLUMN 2   =========================================== -->
+                        <!-- ====================================================== -->
+                        <!-- ====================================================== -->
+                        <div  class="col-lg-4 col-md-4 pl-2">
+                            <p:poll  update="panelConnectedUser" interval="15" global="false" form="bodyForm"  />
 
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <!-- COLUMN 4   =========================================== -->
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-red-pure">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-thumbs-o-down fa-5x"></i>
-                                    </div>
-                                    <div class="col-xs-9 text-right teal">
-                                        <div class="huge">#{nonConformiteRequestController.items.size()}</div>
-                                        <div class="title">Non conformités</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <p:commandLink action="/company/smq/nc/Request/List.xhtml?faces-redirect=true">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Voir Plus</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </p:commandLink>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.row -->
+                            <div  class="card border-primary">
+                                <div class="card-header text-white bg-primary">Utilisateurs en lignes</div>
+                                <div class="card-body  px-0 py-0">
+                                    <h:panelGroup id="panelConnectedUser">
+                                        <ul class="list-group">
+                                            <ui:repeat  value="#{viewSessionCounter.activeStaff}" var="item">
+                                                <li class="list-group-item d-flex justify-content-between align-items-center px-1">
+                                                    <div class="row">
 
+                                                        <div class="pl-3">
+                                                            <h:graphicImage library="img" name="ism/hr/avatar2.png"  style="width:35px; border-radius: 50%" />
+                                                        </div>
+                                                        <div class=" px-1 ">
+                                                            #{item.stFirstname} #{item.stLastname} #{item.stMiddlename} [#{item.stStaff}]
+                                                        </div>
 
-
-
-
-
-                <!-- ====================================================== -->
-                <!-- ====================================================== -->
-                <!-- row 2 =============================================== -->
-                <!-- ====================================================== -->
-                <!-- ====================================================== -->
-                <div class="row">
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <!-- COLUMN 1   =========================================== -->
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <div class="col-lg-8 col-md-8">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">Bienvenu</div>
-                            <div class="panel-body">
-
-                                <div class="page-header">
-                                    <h1 class="display-3">Bonjour #{staffAuthController.staff.stFirstname} #{staffAuthController.staff.stLastname}</h1>
-                                </div>
-
-                                <p>
-                                    Trouvez ci-dessous la situation de votre processus ISO9001:2015. 
-                                </p>
-
-
-
-                                <div class="col-lg-8 col-md-8">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">Votre situation des non conformités</div>
-                                        <p:dataTable id="dtNCState" rendered="#{staffAuthController.staff.stProcessus==null?false:true}"
-                                                     value="#{ismNcrstateController.items}"
-                                                     var="ncstate"
-                                                     class="table table-condensed"
-                                                     >
-                                            <p:column headerText="#{ism.NonConformiteUniteField_ncuId}"
-                                                      width="32"
-                                                      >
-                                                <h:outputText value="#{ncstate.id}"/>
-                                            </p:column>
-
-                                            <p:column headerText="Etat">
-                                                <h:outputText value="#{ncstate.istate} - #{ncstate.statename}"/>
-                                            </p:column>
-
-                                            <p:column headerText="Situation">
-                                                <div class="progress progress-xs  progress-striped active">
-                                                    <div class="progress-bar progress-bar-success" role="progressbar" 
-                                                         aria-valuenow="#{viewIndex.countStaffNC(ncstate.istate)}"
-                                                         aria-valuemin="0" aria-valuemax="100" 
-                                                         style="width:#{ncstate.id lt 4 ? viewIndex.indicOpenStaffNC(ncstate.istate) : viewIndex.indicClosedStaffNC(ncstate.istate)}%">
-                                                        <span style="color: #2d62b0">#{ncstate.id lt 4 ? viewIndex.indicOpenStaffNC(ncstate.istate):viewIndex.indicClosedStaffNC(ncstate.istate)}%</span>
                                                     </div>
 
+                                                    <span class="badge badge-primary badge-pill" data-toggle="tooltip" data-placement="left" title="Déconnecter..." >
+                                                        #{viewUtil.durationFromMilliSec(viewSessionCounter.staffSessionDuration(item))}
+                                                        <p:commandButton 
+                                                            icon="fa fa-unlink"
+                                                            class="btn btn-warning btn-circle #{request.isUserInRole('ADMIN')? disabled :''} btnDisconnect#{item.stStaff}"
+                                                            disabled="#{request.isUserInRole('ADMIN')? disabled :''}"
+                                                            action="#{viewSessionCounter.removeSessionActive(item)}"
 
-                                                </div>
-                                            </p:column>
+                                                            />
+                                                    </span>
 
-                                            <p:column headerText="Label" width="64">
-                                                <span class="badge bg-yellow">#{viewIndex.countStaffNC(ncstate.istate)}</span>
-                                            </p:column>
-                                        </p:dataTable>
-                                    </div><!-- /.panel-body -->
+
+
+                                                </li>
+                                            </ui:repeat>
+                                        </ul>
+                                    </h:panelGroup>
                                 </div>
-
-                                <div  class="col-lg-4 col-md-4">
-                                    <div class="panel panel-info">
-                                        <div class="panel-heading">Documentation</div>
-                                        <div class="panel-body">
-                                            <ic:chart id="chartBarStaffDocModel" type="column" rendered="#{staffAuthController.staff.stProcessus==null?false:true}"
-                                                      style="width: 100%"
-                                                      exporting="true"
-                                                      model="#{docExplorerChartView.barChartDocStaffModel}" />
-                                        </div>
-
-                                    </div>
-                                </div>
-
 
                             </div>
-                        </div>
-
-                    </div>
-
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <!-- COLUMN 2   =========================================== -->
-                    <!-- ====================================================== -->
-                    <!-- ====================================================== -->
-                    <p:poll  update="panelConnectedUser" interval="15" global="false" form="bodyForm"  />
-                    <div  class="col-lg-4 col-md-4">
-                        <div  class="panel panel-primary">
-                            <div class="panel-heading">Utilisateurs en lignes</div>
-                            <h:panelGroup id="panelConnectedUser">
-                                <div  class="panel-body">
-                                    <ul class="list-group">
-                                        <ui:repeat  value="#{viewSessionCounter.activeStaff}" var="item">
-                                            <li class="list-group-item media">
-                                                <div class="media-left">
-                                                    <h:graphicImage library="img" name="ism/hr/avatar2.png"  style="width:35px; border-radius: 50%" />
-                                                </div>
-                                                <div class="media-body">
-                                                    #{item.stFirstname} #{item.stLastname} #{item.stMiddlename} [#{item.stStaff}]
-                                                    <span class="badge pull-right">#{viewUtil.durationFromMilliSec(viewSessionCounter.staffSessionDuration(item))}</span>
-                                                </div>
-                                                <div class="media-right">
-                                                    <p:commandButton 
-                                                        icon="fa fa-unlink"
-                                                        class="btn btn-warning btn-circle #{request.isUserInRole('ADMIN')? disabled :''}"
-                                                        disabled="#{request.isUserInRole('ADMIN')? disabled :''}"
-                                                        action="#{viewSessionCounter.removeSessionActive(item)}"
-                                                        title="Permet de déconnecter l'utilisateur..."
-                                                        />
-                                                </div>
-
-                                            </li>
-                                        </ui:repeat>
-                                    </ul>
-                                </div>
-                            </h:panelGroup>
                         </div>
                     </div>
                 </div>
                 <!-- /.row -->
-
 
 
 
@@ -280,16 +269,15 @@
                 <!-- ====================================================== -->
                 <div class="row">
 
-                    <div class="col-lg-8 col-md-8">
+                    <div class="col-lg-8 col-md-8 col-sm-8">
 
                     </div>
 
-                    <div  class="col-lg-4 col-md-4">
+                    <div  class="col-lg-4 col-md-4 col-sm-4">
 
                     </div>
 
                 </div>
-
 
 
                 <!-- ====================================================== -->
@@ -297,28 +285,18 @@
                 <!-- row 4 =============================================== -->
                 <!-- ====================================================== -->
                 <!-- ====================================================== -->
-                <div class="ui-grid ui-grid-responsive">
-                    <div class="ui-grid-row m-spacing-t16 ">
-                        <div class="ui-grid-col-12 w3-container w3-border">
-                            <ic:chart id="chartBarDocModel" type="column" 
-                                      style="width: 100%"
-                                      exporting="true"
-                                      model="#{docExplorerChartView.barChartDocModel}" />
-                        </div>
+                <div class="row">
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                        <ic:chart id="chartBarDocModel" type="column" 
+                                  style="width: 100%"
+                                  exporting="true"
+                                  model="#{docExplorerChartView.barChartDocModel}" />
                     </div>
 
 
-
-
-                    <div class="ui-grid-row m-spacing-t16 ">
-                        <div class="ui-grid-col-4 w3-container m-spacing-r4">
-
-                        </div>
-
-
-
-                    </div>
                 </div>
+
+
 
 
                 <!--
@@ -362,15 +340,11 @@
                 -->
 
 
-
-
-
-
                 <!--
                 <row>
                     <div class="col-lg-12 col-md-12">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
+                        <div class="card card-primary">
+                            <div class="card-header">
 
                                 <i class="fa fa-info-circle w3-margin-right"></i>News
                                 <span class="btn btn-info"
@@ -386,7 +360,7 @@
 
 
 
-                            <div class="panel-body"  >
+                            <div class="card-body"  >
                                 <p:imageSwitch effect="scrollLeft" 
                                                slideshowAuto="true"
 
@@ -404,6 +378,7 @@
                     </div>
                 </row>
                 -->
+
 
             </h:form>
 

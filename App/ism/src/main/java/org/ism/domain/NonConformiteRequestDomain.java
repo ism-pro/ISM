@@ -8,7 +8,7 @@ package org.ism.domain;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import org.ism.charts.lib.model.ChartModel;
+import org.ism.model.ChartModel;
 import org.ism.entities.smq.nc.NonConformiteRequest;
 
 /**
