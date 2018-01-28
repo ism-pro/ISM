@@ -1,7 +1,7 @@
 /** ***************************************************************************
  *
  ******************************************************************************/
-.modalDialog .modal-body { 
+.modalDialog .modal-body {
     margin-right: 15px;
 }
 
@@ -11,7 +11,7 @@
 
 .modalDialog .modal-header{
     padding-bottom: 2px;
-}
+} 
 
 .modalDialog .img-wrapper {
     height: 364px;
@@ -143,15 +143,12 @@ label.btn {
     right: 0;
     bottom: 0;
     left: 0;
-    background: #fff url("#{resource['img/ism/std/onload.gif']}") no-repeat center center;
+    background: #fff url("#{resource['ism/img/crop/avatar/loading.gif']}") no-repeat center center;
     opacity: .75;
     filter: alpha(opacity=75);
     z-index: 20140628;
-    text-align: center;
 }
-.loading img {
-    text-align: center;
-}
+
 
 
 
@@ -192,7 +189,7 @@ Crop Avatar
 /** Main container 
 ****************************************************/
 #inputCropper{}
-/*.inputCropper{ border: 1px solid #2196F3; width: auto; min-width: 30px; height: 20px;}*/
+.inputCropper{ border: 1px solid #2196F3; width: auto;}
 
 /** Input Name container 
 ****************************************************/
@@ -200,7 +197,6 @@ Crop Avatar
     display:inline-block;
     position:relative;
     cursor: pointer;
-    width: 100%;
 }
 #crop-input-name-text{}
 .ic-crop-input-name-text{ width: 100%!important;}

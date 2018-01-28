@@ -12,8 +12,8 @@
         <!-- STANDARD CONFIG -->
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-            <meta http-equiv="refresh" 
-                  content="60;url=#{request.contextPath}#{request.servletPath}/logout.xhtml?faces-redirect=true"/>
+        <meta http-equiv="refresh" 
+              content="60;url=#{request.contextPath}#{request.servletPath}/logout.xhtml?faces-redirect=true"/>
 
         <!-- ISM TITLE PAGE -->
         <title>#{ism.AppName}</title>
@@ -29,10 +29,11 @@
             <!-- CSS - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <!-- Font-Awesome -->
             <h:outputStylesheet library="webjars" name="font-awesome/4.7.0/css/font-awesome.min-jsf.css"/>
-            
+
             <!-- Bootstrap -->
-            <h:outputStylesheet library="webjars" name="bootstrap/3.3.7/css/bootstrap-jsf.css" />
-            
+            <h:outputStylesheet library="webjars" name="cropper/3.1.3/dist/cropper.min.css" />
+            <h:outputStylesheet library="webjars" name="bootstrap/4.0.0-beta.2/css/bootstrap.min-jsf.css" />
+
             <!-- ISM -->
             <h:outputStylesheet library="css" name="ism-login.min.css" />
             <h:outputStylesheet library="css" name="ism.min.css" />
@@ -41,9 +42,17 @@
             <!-- JS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <!-- JS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <!-- JS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
-            
+
+            <!-- PRIMEFACES  -->
+            <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+
+            <!-- JQUERY UI : NECESSAIRE POUR L'USAGE DE DATRERANGE PICKER -->
+            <h:outputScript library="vendor" name="jquery-ui/1.12.1/jquery-ui.min.js" target="head" />
+
             <!-- Bootstrap -->
-            <h:outputScript library="webjars" name="bootstrap/3.3.7/js/bootstrap.js" />
+            <h:outputScript library="webjars" name="popper.js/1.12.9/dist/umd/popper.min.js" />
+            <h:outputScript library="webjars" name="bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" />
+
 
         </f:facet>
 
@@ -67,6 +76,7 @@
                 top: 0;
                 /* padding: 0 3px; */
             }
+            /*
             #optionForm\3a btnLogIn > span{
                 color: #fff;
                 background-color: #337ab7;
@@ -92,6 +102,7 @@
                 border: 1px solid transparent;
                 border-radius: 4px;
             }
+            */
 
         </style>
 
@@ -125,17 +136,20 @@
 
 
             <!-- Options area -->
-            <h:form id="optionForm">
-                <div class="login-box">
-                    <div class="login-box-body">
-                        <p class="text-center">
-                            <img src="#{resource['img/ism/hr/img_avatar4.png']}" 
-                                 alt="Avatar" width="96" height="96" class="img-circle" />
-                        </p>
-                        <p class="login-box-msg">Entrer vos informations de connexion</p>
+
+            <div class="d-flex justify-content-center">
+
+                <div class="login-box-body ">
+                    <p class="text-center">
+                        <img src="#{resource['img/ism/hr/img_avatar4.png']}" 
+                             alt="Avatar" width="96" height="96" class="img-circle" />
+                    </p>
+                    <p class="login-box-msg">Entrer vos informations de connexion</p>
 
 
-                        <div class="form-group has-feedback">
+                    <h:form id="optionForm">
+
+                        <div class="input-group input-group-sm mb-3">
                             <p:inputText id="j_username" 
                                          type="text"
                                          value="#{staffAuthController.staff.stStaff}"
@@ -147,10 +161,13 @@
                                          placeholder="#{ism.Login}"
                                          class="form-control"
                                          />
-                            <span class="fa fa-user form-control-feedback"></span>
+
+                            <div class="input-group-addon">
+                                <span class="fa fa-user form-control-feedback"></span>
+                            </div>
                         </div>
 
-                        <div class="form-group has-feedback">
+                        <div class="input-group input-group-sm mb-3">
                             <p:password id="j_password"
                                         value="#{staffAuthController.staff.stPassword}"
                                         required="true"
@@ -160,10 +177,12 @@
                                         placeholder="#{ism.Password}"
                                         class="form-control"
                                         />
-                            <span class="fa fa-lock form-control-feedback"></span>
+                            <div class="input-group-addon">
+                                <span class="fa fa-lock form-control-feedback"></span>
+                            </div>
                         </div>
 
-                        <div class="form-group has-feedback">
+                        <div class="input-group input-group-sm mb-3">
                             <p:selectOneMenu id="company"
                                              class="form-control "
                                              style="width:100%"
@@ -179,23 +198,26 @@
 
 
 
-                        <div class="row">
-                            <div class="col-xs-8">    
+
+                        <div class="d-flex">
+                            <div class="col-sm-8">    
                                 <div class="checkbox icheck">
                                     <label>
                                         <input type="checkbox"/> Remember Me
                                     </label>
                                 </div>                        
                             </div><!-- /.col -->
-                            <div class="col-xs-4">
+                            <div class="col-sm-4 d-flex ">
+                                <div class="d-flex align-items-end">
+                                    <p:commandButton id="btnLogIn"
+                                                     type="submit"
+                                                     value="#{ism.LogIn}"
+                                                     action="#{staffAuthController.login}"
+                                                     update=":growl"
+                                                     class="btn btn-primary bg-primary"
+                                                     />
+                                </div>
 
-                                <p:commandButton id="btnLogIn"
-                                                 type="submit"
-                                                 value="#{ism.LogIn}"
-                                                 action="#{staffAuthController.login}"
-                                                 update=":growl"
-                                                 class="btn btn-primary  btn-flat "
-                                                 />
                             </div><!-- /.col -->
                         </div>
 
@@ -204,11 +226,12 @@
                         <a href="#">I forgot my password</a><br/>
                         <a href="register.html" class="text-center">Register a new membership</a>
                         -->
-                    </div><!-- /.login-box-body -->
-                </div><!-- /.login-box -->
+                    </h:form>
+                </div><!-- /.login-box-body -->
+
+            </div>
 
 
-            </h:form>
         </div>
 
 
@@ -230,6 +253,12 @@
     <p:blockUI block="Page" trigger="optionForm:btnLogIn">
         <p:graphicImage width="120px" height="120px" library="img" name="ism/std/Onload.gif"/>
     </p:blockUI>
+
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+    </script>
 
 </html>
 

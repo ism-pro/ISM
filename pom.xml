@@ -9,7 +9,7 @@
         
         <module>Charts</module>
         <module>App</module>
-    </modules>
+  </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>

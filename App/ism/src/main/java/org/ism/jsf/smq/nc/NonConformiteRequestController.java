@@ -1,5 +1,14 @@
 package org.ism.jsf.smq.nc;
 
+import java.awt.Image;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import org.ism.entities.smq.nc.NonConformiteRequest;
 import org.ism.jsf.util.JsfUtil;
 import org.ism.jsf.util.JsfUtil.PersistAction;
@@ -7,6 +16,7 @@ import org.ism.sessions.smq.nc.NonConformiteRequestFacade;
 import org.ism.entities.app.IsmNcrstate;
 
 import java.io.Serializable;
+import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -19,6 +29,7 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
@@ -27,17 +38,25 @@ import org.primefaces.model.Visibility;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.context.FacesContext;
+import javax.imageio.ImageIO;
+import org.apache.commons.io.FilenameUtils;
 import org.ism.entities.admin.Company;
 import org.ism.entities.admin.Maillist;
 import org.ism.entities.smq.Processus;
 import org.ism.entities.smq.nc.NonConformiteActions;
+import org.ism.event.CropErrorEvent;
+import org.ism.event.CroppedEvent;
 import org.ism.jsf.admin.MaillistController;
 import org.ism.jsf.admin.MailsenderController;
 import org.ism.jsf.app.IsmNcrstateController;
 import org.ism.jsf.hr.StaffAuthController;
 import org.ism.lazy.smq.nc.NonConformiteRequestLazyModel;
+import org.ism.model.cropper.CroppedImage;
 import org.ism.services.TableSet;
 import org.ism.services.admin.Mail;
+import org.ism.services.file.FileService;
+import org.ism.util.UtilImage;
 import org.primefaces.event.data.FilterEvent;
 import org.primefaces.event.data.SortEvent;
 import org.primefaces.model.SortMeta;
@@ -95,6 +114,11 @@ public class NonConformiteRequestController implements Serializable {
      * Define lazy model to load progressively data
      */
     private NonConformiteRequestLazyModel lazyModel;
+
+    /**
+     *
+     */
+    private CroppedImage croppedImage;
 
     public NonConformiteRequestController() {
     }
@@ -441,6 +465,25 @@ public class NonConformiteRequestController implements Serializable {
         mailsenderController.sendMessage(mail);
     }
 
+    public void handleCroppedImage(CroppedEvent event) {
+
+        croppedImage = (CroppedImage) event.getCroppedImage();
+        if(croppedImage==null){
+            JsfUtil.addErrorMessage("Aucune image n'a été rognée !");
+            return;
+        }
+        
+        FileService.imgTmpRemoveOld(croppedImage);
+        FileService.imgTmpCreate(croppedImage);
+    }
+    
+    public void handleCropError(CropErrorEvent  cropErrorEvent){
+        JsfUtil.addErrorMessage("Crop Error", cropErrorEvent.getCropError().getSize().msg);
+    }
+
+    private void manageCroppedImage(){
+        JsfUtil.out("Now Manage Mage file after save");
+    }
     /**
      * ************************************************************************
      * CRUD OPTIONS
@@ -453,6 +496,7 @@ public class NonConformiteRequestController implements Serializable {
         selected.setNcrCreated(new Date());
         selected.setNcrState(new IsmNcrstate(IsmNcrstate.CREATE_ID));
 
+
         persist(PersistAction.CREATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
                         getString("NonConformiteRequestPersistenceCreatedSummary"),
@@ -463,6 +507,7 @@ public class NonConformiteRequestController implements Serializable {
         if (!JsfUtil.isValidationFailed()) {
             // Récupère l'élément nouvellement crée
             selected = getLast();
+            manageCroppedImage();
             handleMailOnCreate();
 
             if (isReleaseSelected) {

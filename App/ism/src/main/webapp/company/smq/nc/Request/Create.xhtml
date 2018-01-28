@@ -247,7 +247,12 @@
                                        title="#{ism.NonConformiteRequestFieldInfo_ncrLink}" 
                                        />
                         <ic:inputCropper id="ncrLinkCropper" for="ncrLink"
-                                         header="Image de non conformite" />
+                                         aspectRatio="photo"
+                                         loadingGif="/resources/img/ism/std/Onload.gif"
+                                         header="Image de non conformite" >
+                            <p:ajax event="cropped" listener="#{nonConformiteRequestController.handleCroppedImage}" update="growl" />
+                            <p:ajax event="cropError" listener="#{nonConformiteRequestController.handleCropError}" update="growl" />
+                        </ic:inputCropper>
                         <p:message for="ncrLink"   />
                     </h:panelGrid>
 

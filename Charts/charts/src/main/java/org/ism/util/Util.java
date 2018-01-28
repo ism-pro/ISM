@@ -5,6 +5,7 @@
  */
 package org.ism.util;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -13,8 +14,11 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javax.el.MethodExpression;
 import javax.faces.application.Application;
+import javax.faces.component.UIComponent;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import javax.faces.context.ResponseWriter;
+import org.ism.component.chart.Chart;
 
 /**
  * <h1>Util</h1>
@@ -90,5 +94,17 @@ public class Util {
 
     public static String removeLastChar(String str) {
         return str.substring(0, str.length() - 1);
+    }
+
+    //
+    public static void encodeStateHolder(FacesContext context, String name, String value) throws IOException {
+        ResponseWriter writer = context.getResponseWriter();
+
+        writer.startElement("input", null);
+        writer.writeAttribute("type", "hidden", null);
+        writer.writeAttribute("id", name, null);
+        writer.writeAttribute("name", name, null);
+        writer.writeAttribute("value", value, null);
+        writer.endElement("input");
     }
 }

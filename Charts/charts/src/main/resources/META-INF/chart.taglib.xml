@@ -547,17 +547,23 @@
     // ===================================================================== -->
     
     <tag>
-        <tag-name>cropAvatar</tag-name>
+        <tag-name>inputCropper</tag-name>
         <description>
             <![CDATA[
-                CropAvatar allows selecting, cropping a certain region of an image.
-                A new image is created containing the cropped area and assigned 
-                to a CroppedImage instanced on the server side.]]>
+                InputCropper allows to select a picture. Depend on setup picture
+                can be load in memory to be as a blob image.<br>
+                The useful of crop is that image can be edited and cropped in 
+                différent way before being blob and return the blob link create.<br >
+                InputCropper require "for" attribut that as to be lined to a input.
+                Note : input will be laod inside the InputCropper html on ready DOM.
+            ]]>
         </description>
+        
         <component>
-            <component-type>org.ism.component.CropAvatar</component-type>
-            <renderer-type>org.ism.component.CropAvatarRenderer</renderer-type>
+            <component-type>org.ism.component.InputCropper</component-type>
+            <renderer-type>org.ism.component.InputCropperRenderer</renderer-type>
         </component>
+        
         <attribute>
             <description>
                 <![CDATA[
@@ -569,6 +575,7 @@
             <name>applyLabel</name>
             <type>java.lang.String</type>
         </attribute>
+        
         <attribute>
             <description>
                 <![CDATA[
@@ -580,17 +587,25 @@
             <name>applyTitle</name>
             <type>java.lang.String</type>
         </attribute>
+        
         <attribute>
             <description>
                 <![CDATA[
-                    Insert a title to avatar image.
-                    Default value is "Cliquer pour modifier". 
-                    Write null if does not want a title on avatar image.
+                    Define default aspect ratio which is one of : <br>
+                    <ul><li>"cinema" : [16:9]</li><li>"photo" : [4:3]</li><li>"camera" : [1:1]</li><li>"avatar" : [2:3]</li><li>"free" : any</li></ul>
                 ]]>
             </description>
-            <name>avatarTitle</name>
+            <name>aspectRatio</name>
             <type>java.lang.String</type>
         </attribute>
+        
+        <attribute>
+            <description><![CDATA[An el expression referring to a server side UIComponent instance in a backing bean.]]></description>
+            <name>binding</name>
+            <required>false</required>
+            <type>javax.faces.component.UIComponent</type>
+        </attribute>
+        
         <attribute>
             <description>
                 <![CDATA[
@@ -633,6 +648,30 @@
             <type>java.lang.String</type>
         </attribute>
         
+        <attribute>
+            <description>
+                <![CDATA[
+                    Attribute "for" refer to an input text id where the it should
+                    present the result.
+                ]]>
+            </description>
+            <name>for</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                    Header represent the title of modal window.
+                    Default value is "Title". 
+                    Write null if does not want a title.
+                ]]>
+            </description>
+            <name>header</name>
+            <type>java.lang.String</type>
+        </attribute>
         
         <attribute>
             <description><![CDATA[Unique identifier of the component in a namingContainer.]]></description>
@@ -640,18 +679,44 @@
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                    Insert a title to input path image.
+                    Default value is "Cliquer pour modifier". 
+                    Write null if does not want a title on avatar image.
+                ]]>
+            </description>
+            <name>inputTitle</name>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        
+        <attribute>
+            <description>
+                <![CDATA[
+                    Loading gif allow to change the current loading waiting.
+                    Default one exist
+                ]]>
+            </description>
+            <name>loadingGif</name>
+            <type>java.lang.String</type>
+        </attribute>
+
+
+
+
         <attribute>
             <description><![CDATA[Boolean value to specify the rendering of the component, when set to false component will not be rendered.]]></description>
             <name>rendered</name>
             <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
-        <attribute>
-            <description><![CDATA[An el expression referring to a server side UIComponent instance in a backing bean.]]></description>
-            <name>binding</name>
-            <required>false</required>
-            <type>javax.faces.component.UIComponent</type>
-        </attribute>
+
+
+
+
         <attribute>
             <description><![CDATA[Value of the component.]]></description>
             <name>value</name>

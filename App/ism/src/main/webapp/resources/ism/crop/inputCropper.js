@@ -31,7 +31,6 @@ PrimeFaces.locales.fr_FR = {
 PrimeFaces.locales.fr_FR.InputCropper = {
     name: 'Créateur d\'éditeur d\'image'
 };
-
 PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
 ///
 /// Init
@@ -41,20 +40,23 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
 
         // Convert new parameter
         this._super(a);
-
         // Main container
         this.inputCropper = $(this.jqId);
         this.for = $(PrimeFaces.escapeClientId($('input[id*=' + this.cfg.for + ']').attr('id')));
+        this.croppedInfosHolder = $(this.jqId + "_croppedInfos");
+        this.croppedErrorHolder = $(this.jqId + "_cropError");
+        this.croppedDataHolder = $(this.jqId + "_croppedData");
+
+        // Loading state
+        this.loading = $('.loading');
+
 
         //
         this.input = {};
         this.input.name = $(this.jqId + ' .ic-crop-input-name');
+
         // Prepare Cropper
         this.for.detach().prependTo(this.input.name);
-        this.for.addClass('ic-crop-input-name-text');
-        this.for.attr('disabled', true);
-        this.for.attr('title', 'Charger une image');
-
         this.input.text = $(this.jqId + ' .ic-crop-input-name-text');
         this.input.in = $(this.jqId + ' .ic-crop-input-name-in');
         //
@@ -65,6 +67,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         //
         this.dlg = {}
         this.dlg.modal = $(this.jqId).find('.modalDialog');
+        this.dlg.modal.detach().appendTo(document.body);
         this.dlg.inputFile = this.dlg.modal.find('.input-img-upload');
         this.dlg.data = this.dlg.modal.find('.input-data');
         this.dlg.src = this.dlg.modal.find('.input-src');
@@ -81,8 +84,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.dlg.datas.fy = this.dlg.modal.find('.dataScaleY');
         // Sizer Container docs-data
         this.URL = window.URL || window.webkitURL;
-
-
         //
         this.dlg.opts = {};
         this.dlg.opts.drag = this.dlg.modal.find('.optDragMode a');
@@ -90,19 +91,13 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.dlg.opts.inputZoomerValue = this.dlg.modal.find(".inputZoomerValue");
         this.dlg.opts.inputZoomer = this.dlg.modal.find(".inputZoomer");
         this.dlg.opts.inputZoomerHandler = this.dlg.modal.find(".inputZoomerHandler");
-
         this.dlg.opts.inputRoterValue = this.dlg.modal.find(".inputRoterValue");
         this.dlg.opts.inputRoter = this.dlg.modal.find(".inputRoter");
         this.dlg.opts.inputRoterHandler = this.dlg.modal.find(".inputRoterHandler");
-
         this.dlg.opts.inputRotateSpin = this.dlg.modal.find(".inputRotateSpin");
         this.dlg.opts.inputZoomerSpin = this.dlg.modal.find(".inputZoomerSpin");
         this.dlg.opts.inputScaleXSpin = this.dlg.modal.find(".inputScaleXSpin");
         this.dlg.opts.inputScaleYSpin = this.dlg.modal.find(".inputScaleYSpin");
-
-
-
-
         this.dlg.opts.configs = this.dlg.modal.find('.optCropper a');
         this.dlg.opts.inputCroppers = this.dlg.modal.find('input[data-toggle=toggle]');
         this.dlg.opts.inputCropperCrop = this.dlg.modal.find('.inputCropperCrop');
@@ -124,17 +119,15 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.preview.md = this.dlg.modal.find('.preview-md');
         this.preview.sm = this.dlg.modal.find('.preview-sm');
         this.preview.xs = this.dlg.modal.find('.preview-xs');
-
         //
         //
         // Config setup
-        this.configCropper();   // configuration de this options
+        this.configCropper(); // configuration de this options
         this.dlg.opts.inputCropperCrop.prop('checked', false);
         this.dlg.opts.inputCropperEdition.prop('checked', false);
         this.cfg.dragCrop = this.cfg.dragCrop || true;
         this.cfg.inputZoomerValue = this.cfg.inputZoomerValue || 1;
         this.cfg.inputRoterValue = this.cfg.inputRoterValue || 180;
-
         //
         //
         // Build and bind
@@ -143,6 +136,11 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.configComponent();
         this.bindEvents();
     },
+    //
+    //
+    //
+    // Build
+
     ///
     ///
     /// Init
@@ -158,6 +156,26 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     configCropper: function (a) {
         // Create cropper config if not defined
         this.cfg.cropper = this.cfg.cropper || {};
+
+        // Aspect ratio
+        switch (this.cfg.aspectRatio) {
+            case 'cinema':
+                this.cfg.cropper.aspectRatio = 16 / 9;
+                break
+            case 'photo':
+                this.cfg.cropper.aspectRatio = 4 / 3;
+                break
+            case 'camera':
+                this.cfg.cropper.aspectRatio = 1 / 1;
+                break
+            case 'avatar':
+                this.cfg.cropper.aspectRatio = 2 / 3;
+                break
+            case 'avatar':
+                this.cfg.cropper.aspectRatio = NaN;
+                break
+        }
+
         this.cfg.cropper.aspectRatio = this.cfg.cropper.aspectRatio || (1);
         this.cfg.cropper.autoCrop = this.cfg.cropper.autoCrop || true;
         this.cfg.cropper.autoCropArea = this.cfg.cropper.autoCropArea || 0.8;
@@ -185,10 +203,9 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.cfg.cropper.zoomable = this.cfg.cropper.zoomable || true;
         this.cfg.cropper.zoomOnTouch = this.cfg.cropper.zoomOnTouch || true;
         this.cfg.cropper.zoomOnWheel = this.cfg.cropper.zoomOnWheel || true;
-
         ///
-        var thisa = this;   // current object
-        this.cropper = {};  // current cropper 
+        var thisa = this; // current object
+        this.cropper = {}; // current cropper 
         this.cropper.options = {
             aspectRatio: this.cfg.cropper.aspectRatio,
             autoCrop: this.cfg.cropper.autoCrop,
@@ -217,7 +234,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             zoomable: this.cfg.cropper.zoomable,
             zoomOnTouch: this.cfg.cropper.zoomOnTouch,
             zoomOnWheel: this.cfg.cropper.zoomOnWheel,
-
             ready: function (e) {
                 thisa.ready(e);
             },
@@ -232,7 +248,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             }),
             crop: (function (e) {
                 thisa.crop(e);
-
             }),
             zoom: function (e) {
                 thisa.zoom(e);
@@ -242,6 +257,32 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.cropper.uploadedImageType = 'image/jpeg';
         this.cropper.uploadedImageURL = '';
         this.cropper.active = false;
+
+        // Create cropper canvas options
+        this.cropper.canvas = {};
+        this.cropper.canvas.options = {
+            width: 1024,
+            height: 1024,
+            minWidth: 256,
+            minHeight: 256,
+            maxWidth: 4096,
+            maxHeight: 4096,
+            fillColor: '#fff',
+            imageSmoothingEnabled: false,
+            imageSmoothingQuality: 'low'
+        };
+
+        // Cropper file
+        this.cropper.file = {};
+
+        // Create cropper Error
+        this.cropper.error = {};
+        this.cropper.error.code = 0;
+        this.cropper.error.size = {};
+        this.cropper.error.size.value = 0;
+        this.cropper.error.size.msg = '';
+        this.cropper.error.size.min = 5;
+        this.cropper.error.size.max = 10000000;
     },
     configTooltip: function () {
         // Init gloabal tooltip
@@ -252,7 +293,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     configComponent: function () {
         this.dlg.opts.inputZoomerValue.val(this.cfg.inputZoomerValue);
         var _this = this;
-
         this.dlg.opts.inputZoomer.slider({
             min: 0.1, max: 10,
             value: this.cfg.inputZoomerValue,
@@ -267,7 +307,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             }
         });
         this.dlg.opts.inputZoomer.slider('disable');
-
         this.dlg.opts.inputRoter.slider({
             min: -180, max: 180,
             value: this.cfg.inputRoterValue,
@@ -281,7 +320,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             }
         });
         this.dlg.opts.inputRoter.slider('disable');
-
         this.dlg.opts.inputRotateSpin.TouchSpin({
             min: -180,
             max: 180,
@@ -323,8 +361,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             mousewheel: true,
             postfix: 'Y'
         });
-
-
     },
     ///
     ///
@@ -337,10 +373,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.input.name.hover($.proxy(this.inputNameShow, this), $.proxy(this.inputNameHide, this));
         this.img.container.hover($.proxy(this.inputNameShow, this), $.proxy(this.inputNameHide, this));
         this.img.cropped.hover($.proxy(this.inputNameShow, this), $.proxy(this.inputNameHide, this));
-
-        // Accept Canvas
-//        this.dlg.apply.on('click', $.proxy(this.dlgApplyClick, this));
-
 
         // Image wrapper
         this.preview.wrapper.hover($.proxy(this.tooltipOn, this), $.proxy(this.tooltipOff, this));
@@ -357,16 +389,12 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     bindEventsCropper: function (a) {
         // Cropper
         this.preview.image.cropper(this.cropper.options);
-
         // Input Image
         this.dlg.inputFile.change($.proxy(this.inputChange, this));
-
         // Options
         this.inputs.link.change('input', $.proxy(this.inputRequest, this));
-
         // Methods
         this.btns.selector.on('click', '[data-method]', $.proxy(this.cmdRequest, this));
-
     },
     //
     //
@@ -386,7 +414,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     crop: function (e) {
         if (!this.cropper.active)
             return;
-
         this.dlg.datas.x.val(Math.round(e.x));
         this.dlg.datas.y.val(Math.round(e.y));
         this.dlg.datas.h.val(Math.round(e.height));
@@ -423,14 +450,10 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     inputChange: function (e) {
         var files, file;
         files = this.dlg.inputFile.prop('files');
-
         if (files && files.length) {
             file = files[0];
-
             if (this.isImageFile(file)) {
                 this.cropper.uploadedImageType = file.type;
-                
-
                 if (this.cropper.uploadedImageURL) {
                     URL.revokeObjectURL(this.cropper.uploadedImageURL); // Revoke the old one
                 }
@@ -455,7 +478,14 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                 this.dlg.opts.inputZoomerSpin.val(1)
                 this.dlg.opts.inputScaleXSpin.val(1);
                 this.dlg.opts.inputScaleYSpin.val(1);
+
+                // Save file
+                if (!this.cropper.file.ext) {
+                    this.cropper.file.filenameOld = this.cropper.file.filename + '.' + this.cropper.file.ext;
+                }
                 this.cropper.file = file;
+                this.cropper.file.ext = this.getImageExtension(file);
+                this.cropper.file.filename = this.getOnlyFilename(file);
             } else {
                 window.alert('Please choose an image file.');
             }
@@ -466,7 +496,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         var type = this.inputs.link.prop('type');
         var cropBoxData;
         var canvasData;
-
         if (!this.preview.image.data('cropper')) {
             return;
         }
@@ -477,7 +506,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             this.cropper.options[name] = this.inputs.link.prop('checked');
             cropBoxData = this.preview.image.cropper('getCropBoxData');
             canvasData = this.preview.image.cropper('getCanvasData');
-
             this.cropper.options.ready = function () {
                 this.preview.image.cropper('setCropBoxData', cropBoxData);
                 this.preview.image.cropper('setCanvasData', canvasData);
@@ -495,16 +523,13 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         var cropped;
         var $target;
         var result;
-
         if (!cropper || !data.method)
             return;
-
         if (cropper && data.method) {
             data = $.extend({}, data); // Clone a new one
 
             if (typeof data.target !== 'undefined') {
                 $target = $(data.target);
-
                 if (typeof data.option === 'undefined') {
                     try {
                         data.option = JSON.parse($target.val());
@@ -515,7 +540,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
             }
 
             cropped = cropper.cropped;
-
             // Manage first options
             switch (data.method) {
                 case 'rotate':
@@ -528,9 +552,11 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                 case 'getCroppedCanvas':
                     {
                         if (this.cropper.uploadedImageType === 'image/jpeg') {
+
                             if (!data.option) {
                                 data.option = {};
                             }
+                            //data.option = this.cropper.canvas.options;
                             data.option.fillColor = '#fff';
                         }
                     }
@@ -585,34 +611,36 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                 case 'getCroppedCanvas':
                     {
                         if (result) {
-//                            // Bootstrap's Modal
-//                            $('#getCroppedCanvasModal').modal().find('.modal-body').html(result);
-//
-//                            if (!$('#getCroppedCanvasModal').hasClass('disabled')) {
-//                                $('#getCroppedCanvasModal').attr('href', result.toDataURL(this.cropper.uploadedImageType));
-//                            }
-//                            if (!this.dlg.src.val() && !this.dlg.inputFile.val()) {
-//                                return false;
-//                            }
+                            $(this.loading).show();
+                            // Get Blob Data
+                            this.base64Str = result.toDataURL(this.cropper.file.type, "1.0").replace('data&colon;' + this.cropper.file.type + ';base64,', '');
 
-                            var canvas = result; //this.preview.image.cropper('getCroppedCanvas');
-                            var thisa = this;
-                            canvas.toBlob(function (blob) {
-                                var newImg = document.createElement('img'),
-                                        url = URL.createObjectURL(blob);
-                                newImg.onload = function () {
-                                    // no longer need to read the blob so it's revoked
-                                    URL.revokeObjectURL(url);
-                                };
-                                newImg.src = url;
-                                //console.log(url)
-                                //document.body.appendChild(newImg);
-                                //thisa.img.cropped.src = url;
-                                thisa.img.cropped.attr('src', url);
-                                thisa.input.text.val(url);
-                            });
-                            this.getAllAsJson();
-                            //this.preview.image.cropper(this.cropper.options);
+
+                            var datasize = this.base64Str.length;
+                            console.log("Taille cropped : " + this.toFormatted(datasize));
+                            if (datasize >= this.cropper.error.size.max || datasize <= this.cropper.error.size.min) {
+                                this.cropper.error.size.value = datasize;
+                                this.cropper.error.size.msg = 'La taille de rognage [' + this.toFromatted(datasize) + '] est hors limite [' + this.toFromatted(this.cropper.error.size.min) + '; ' + this.toFromatted(this.cropper.error.size.max) + '] !';
+                                this.fireErrorCropEvent();
+                                $(this.loading).hide();
+                                return;
+                            }
+
+                            // Apply Blob To display Overlay Image URL
+                            this.img.cropped.prop('src', this.base64Str);
+                            // Save Old File name
+                            this.originalFilenameOld = (this.originalFilename + this.cropper.file.ext) || null;
+                            // Create new filename
+                            this.originalFilename = this.getOnlyFilename(this.cropper.file) + "_" + this.getUniqueKey(); //.name.replace('/(.*)\.(.*?)$/, "$1"').replace(".", "_") + "_" + this.getUniqueKey();
+                            // Write value to Input
+                            $(this.for).prop('value', this.originalFilename);
+                            $(this.for).prop('disabled', true);
+
+                            // Fire cropped Event
+                            this.fireCroppedEvent();
+
+
+                            $(this.loading).hide();
                         }
                     }
                     break;
@@ -667,12 +695,10 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         }
 
         this.preview.image.cropper('zoomTo', this.cropper.zoom * this.dlg.opts.inputZoomerValue.val());
-
     },
     doRotate: function (e) {
         if (!this.cropper.active)
             return;
-
         if (e) {
             this.dlg.opts.inputRoterValue.val(e.target.value);
             this.dlg.opts.inputRotateSpin.val(e.target.value);
@@ -686,7 +712,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     doScaleX: function (e) {
         if (!this.cropper.active)
             return;
-
         if (!this.cropper.scaleX) {
             this.cropper.scaleX = this.getScaleX();
         }
@@ -695,7 +720,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     doScaleY: function (e) {
         if (!this.cropper.active)
             return;
-
         if (!this.cropper.scaleY) {
             this.cropper.scaleY = this.getScaleY();
         }
@@ -705,7 +729,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         if (!this.cropper.active)
             return;
         var checked = $(e.target).prop('checked') === true;
-
         switch ($(e.target).attr('data-method')) {
             case 'crop':
                 {
@@ -725,6 +748,60 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                     }
                 }
                 break
+        }
+    },
+    ///
+    ///
+    ///
+    /// FIRE EVENTS
+    fireErrorCropEvent: function () {
+        if (this.cfg.behaviors) {
+            var c = this.cfg.behaviors.cropError;
+            if (c) {
+                var source = this.cropper.error;
+                this.croppedErrorHolder.prop('value', JSON.stringify(source));
+                c.call(this, source);
+            }
+        }
+    },
+    fireCroppedEvent: function () {
+        if (this.cfg.behaviors) {
+            var c = this.cfg.behaviors.cropped;
+            if (c) {
+//                console.log(this.getAllAsJson())
+                var a = this.getAllAsJson();
+                //c.call(this, a);
+
+                $.ajax({
+                    url: a_cross_domain_url,
+                    xhrFields: {
+                        withCredentials: true
+                    }
+                });
+
+
+//                console.log(c);
+//                var s = this.getAllAsJson();
+//                PrimeFaces.ajax.Request.handle({
+//                    source: 'bodyForm\:ncrLink',
+//                    process: 'bodyForm\:ncrLink',
+//                    params: {s},
+//                    update: 'growl',
+//                    oncomplete: function (xhr, status) {
+//                        alert('Complete : ' + xhr.statusText);
+//                        console.log(xhr);
+//                    },
+//                    onsuccess: function (data, status, xhr) {
+//                        alert('Success : ' + status + ' >>> ' + data);
+//                        console.log(data);
+//
+//                    },
+//                    onerror: function (xhr, status, error) {
+//                        alert('Error : [' + xhr.status + '] ' + xhr.statusText);
+//                        console.log(xhr);
+//                    }
+//                });
+            }
         }
     },
     ///
@@ -769,10 +846,34 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         //console.log(i)
         return i.scaleY;
     },
+    getImageExtension: function (file) {
+        var mimeType = null;
+        switch (file.type) {
+            case 'image/jpeg':
+                if (file.name.toLowerCase().indexOf(".jpg")) {
+                    mimeType = '.jpg';
+                } else if (file.name.toLowerCase().indexOf(".jpeg")) {
+                    mimeType = '.jpeg';
+                }
+                break;
+            case 'image/png':
+                mimeType = '.png';
+                break;
+            case 'image/gif':
+                mimeType = '.gif';
+                break;
+        }
+        return mimeType;
+    },
+    getOnlyFilename: function (file) {
+        var name = file.name;
+        var mimeType = this.getImageExtension(file);
+        name = name.replace(mimeType, '').replace(mimeType.toUpperCase(), '');
+        return name;
+    },
     getAllAsJson: function (e) {
         if (!this.cropper.active)
             return 0;
-
         var source = {};
         source.containerData = this.preview.image.cropper("getContainerData");
         source.imageData = this.preview.image.cropper("getImageData");
@@ -781,34 +882,55 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         source.cropBoxData = this.preview.image.cropper("getCropBoxData");
         source.data = this.preview.image.cropper("getData");
         source.blobIn = $(this.preview.wrapper.find('img')).prop('src');
+        source.originalFilename = this.originalFilename;
+        source.originalFilenameOld = this.originalFilenameOld;
         source.file = {};
         source.file.lastModified = this.cropper.file.lastModified;
         source.file.lastModifiedDate = this.cropper.file.lastModifiedDate;
         source.file.name = this.cropper.file.name;
         source.file.size = this.cropper.file.size;
         source.file.type = this.cropper.file.type;
-        
-        console.log(this.cropper.file)
-        var json = [
-            {source}
-        ].join();
+        source.file.filename = this.cropper.file.filename;
+        source.file.ext = this.cropper.file.ext;
+        source.blob = this.base64Str;
 
+        //console.log(this.cropper.file)
+        var json = {params: [{source}]};
         try {
-            console.log(JSON.stringify(source));
+            this.croppedInfosHolder.prop('value', JSON.stringify(source));
         } catch (e) {
             console.log(e.message);
         }
+        return json;
+    },
+    getUniqueKey: function () {
+        var milliseconds = (new Date).getTime();
+        return (Math.random().toString(36).substr(2, 36) + "_" + milliseconds).toUpperCase();
+    },
+    toFormatted: function (nbr) {
+        var nombre = '' + nbr;
+        var retour = '';
+        var count = 0;
+        for (var i = nombre.length - 1; i >= 0; i--) {
+            if (count !== 0 && count % 3 === 0)
+                retour = nombre[i] + ' ' + retour;
+            else
+                retour = nombre[i] + retour;
+            count++;
+        }
+        //alert('nb : ' + nbr + ' => ' + retour);
+        return retour;
     }
 
 
 });
-
-
-
-
 $(function () {
 
 
 
 });
+
+
+
+
 
