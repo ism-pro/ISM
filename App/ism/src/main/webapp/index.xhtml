@@ -36,8 +36,9 @@
 
             <!-- ISM -->
             <h:outputStylesheet library="css" name="ism-login.min.css" />
+            <!--
             <h:outputStylesheet library="css" name="ism.min.css" />
-
+            -->
             <!-- JS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <!-- JS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
             <!-- JS  - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
@@ -52,191 +53,161 @@
             <!-- Bootstrap -->
             <h:outputScript library="webjars" name="popper.js/1.12.9/dist/umd/popper.min.js" />
             <h:outputScript library="webjars" name="bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" />
-
-
         </f:facet>
-
-        <script>
-            window.onload = function () {
-                if (window.location.href.indexOf('http://') === 0)
-                    window.location = 'https://' + window.location.hostname + ':8181' + window.location.pathname + window.location.search;
-            };
-        </script>
-
-        <style>
-            .ui-selectonemenu .ui-selectonemenu-trigger {
-                border-right: 0;
-                border-top: 0;
-                border-bottom: 0;
-                cursor: pointer;
-                width: auto !important;
-                height: 100%;
-                position: absolute;
-                right: 0;
-                top: 0;
-                /* padding: 0 3px; */
-            }
-            /*
-            #optionForm\3a btnLogIn > span{
-                color: #fff;
-                background-color: #337ab7;
-                border-color: #2e6da4;
-
-                display: inline-block;
-                padding: 6px 12px;
-                margin-bottom: 0;
-                font-size: 14px;
-                font-weight: 400;
-                line-height: 1.42857143;
-                text-align: center;
-                white-space: nowrap;
-                vertical-align: middle;
-                -ms-touch-action: manipulation;
-                touch-action: manipulation;
-                cursor: pointer;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                background-image: none;
-                border: 1px solid transparent;
-                border-radius: 4px;
-            }
-            */
-
-        </style>
-
     </h:head>
 
 
 
+    <h:body id="body" style="background-color: rgba(41, 43, 44, 0.07)!important;" >
 
-
-
-
-    <h:body id="Page" style="background-color: rgba(41, 43, 44, 0.07)!important;" >
-        <!-- Header -->
-        <header class="text-center container-fluid text-white" id="myHeader" style="background-color:#bbb!important; padding: 8px 16px!important;">
-            <div class="w3-center">
-                <h:graphicImage value="#{resource['img/ism/ism.png']}"  
-                                class="w3-xxxlarge w3-animate-bottom"
-                                width="240px" 
-                                height="64px"   />
-                <div style="padding: 10px;">#{ism.AppName} - #{ism.AppVersion}</div>
-            </div>
-
-        </header>
 
 
         <!-- Content -->
-        <div class="i-content"   >
-            <!-- Welcome area -->
-            <center><div id="welcome">#{ism.Welcome}</div></center>
+        <div class="container-fluid " >
+            <div class="area-bg" style="height: 100vh;">
+                <div class="area-content">
 
 
-
-            <!-- Options area -->
-
-            <div class="d-flex justify-content-center">
-
-                <div class="login-box-body ">
-                    <p class="text-center">
-                        <img src="#{resource['img/ism/hr/img_avatar4.png']}" 
-                             alt="Avatar" width="96" height="96" class="img-circle" />
-                    </p>
-                    <p class="login-box-msg">Entrer vos informations de connexion</p>
-
-
-                    <h:form id="optionForm">
-
-                        <div class="input-group input-group-sm mb-3">
-                            <p:inputText id="j_username" 
-                                         type="text"
-                                         value="#{staffAuthController.staff.stStaff}"
-                                         required="true"
-                                         a:autocorrect="off" 
-                                         autocomplete="off"
-                                         title="#{ism.AuthenticationFieldInfo_staff}"
-                                         label="#{ism.Login}"
-                                         placeholder="#{ism.Login}"
-                                         class="form-control"
-                                         />
-
-                            <div class="input-group-addon">
-                                <span class="fa fa-user form-control-feedback"></span>
+                    <div class="justify-content-center">
+                        <!-- *********************************************** -->
+                        <!-- Insertion de l'image de l'application au centre -->
+                        <!-- *********************************************** -->
+                        <div class="row ">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12 align-self-center" >
+                                <center style="background-color: rgba(41, 43, 44, 0.07)!important;">
+                                    <h:graphicImage value="#{resource['img/ism/ism.png']}"  
+                                                    class="w3-xxxlarge w3-animate-bottom"
+                                                    width="240px" 
+                                                    height="64px"   />
+                                    <div style="padding: 10px;">#{ism.AppName} - #{ism.AppVersion}</div>
+                                </center>
                             </div>
                         </div>
 
-                        <div class="input-group input-group-sm mb-3">
-                            <p:password id="j_password"
-                                        value="#{staffAuthController.staff.stPassword}"
-                                        required="true"
-                                        autocomplete="off"                                                 
-                                        title="#{ism.AuthenticationFieldInfo_password}"
-                                        label="#{ism.Password}"
-                                        placeholder="#{ism.Password}"
-                                        class="form-control"
-                                        />
-                            <div class="input-group-addon">
-                                <span class="fa fa-lock form-control-feedback"></span>
+                        <!-- *********************************************** -->
+                        <!-- Insertion d'un message d'acceuil                -->
+                        <!-- *********************************************** -->
+                        <div class="row py-2">
+                            <div class="col-sm-12 col-md-12 col-lg-12 col-xl-12">
+                                <center><div id="welcome">#{ism.Welcome}</div></center>
                             </div>
                         </div>
 
-                        <div class="input-group input-group-sm mb-3">
-                            <p:selectOneMenu id="company"
-                                             class="form-control "
-                                             style="width:100%"
-                                             value="#{staffAuthController.company}" converter="#{companyConverter}"
-                                             >
-                                <f:selectItems value="#{companyController.itemsAvailableSelectOne}" 
-                                               var="jCompanyItem"
-                                               itemLabel="#{jCompanyItem.CCompany} - #{jCompanyItem.CDesignation}"
-                                               itemValue="#{jCompanyItem}"
-                                               />
-                            </p:selectOneMenu>
-                        </div>
+                    </div>
 
 
 
 
-                        <div class="d-flex">
-                            <div class="col-sm-8">    
-                                <div class="checkbox icheck">
-                                    <label>
-                                        <input type="checkbox"/> Remember Me
-                                    </label>
-                                </div>                        
-                            </div><!-- /.col -->
-                            <div class="col-sm-4 d-flex ">
-                                <div class="d-flex align-items-end">
-                                    <p:commandButton id="btnLogIn"
-                                                     type="submit"
-                                                     value="#{ism.LogIn}"
-                                                     action="#{staffAuthController.login}"
-                                                     update=":growl"
-                                                     class="btn btn-primary bg-primary"
-                                                     />
+                    <!-- *********************************************** -->
+                    <!-- Création de la zone centrale de contenu login   -->
+                    <!-- *********************************************** -->
+                    <div class="row py-4">
+                        <div class="col-sm-4"></div>
+                        <div class="col-sm-4">
+
+                            <div class="card">
+
+                                <!-- *********************************************** -->
+                                <!-- Card Header : Invitation de connexion           -->
+                                <!-- *********************************************** -->
+                                <div class="card-header">
+                                    <div class="d-flex justify-content-center">
+                                        <img src="#{resource['img/ism/hr/img_avatar4.png']}" 
+                                             alt="Avatar" width="96" height="96" class="rounded-circle" />
+                                    </div>
+                                    <div class="d-flex justify-content-center small">Entrer vos informations de connexion</div>
                                 </div>
 
-                            </div><!-- /.col -->
+                                <!-- *********************************************** -->
+                                <!-- Card Body : Corp de connexion           -->
+                                <!-- *********************************************** -->
+                                <div class="card-body p-3">
+                                    <h:form id="logForm">
+
+                                        <div class="input-group input-group-sm mb-2 ">
+                                            <div class="input-group-addon">
+                                                <span class="fa fa-user form-control-feedback"></span>
+                                            </div>
+                                            <p:inputText id="j_username" 
+                                                         type="text"
+                                                         value="#{staffAuthController.staff.stStaff}"
+                                                         required="true"
+                                                         a:autocorrect="off" 
+                                                         autocomplete="off"
+                                                         title="#{ism.AuthenticationFieldInfo_staff}"
+                                                         label="#{ism.Login}"
+                                                         placeholder="#{ism.Login}"
+                                                         class="form-control"
+                                                         />
+                                        </div>
+
+                                        <div class="input-group input-group-sm mb-2">
+                                            <div class="input-group-addon">
+                                                <span class="fa fa-lock form-control-feedback"></span>
+                                            </div>
+                                            <p:password id="j_password"
+                                                        value="#{staffAuthController.staff.stPassword}"
+                                                        required="true"
+                                                        autocomplete="off"                                                 
+                                                        title="#{ism.AuthenticationFieldInfo_password}"
+                                                        label="#{ism.Password}"
+                                                        placeholder="#{ism.Password}"
+                                                        class="form-control"
+                                                        />
+                                        </div>
+
+                                        <div class="input-group input-group-sm small p-0 mb-2">
+                                            <p:selectOneMenu id="company"
+                                                             class="form-control m-0 p-0"
+                                                             style="width:100%"
+                                                             value="#{staffAuthController.company}" converter="#{companyConverter}"
+                                                             >
+                                                <f:selectItems value="#{companyController.itemsAvailableSelectOne}" 
+                                                               var="jCompanyItem"
+                                                               itemLabel="#{jCompanyItem.CCompany} - #{jCompanyItem.CDesignation}"
+                                                               itemValue="#{jCompanyItem}"
+                                                               class="small m-0 p-0"
+                                                               />
+                                            </p:selectOneMenu>
+                                        </div>
+
+                                        <div class="input-group mt-3 small">
+                                            <div class="checkbox">
+                                                <label>
+                                                    <input id="login-remember" type="checkbox" name="remember" value="1" onclick="PF('dlgAuthentication').show();"/> Remember me
+                                                </label>
+                                            </div>
+                                        </div>
+
+
+                                        <p:commandButton id="btnLogIn"
+                                                         type="submit"
+                                                         value="#{ism.LogIn}"
+                                                         action="#{staffAuthController.login}"
+                                                         update=":growl"
+                                                         class="btn btn-primary bg-primary"
+                                                         icon="fa fa-sign-in "
+                                                         style="width: 100%"
+                                                         />
+
+                                        <hr />
+
+                                        <div class="small smallTxt">
+                                            <label>Mot de passe oublié ! <p:link value="Réinitialiser..." onclick="PF('dlgAuthentication').show();"/></label><br />
+                                            <label>Aucun compte !  <p:link value="Demander..." onclick="PF('dlgAuthentication').show();"/></label>
+                                        </div>
+
+                                    </h:form>
+                                </div>
+                            </div><!-- Hend card -->
                         </div>
 
-
-                        <!--
-                        <a href="#">I forgot my password</a><br/>
-                        <a href="register.html" class="text-center">Register a new membership</a>
-                        -->
-                    </h:form>
-                </div><!-- /.login-box-body -->
-
+                        <div class="col-sm-4"></div>
+                    </div>
+                </div>
             </div>
 
-
         </div>
-
-
-
-
 
 
         <p:growl id="growl" life="8000" />
@@ -247,14 +218,29 @@
 
 
 
+    <!-- Permet d'informer l'utilisateur lors d'usage de fonction non définie -->
+    <p:dialog header="Autorisation..." widgetVar="dlgAuthentication" minHeight="60" resizable="false">
+        <f:facet name="footer">
+            <div class="d-flex flex-row-reverse ">
+                <p:commandButton value="Fermer" class="btn btn-primary bg-primary text-light" type="button" 
+                                 onclick="PF('dlgAuthentication').hide()"
+                                 icon="fa fa-close" style="width: 100%;" />
+            </div>
+        </f:facet>
+        <h:outputText class="small" value="Vous n'êtes pas autorisé à utiliser cette fonction !" />
+    </p:dialog>
 
-
-
-    <p:blockUI block="Page" trigger="optionForm:btnLogIn">
+    <!-- Permet d'afficher une feuille de chargement lors de commande ajax -->
+    <p:blockUI block="body" trigger="logForm:btnLogIn">
         <p:graphicImage width="120px" height="120px" library="img" name="ism/std/Onload.gif"/>
     </p:blockUI>
 
     <script>
+        // Redirect user to https
+        window.onload = function () {
+            if (window.location.href.indexOf('http://') === 0)
+                window.location = 'https://' + window.location.hostname + ':8181' + window.location.pathname + window.location.search;
+        };
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
         })

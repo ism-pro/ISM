@@ -293,7 +293,7 @@ public class NoCacheFilter implements Filter {
      * only need to override the methods that you need to change. You can get
      * access to the wrapped request using the method getRequest()
      */
-    class RequestWrapper extends HttpServletRequestWrapper {
+    public class RequestWrapper extends HttpServletRequestWrapper {
 
         public RequestWrapper(HttpServletRequest request) {
             super(request);

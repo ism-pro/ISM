@@ -31,6 +31,7 @@ PrimeFaces.locales.fr_FR = {
 PrimeFaces.locales.fr_FR.InputCropper = {
     name: 'Créateur d\'éditeur d\'image'
 };
+
 PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
 ///
 /// Init
@@ -128,6 +129,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.cfg.dragCrop = this.cfg.dragCrop || true;
         this.cfg.inputZoomerValue = this.cfg.inputZoomerValue || 1;
         this.cfg.inputRoterValue = this.cfg.inputRoterValue || 180;
+        this.cfg.uploadUrl = this.cfg.uploadUrl || '/ISM/faces/upload';
         //
         //
         // Build and bind
@@ -613,11 +615,11 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                         if (result) {
                             $(this.loading).show();
                             // Get Blob Data
-                            this.base64Str = result.toDataURL(this.cropper.file.type, "1.0").replace('data&colon;' + this.cropper.file.type + ';base64,', '');
+                            this.base64Str = result.toDataURL(this.cropper.file.type, "1.0");//.replace('data:' + this.cropper.file.type + ';base64,', '');
 
 
                             var datasize = this.base64Str.length;
-                            console.log("Taille cropped : " + this.toFormatted(datasize));
+                            //console.log("Taille cropped : " + this.toFormatted(datasize));
                             if (datasize >= this.cropper.error.size.max || datasize <= this.cropper.error.size.min) {
                                 this.cropper.error.size.value = datasize;
                                 this.cropper.error.size.msg = 'La taille de rognage [' + this.toFromatted(datasize) + '] est hors limite [' + this.toFromatted(this.cropper.error.size.min) + '; ' + this.toFromatted(this.cropper.error.size.max) + '] !';
@@ -768,39 +770,43 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         if (this.cfg.behaviors) {
             var c = this.cfg.behaviors.cropped;
             if (c) {
-//                console.log(this.getAllAsJson())
-                var a = this.getAllAsJson();
-                //c.call(this, a);
+                var that = this;
+                
+                // Send Image to memory
+                var blobIn = this.dataURItoBlob(this.base64Str); 
+                var name = this.cropper.file.filename + "." + this.cropper.file.ext;
+                var d = (new Date);
+                var t = this.cropper.file.type;
+                var file = new File([blobIn], name, {type: t, lastmModified: d});
+                var formData = new FormData();
+                formData.append('file', file);
 
+                //console.log(that.cfg.uploadUrl)
                 $.ajax({
-                    url: a_cross_domain_url,
-                    xhrFields: {
-                        withCredentials: true
+                    type: 'POST',
+                    url: that.cfg.uploadUrl,
+                    async: true,
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    timeout: 60000,
+                   
+                    success: function (data) {
+                        // your callback here
+                        //console.log("Success")
+                        //$('body').html(data);
+                    },
+                    error: function (er) {
+                        // handle error
+                        console.log('Error [' + er.status + '] : ' + er.statusText)
                     }
                 });
 
 
-//                console.log(c);
-//                var s = this.getAllAsJson();
-//                PrimeFaces.ajax.Request.handle({
-//                    source: 'bodyForm\:ncrLink',
-//                    process: 'bodyForm\:ncrLink',
-//                    params: {s},
-//                    update: 'growl',
-//                    oncomplete: function (xhr, status) {
-//                        alert('Complete : ' + xhr.statusText);
-//                        console.log(xhr);
-//                    },
-//                    onsuccess: function (data, status, xhr) {
-//                        alert('Success : ' + status + ' >>> ' + data);
-//                        console.log(data);
-//
-//                    },
-//                    onerror: function (xhr, status, error) {
-//                        alert('Error : [' + xhr.status + '] ' + xhr.statusText);
-//                        console.log(xhr);
-//                    }
-//                });
+                // Send data cropped
+                var json = this.getAllAsJson();
+                c.call(this, json);
             }
         }
     },
@@ -881,7 +887,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         source.canvasData = this.preview.image.cropper("getCanvasData");
         source.cropBoxData = this.preview.image.cropper("getCropBoxData");
         source.data = this.preview.image.cropper("getData");
-        source.blobIn = $(this.preview.wrapper.find('img')).prop('src');
+        //source.blobIn = $(this.preview.wrapper.find('img')).prop('src');
         source.originalFilename = this.originalFilename;
         source.originalFilenameOld = this.originalFilenameOld;
         source.file = {};
@@ -892,7 +898,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         source.file.type = this.cropper.file.type;
         source.file.filename = this.cropper.file.filename;
         source.file.ext = this.cropper.file.ext;
-        source.blob = this.base64Str;
+        //source.blob = this.base64Str;
 
         //console.log(this.cropper.file)
         var json = {params: [{source}]};
@@ -920,13 +926,37 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         }
         //alert('nb : ' + nbr + ' => ' + retour);
         return retour;
-    }
+    },
+    dataURItoBlob: function (dataURI) {
+        // convert base64 to raw binary data held in a string
+        // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+        var byteString = atob(dataURI.split(',')[1]);
 
+        // separate out the mime component
+        var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0];
+
+        // write the bytes of the string to an ArrayBuffer
+        var ab = new ArrayBuffer(byteString.length);
+        var ia = new Uint8Array(ab);
+        for (var i = 0; i < byteString.length; i++) {
+            ia[i] = byteString.charCodeAt(i);
+        }
+
+        //Old Code
+        //write the ArrayBuffer to a blob, and you're done
+        //var bb = new BlobBuilder();
+        //bb.append(ab);
+        //return bb.getBlob(mimeString);
+
+        //New Code
+        var resultBlob = new Blob([ab], {type: mimeString});
+        //console.log(resultBlob);
+        return resultBlob;
+    }
+    
 
 });
 $(function () {
-
-
 
 });
 

@@ -108,6 +108,16 @@
         <filter-name>NoCacheFilter</filter-name>
         <filter-class>org.ism.filters.NoCacheFilter</filter-class>
     </filter>
+    <filter>
+        <description>Permet la gestion d'envoi de fichier volumineux</description>
+        <filter-name>MultipartFilter</filter-name>
+        <filter-class>org.ism.servlet.file.MultipartFilter</filter-class>
+        <init-param>
+            <description>Emplacement de resouces temporaire</description>
+            <param-name>location</param-name>
+            <param-value>/ISM/rsc/tmp</param-value> 
+        </init-param>
+    </filter>
     <filter-mapping>
         <filter-name>NoCacheFilter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
@@ -163,10 +173,6 @@
         <extension>map</extension>
         <mime-type>css/map</mime-type>
     </mime-mapping>
-    
-     
-    
-    
     <!-- START SETUPS FOR CRYSTAL REPORT -->
     <context-param>
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
@@ -206,11 +212,6 @@
     </resource-ref>
     -->
     <!-- END SETUPS FOR CRYSTAL REPORT -->
-    
-    
-    
-    
-    
     <!-- Resources security -->
     <!-- 
     <security-constraint>

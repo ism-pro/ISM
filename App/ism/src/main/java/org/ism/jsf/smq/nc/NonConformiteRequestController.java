@@ -473,8 +473,8 @@ public class NonConformiteRequestController implements Serializable {
             return;
         }
         
-        FileService.imgTmpRemoveOld(croppedImage);
-        FileService.imgTmpCreate(croppedImage);
+        //FileService.imgTmpRemoveOld(croppedImage);
+        //FileService.imgTmpCreate(croppedImage);
     }
     
     public void handleCropError(CropErrorEvent  cropErrorEvent){
