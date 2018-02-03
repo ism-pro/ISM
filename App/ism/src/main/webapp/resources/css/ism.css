@@ -197,3 +197,25 @@ ipadding-bottom-50{ padding-bottom: 50px;}
     width: 100%;
     box-shadow: 0 1px 1px rgba(0,0,0,0.1);
 }
+
+
+
+
+
+/** ****************************************************************************
+
+
+    BOOOSTRAP : 4
+
+
+** ****************************************************************************/
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+
+.card-header .collapsed .fa {
+  transform: rotate(180deg);
+}
+
+
+

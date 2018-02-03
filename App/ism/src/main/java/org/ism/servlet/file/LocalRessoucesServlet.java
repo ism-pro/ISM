@@ -8,23 +8,33 @@ package org.ism.servlet.file;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.ism.filters.NoCacheFilter;
 
 /**
- *
+ * https://stackoverflow.com/questions/19137020/jsf-2-0-displaying-images-located-on-local-directory
  * @author r.hendrick
  */
-//@WebServlet(name = "UploadServlet", urlPatterns = {"/UploadServlet"})
-//@WebServlet(urlPatterns = {"/upload"})
-//@MultipartConfig(location = "/ISM/rsc/tmp", maxFileSize = 10485760L) // 10MB.
-public class UploadServlet extends HttpServlet {
+public class LocalRessoucesServlet extends HttpServlet {
 
+    private static final String INIT_PARAM_RSCPATH = "RscPath"; // C:\\ISM\rsc
+    
+    // Vars --------------------------------------------------------------------------------------
+    private String location;
+
+    // Actions ------------------------------------------------------------------------------------
+
+    @Override
+    public void init() throws ServletException {
+        super.init(); 
+        this.location = getInitParameter(INIT_PARAM_RSCPATH);
+   
+    }
+    
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -38,27 +48,30 @@ public class UploadServlet extends HttpServlet {
             throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
 
-        NoCacheFilter.RequestWrapper rw;
-        rw = (NoCacheFilter.RequestWrapper) request;
-        MultipartRequest mpr = (MultipartRequest) rw.getRequest();
-        File file = mpr.getFile("file");
+        String ctxPath = request.getContextPath(); // /ISM
+        String servletPath = request.getServletPath(); // /rsc
+        String prefixContext = ctxPath + servletPath;
+        String filename = request.getPathInfo().substring(1);
+        String filePath = request.getRequestURI().replace(prefixContext, "").replace(filename, "");
+        
+        File file = new File(location + File.separator, filename);
+        response.setHeader("Content-Type", getServletContext().getMimeType(filename));
+        response.setHeader("Content-Length", String.valueOf(file.length()));
+        response.setHeader("Content-Disposition", "inline; filename=\"" + filename + "\"");
+        Files.copy(file.toPath(), response.getOutputStream());
 
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet UploadServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet UploadServlet at " + request.getContextPath() + "</h1>");
-            out.println("<div id=\"inputCropperLoaded\" title=\"Basic dialog\">\n"
-                    + "  <p>Image chargée</p>\n"
-                    + "</div>");
-
-            out.println("</body>");
-            out.println("</html>");
-        }
+//        try (PrintWriter out = response.getWriter()) {
+//            /* TODO output your page here. You may use following sample code. */
+//            out.println("<!DOCTYPE html>");
+//            out.println("<html>");
+//            out.println("<head>");
+//            out.println("<title>Servlet ImagePath</title>");            
+//            out.println("</head>");
+//            out.println("<body>");
+//            out.println("<h1>Servlet ImagePath at " + request.getContextPath() + "</h1>");
+//            out.println("</body>");
+//            out.println("</html>");
+//        }
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

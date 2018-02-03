@@ -40,6 +40,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.context.FacesContext;
 import javax.imageio.ImageIO;
+import javax.servlet.http.Part;
 import org.apache.commons.io.FilenameUtils;
 import org.ism.entities.admin.Company;
 import org.ism.entities.admin.Maillist;
@@ -119,6 +120,9 @@ public class NonConformiteRequestController implements Serializable {
      *
      */
     private CroppedImage croppedImage;
+    private Part uploadedPartFile;
+    private File uploadedFile;
+    private String uploadedStringFile;
 
     public NonConformiteRequestController() {
     }
@@ -472,9 +476,8 @@ public class NonConformiteRequestController implements Serializable {
             JsfUtil.addErrorMessage("Aucune image n'a été rognée !");
             return;
         }
-        
-        //FileService.imgTmpRemoveOld(croppedImage);
-        //FileService.imgTmpCreate(croppedImage);
+        FileService.tmpRemoveOld(croppedImage);
+        //FileService.imgCreate(croppedImage);
     }
     
     public void handleCropError(CropErrorEvent  cropErrorEvent){
@@ -482,7 +485,13 @@ public class NonConformiteRequestController implements Serializable {
     }
 
     private void manageCroppedImage(){
-        JsfUtil.out("Now Manage Mage file after save");
+        
+        if(croppedImage==null)
+            return;
+        
+        
+        FileService.tmpMoveSmqNC(croppedImage);
+        croppedImage = null;
     }
     /**
      * ************************************************************************
@@ -495,6 +504,10 @@ public class NonConformiteRequestController implements Serializable {
         selected.setNcrChanged(new Date());
         selected.setNcrCreated(new Date());
         selected.setNcrState(new IsmNcrstate(IsmNcrstate.CREATE_ID));
+        if(croppedImage!=null){
+            if(selected.getNcrLink()==null || selected.getNcrLink().trim().isEmpty())
+            selected.setNcrLink(FileService.filenameComplete(croppedImage));
+        }
 
 
         persist(PersistAction.CREATE,
@@ -838,6 +851,34 @@ public class NonConformiteRequestController implements Serializable {
         return getFacade().countProcessusInState(processus, state);
     }
 
+    public Part getUploadedPartFile() {
+        return uploadedPartFile;
+    }
+
+    public void setUploadedPartFile(Part uploadedPartFile) {
+        this.uploadedPartFile = uploadedPartFile;
+    }
+
+    public File getUploadedFile() {
+        return uploadedFile;
+    }
+
+    public void setUploadedFile(File uploadedFile) {
+        this.uploadedFile = uploadedFile;
+    }
+
+    public String getUploadedStringFile() {
+        return uploadedStringFile;
+    }
+
+    public void setUploadedStringFile(String uploadedStringFile) {
+        this.uploadedStringFile = uploadedStringFile;
+    }
+
+    
+
+    
+    
     ////////////////////////////////////////////////////////////////////////////
     /// Injection
     ///

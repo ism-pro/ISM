@@ -20,22 +20,7 @@ and open the template in the editor.
 }
 
 
-#smq-nc-titles{
-    padding: 10px;
-    border: 1px solid #dee3ff;
-    background-color: #dee3ff;
-    margin-left: 5px;
-    margin-right: 5px;
-}
-.smq-nc-title{
-    font-size: 0.9em!important;
-    font-style:  italic;
-    color: #088cce;
-    width: 100%;
-}
-#smq-nc-title-State{
-    font-size: 0.6em!important;
-}
+
 
 #InFormMode{
     padding: 10px;

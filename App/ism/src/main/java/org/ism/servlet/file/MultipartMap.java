@@ -67,7 +67,7 @@ public class MultipartMap extends HashMap<String, Object> {
     private static final String CONTENT_DISPOSITION = "content-disposition";
     private static final String CONTENT_DISPOSITION_FILENAME = "filename";
     private static final String DEFAULT_ENCODING = "UTF-8";
-    private static final int DEFAULT_BUFFER_SIZE = 10240; // 10KB.
+    private static final int DEFAULT_BUFFER_SIZE = 33554432; // 33.5MB au lieu de 10240; // 10KB.
 
     // Vars ---------------------------------------------------------------------------------------
     private String encoding;
@@ -277,7 +277,8 @@ public class MultipartMap extends HashMap<String, Object> {
         // Write uploaded file.
         File f = new File(location);
         f.mkdirs();
-        File file = File.createTempFile(prefix + "_", suffix, new File(location));
+        //File file = File.createTempFile(prefix + "_", suffix, new File(location));
+        File file = new File(location + File.separator + filename);
         if (multipartConfigured) {
             part.write(file.getName()); // Will be written to the very same File.
         } else {

@@ -28,12 +28,6 @@
         <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
         <param-value>/META-INF/chart.taglib.xml</param-value>
     </context-param>
-    <!--
-    <context-param>
-        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
-        <param-value>/META-INF/jsfc.taglib.xml</param-value>
-    </context-param>
-    -->
     <context-param>
         <param-name>javax.faces.STATE_SAVING_METHOD</param-name>
         <param-value>server</param-value>
@@ -55,13 +49,54 @@
             <role-name>GUEST</role-name>
         </run-as>
     </servlet>
+    <servlet>
+        <description>Service de chargement de fichier</description>
+        <servlet-name>UploadServlet</servlet-name>
+        <servlet-class>org.ism.servlet.file.UploadServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+        <multipart-config>
+            <max-file-size>33554432</max-file-size>
+            <max-request-size>33554432</max-request-size>
+            <file-size-threshold>33554432</file-size-threshold>
+        </multipart-config>
+    </servlet>
+    <servlet>
+        <description>Service de gestion de fichier</description>
+        <servlet-name>LocalRessoucesServlet</servlet-name>
+        <servlet-class>org.ism.servlet.file.LocalRessoucesServlet</servlet-class>
+        <init-param>
+            <description>Local disk</description>
+            <param-name>RscPath</param-name>
+            <param-value>C:\\ISM\rsc</param-value>
+        </init-param>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
+    
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/faces/*</url-pattern>
     </servlet-mapping>
+    
+    <filter-mapping>
+        <filter-name>MultipartFilter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    
     <listener>
         <listener-class>com.sun.faces.config.ConfigureListener</listener-class>
     </listener>
+    
+    
+    <servlet-mapping>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/upload</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>LocalRessoucesServlet</servlet-name>
+        <url-pattern>/rsc/*</url-pattern>
+    </servlet-mapping>
+    
+    
     <session-config>
         <session-timeout>1</session-timeout>
     </session-config>
@@ -115,7 +150,7 @@
         <init-param>
             <description>Emplacement de resouces temporaire</description>
             <param-name>location</param-name>
-            <param-value>/ISM/rsc/tmp</param-value> 
+            <param-value>/ISM/rsc/tmp</param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -197,6 +232,7 @@
     <servlet>
         <servlet-name>CrystalReportViewerServlet</servlet-name>
         <servlet-class>com.crystaldecisions.report.web.viewer.CrystalReportViewerServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
     </servlet>
     <servlet-mapping>
         <servlet-name>CrystalReportViewerServlet</servlet-name>

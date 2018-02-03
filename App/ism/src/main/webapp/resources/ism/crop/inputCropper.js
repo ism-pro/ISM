@@ -636,6 +636,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                             this.originalFilename = this.getOnlyFilename(this.cropper.file) + "_" + this.getUniqueKey(); //.name.replace('/(.*)\.(.*?)$/, "$1"').replace(".", "_") + "_" + this.getUniqueKey();
                             // Write value to Input
                             $(this.for).prop('value', this.originalFilename);
+                            $(this.for).text(this.originalFilename);
                             $(this.for).prop('disabled', true);
 
                             // Fire cropped Event
@@ -770,11 +771,14 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         if (this.cfg.behaviors) {
             var c = this.cfg.behaviors.cropped;
             if (c) {
+                // Preserver Parent
                 var that = this;
+                // JSON is require
+                var json = this.getAllAsJson();
                 
                 // Send Image to memory
                 var blobIn = this.dataURItoBlob(this.base64Str); 
-                var name = this.cropper.file.filename + "." + this.cropper.file.ext;
+                var name = json.params[0].source.originalFilename + "" + this.cropper.file.ext;
                 var d = (new Date);
                 var t = this.cropper.file.type;
                 var file = new File([blobIn], name, {type: t, lastmModified: d});
@@ -791,21 +795,17 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                     contentType: false,
                     processData: false,
                     timeout: 60000,
-                   
+                    //beforeSend: function(){console.log('before send')},
                     success: function (data) {
-                        // your callback here
                         //console.log("Success")
                         //$('body').html(data);
                     },
-                    error: function (er) {
-                        // handle error
-                        console.log('Error [' + er.status + '] : ' + er.statusText)
-                    }
+                    error: function (er) { console.log('Error [' + er.status + '] : ' + er.statusText)},
+                    //complete: function(){ console.log('complete');  }
                 });
-
-
+                
                 // Send data cropped
-                var json = this.getAllAsJson();
+                //console.log(json)
                 c.call(this, json);
             }
         }
@@ -874,7 +874,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     getOnlyFilename: function (file) {
         var name = file.name;
         var mimeType = this.getImageExtension(file);
-        name = name.replace(mimeType, '').replace(mimeType.toUpperCase(), '');
+        name = name.replace(mimeType.toUpperCase(), '').replace(mimeType.toLowerCase(), '');
         return name;
     },
     getAllAsJson: function (e) {
