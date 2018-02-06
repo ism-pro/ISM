@@ -751,6 +751,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         }
     },
     doLoad: function (e) {
+        $('.docs-tooltip').tooltip('hide');
         // Check If Path is defined
         if (!this.cfg.image) {
             //console.log('Nothing to be load : image is undefined....');
@@ -815,6 +816,8 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         } else {
             window.alert('Please choose an image file.');
         }
+    
+        $('.docs-tooltip').tooltip('show');
     },
     ///
     ///
@@ -838,7 +841,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                 var that = this;
                 // JSON is require
                 var json = this.getAllAsJson();
-
+                //console.log(json);
                 // Send Image to memory
                 var blobIn = this.dataURItoBlob(this.base64Str);
                 var name = json.params[0].source.originalFilename + "" + this.cropper.file.ext;
@@ -890,12 +893,12 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
     tooltipOn: function (e) {
         if (this.cropper.active)
             return;
-        $('.docs-tooltip').tooltip('show');
+        //$('.docs-tooltip').tooltip('show');
     },
     tooltipOff: function (e) {
         if (this.cropper.active)
             return;
-        $('.docs-tooltip').tooltip('hide');
+        //$('.docs-tooltip').tooltip('hide');
     },
     getZoom: function (e) {
         if (!this.cropper.active)
