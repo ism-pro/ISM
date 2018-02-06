@@ -33,8 +33,8 @@ PrimeFaces.locales.fr_FR.InputCropper = {
 };
 
 PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
-///
-/// Init
+    ///
+    /// Init
     init: function (a) {
 
 
@@ -129,7 +129,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.cfg.dragCrop = this.cfg.dragCrop || true;
         this.cfg.inputZoomerValue = this.cfg.inputZoomerValue || 1;
         this.cfg.inputRoterValue = this.cfg.inputRoterValue || 180;
-        this.cfg.uploadUrl = this.cfg.uploadUrl || '/ISM/faces/upload';
+        this.prelaodImage = (this.cfg.image ? true : false);
         //
         //
         // Build and bind
@@ -138,11 +138,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.configComponent();
         this.bindEvents();
     },
-    //
-    //
-    //
-    // Build
-
     ///
     ///
     /// Init
@@ -376,6 +371,9 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         this.img.container.hover($.proxy(this.inputNameShow, this), $.proxy(this.inputNameHide, this));
         this.img.cropped.hover($.proxy(this.inputNameShow, this), $.proxy(this.inputNameHide, this));
 
+        // Modal Window
+        this.dlg.modal.on('shown.bs.modal', $.proxy(this.doLoad, this));
+
         // Image wrapper
         this.preview.wrapper.hover($.proxy(this.tooltipOn, this), $.proxy(this.tooltipOff, this));
         // Cropper events
@@ -581,7 +579,6 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                     break;
                 case 'zoom' :
                     {
-                        // Save initial zoom
                         if (!this.cropper.zoom) {
                             this.cropper.zoom = this.getZoom();
                         }
@@ -633,7 +630,7 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                             // Save Old File name
                             this.originalFilenameOld = (this.originalFilename + this.cropper.file.ext) || null;
                             // Create new filename
-                            this.originalFilename = this.getOnlyFilename(this.cropper.file) + "_" + this.getUniqueKey(); //.name.replace('/(.*)\.(.*?)$/, "$1"').replace(".", "_") + "_" + this.getUniqueKey();
+                            this.originalFilename = this.getUniqueKey(); //this.getOnlyFilename(this.cropper.file) + "_" + this.getUniqueKey(); //.name.replace('/(.*)\.(.*?)$/, "$1"').replace(".", "_") + "_" + this.getUniqueKey();
                             // Write value to Input
                             $(this.for).prop('value', this.originalFilename);
                             $(this.for).text(this.originalFilename);
@@ -753,6 +750,72 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                 break
         }
     },
+    doLoad: function (e) {
+        // Check If Path is defined
+        if (!this.cfg.image) {
+            //console.log('Nothing to be load : image is undefined....');
+            return;
+        }
+        
+        if(!this.prelaodImage){
+            //console.log('Image déjà préparé !');
+            return;
+        }
+        this.prelaodImage = false;
+        
+        // Create a file
+        var blobUrl = "blob" + ":" + this.getContextPath() + this.cfg.image;
+        var name = this.getFilenameFromPath(this.cfg.image);
+        var d = (new Date);
+        var f = {};
+        f.name = name;
+        f.type = this.getImageMimeType(f);
+        var file = new File([blobUrl], name, {type: f.type, lastmModified: d});
+
+        // Setup default Param
+        if (this.isImageFile(file)) {
+            this.cropper.uploadedImageType = file.type;
+            if (this.cropper.uploadedImageURL) {
+                URL.revokeObjectURL(this.cropper.uploadedImageURL); // Revoke the old one
+            }
+            this.cropper.uploadedImageURL = URL.createObjectURL(file);
+            if (this.cropper.active) {
+               this.preview.image.cropper('destroy').attr('src', this.cropper.uploadedImageURL).cropper(this.cropper.options);
+            } else {
+                //this.preview.image = $('<img src="' + this.cropper.uploadedImageURL + '">');
+                this.preview.image.cropper('replace', this.getContextPath() + this.cfg.image);
+                this.preview.image.prop('src', this.cropper.uploadedImageUrl);
+                this.preview.wrapper.empty().html(this.preview.image);
+                console.log(this.cropper.options);
+                this.preview.image.cropper(this.cropper.options);
+                
+            }
+
+            // 
+            this.dlg.inputFile.val('');
+            this.tooltipOff();
+            this.cropper.active = true;
+            this.cropper.zoom = null;
+            this.dlg.opts.inputZoomer.slider('enable');
+            this.dlg.opts.inputRoter.slider('enable');
+            this.dlg.opts.inputZoomer.slider('value', 1);
+            this.dlg.opts.inputRoter.slider('value', 180);
+            this.dlg.opts.inputRotateSpin.val(180)
+            this.dlg.opts.inputZoomerSpin.val(1)
+            this.dlg.opts.inputScaleXSpin.val(1);
+            this.dlg.opts.inputScaleYSpin.val(1);
+
+            // Save file
+            if (!this.cropper.file.ext) {
+                this.cropper.file.filenameOld = this.cropper.file.filename + '.' + this.cropper.file.ext;
+            }
+            this.cropper.file = file;
+            this.cropper.file.ext = this.getImageExtension(file);
+            this.cropper.file.filename = this.getOnlyFilename(file);
+        } else {
+            window.alert('Please choose an image file.');
+        }
+    },
     ///
     ///
     ///
@@ -775,9 +838,9 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                 var that = this;
                 // JSON is require
                 var json = this.getAllAsJson();
-                
+
                 // Send Image to memory
-                var blobIn = this.dataURItoBlob(this.base64Str); 
+                var blobIn = this.dataURItoBlob(this.base64Str);
                 var name = json.params[0].source.originalFilename + "" + this.cropper.file.ext;
                 var d = (new Date);
                 var t = this.cropper.file.type;
@@ -800,12 +863,15 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
                         //console.log("Success")
                         //$('body').html(data);
                     },
-                    error: function (er) { console.log('Error [' + er.status + '] : ' + er.statusText)},
+                    error: function (er) {
+                        console.log('Error [' + er.status + '] : ' + er.statusText)
+                    },
                     //complete: function(){ console.log('complete');  }
                 });
-                
+
                 // Send data cropped
                 //console.log(json)
+
                 c.call(this, json);
             }
         }
@@ -871,11 +937,44 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         }
         return mimeType;
     },
+    getFilenameExt: function (fileStr) {
+        var strFile = new String(fileStr);
+        var strs = strFile.split('.');
+        var ext = strs[strs.length - 1];
+        return ext;
+    },
+    getImageMimeType: function (file) {
+        var filename = new String(file.name);
+        var ext = this.getFilenameExt(filename).toLowerCase();
+
+        var mimeType = null;
+        switch (ext) {
+            case 'jpg':
+                mimeType = 'image/jpeg';
+                break;
+            case 'jpeg':
+                mimeType = 'image/jpeg';
+                break;
+            case 'png':
+                mimeType = 'image/png';
+                break;
+            case 'gif':
+                mimeType = 'image/gif';
+                break;
+        }
+        return mimeType;
+    },
     getOnlyFilename: function (file) {
         var name = file.name;
         var mimeType = this.getImageExtension(file);
         name = name.replace(mimeType.toUpperCase(), '').replace(mimeType.toLowerCase(), '');
         return name;
+    },
+    getFilenameFromPath: function (fileStr) {
+        var strFile = new String(fileStr);
+        var strs = strFile.split('/');
+        var filename = strs[strs.length - 1];
+        return filename;
     },
     getAllAsJson: function (e) {
         if (!this.cropper.active)
@@ -952,15 +1051,13 @@ PrimeFaces.widget.InputCropper = PrimeFaces.widget.BaseWidget.extend({
         var resultBlob = new Blob([ab], {type: mimeString});
         //console.log(resultBlob);
         return resultBlob;
-    }
-    
-
+    },
+    getContextPath: function (e) {
+        return (window.location.origin + '/' + (new String(window.location.pathname)).split('/')[1]);
+    },
 });
 $(function () {
 
+
 });
-
-
-
-
 

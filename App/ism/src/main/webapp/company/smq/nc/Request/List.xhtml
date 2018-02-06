@@ -16,6 +16,13 @@
 
         <ui:define name="body">
 
+            <style>
+                .ui-datatable thead th {
+                    padding: 1px 3px; 
+                }
+                .ui-datatable .ui-column-filter{max-min: calc(100% - 10px);max-width: calc(100% - 10px);}
+            </style>
+
             <h:form id="bodyForm">
                 <p:contextMenu id="contextMenu" for="datalist" >
                     <p:menuitem icon="ui-btn-Create"
@@ -93,7 +100,8 @@
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
 
- 
+
+
 
                             <p:dataTable id="datalist" widgetVar="datalist"
                                          value="#{nonConformiteRequestController.lazyModel}" var="item"
@@ -111,6 +119,7 @@
                                          paginator="#{nonConformiteRequestController.tableSet.paginator}" 
                                          paginatorTemplate="#{nonConformiteRequestController.tableSet.paginatorTemplate}"
                                          currentPageReportTemplate="#{nonConformiteRequestController.tableSet.currentPageReportTemplate}"
+                                         pageLinks="#{nonConformiteRequestController.tableSet.pageLinks}"
 
                                          resizableColumns="#{nonConformiteRequestController.tableSet.resizableColumns}"
                                          draggableColumns="#{nonConformiteRequestController.tableSet.draggableColumns}"
@@ -144,9 +153,17 @@
                                             <p:dataExporter type="pdf" target="datalist" fileName="#{ism.NonConformiteRequestTitleList}_#{viewUtil.maintenant}"  />
                                         </p:commandLink>
                                     </div>
+
+
+                                    <p:commandButton id="toggler" type="button" value="Columns" 
+                                                     style="float:left;" icon="ui-icon-calculator" 
+                                                     />
+
+                                    <p:columnToggler id="tableColToggler" datasource="datalist" trigger="toggler" >
+                                        <p:ajax event="toggle" update=":growl"
+                                                listener="#{nonConformiteRequestController.handleColumnToggle}" />
+                                    </p:columnToggler>
                                 </f:facet>
-
-
 
 
 
@@ -498,7 +515,7 @@
                                  styleClass="options-btn"
                                  value="#{ism.Delete}"
                                  title="Permet de supprimer la non conformité sélectionné !"
-                                 actionListener="#{nonConformiteRequestController.destroy}"
+                                 actionListener="#{nonConformiteRequestController.destroy()}"
                                  update=":bodyForm:datalist,westGroup,:growl"
                                  onstart=";
                                  #{viewConfirmDialog.dlg.setHeader(ism.NonConformiteRequestDlgHeader)};
@@ -509,7 +526,9 @@
                                              or empty nonConformiteRequestController.selected.ncrId
                                              or nonConformiteRequestController.selected.ncrState.id!=1}"
                                  rendered="#{request.isUserInRole('SNC_REQUEST_E')}"
-                                 />
+                                 >
+                    <p:confirm  />
+                </p:commandButton>
                 <p:commandButton id="refreshButton"
                                  icon="ui-btn-Refresh"
                                  styleClass="options-btn"
@@ -520,7 +539,7 @@
                                  disabled="#{empty nonConformiteRequestController.selected 
                                              or empty nonConformiteRequestController.selected.ncrId}"
                                  />
-                <hr style="margin-top: 5px;margin-bottom: 5px;" />
+                <hr class="my-1" />
                 <p:commandButton id="mailButton"
                                  icon="fa fa-telegram"
                                  styleClass="options-btn "

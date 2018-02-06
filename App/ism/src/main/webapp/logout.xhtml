@@ -118,18 +118,16 @@
                                 <!-- *********************************************** -->
                                 <div class="card-body p-3">
                                     <h:form id="Form">
-                                        <center>
-                                            <p:commandButton    action="index.xhtml?faces-redirect=true" 
-                                                                id="btnGoToLogin"
-                                                                value="#{ism.LogIn} [#{request.session.maxInactiveInterval}]"
-                                                                actionListener="#{staffAuthController.logout()}"
-                                                                style="min-width: 240px; "
-                                                                class="btn btn-primary  "
-                                                                />
-
-
-                                        </center>
-
+                                        <div class="input-group input-group-sm small p-0 mb-2" data-toggle="tooltip" data-placement="left" title="Retourner à l'application">
+                                            <p:commandButton id="btnGoToLogin"
+                                                             value="#{ism.LogIn} [#{request.session.maxInactiveInterval}]"
+                                                             action="index.xhtml?faces-redirect=true" 
+                                                             actionListener="#{staffAuthController.logout()}"
+                                                             class="btn btn-primary bg-primary"
+                                                             icon="fa fa-address-card"
+                                                             style="width: 100%"
+                                                             />
+                                        </div>
 
                                     </h:form>
                                 </div>
@@ -148,7 +146,16 @@
     <p:blockUI block="body" trigger="Form:btnGoToLogin">
         <p:graphicImage width="48px" height="48px" library="img" name="ism/std/Onload.gif"/>
     </p:blockUI>
-
+    <script>
+        // Redirect user to https
+        window.onload = function () {
+            if (window.location.href.indexOf('http://') === 0)
+                window.location = 'https://' + window.location.hostname + ':8181' + window.location.pathname + window.location.search;
+        };
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip();
+        })
+    </script>
 
 </html>
 

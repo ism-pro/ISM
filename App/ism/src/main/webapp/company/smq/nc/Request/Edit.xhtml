@@ -193,7 +193,7 @@
                                 <p:accordionPanel activeIndex="-1" style="border:1px">
                                     <p:tab title="Définition client si nécessaire...">
                                         <h:panelGrid columns="2" cellpadding="1px" cellspacing="0px" style="margin:0px; padding:0px;">
-                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientname}"  for="ncrClientname" />
+                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientname1}"  for="ncrClientname" />
                                             <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px"  >                
                                                 <p:inputText id="ncrClientname" 
                                                              value="#{nonConformiteRequestController.selected.ncrClientname}" 
@@ -204,7 +204,7 @@
                                             </h:panelGrid>
 
 
-                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientaddress}"  for="ncrClientaddress" />
+                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientaddress1}"  for="ncrClientaddress" />
                                             <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
                                                 <p:inputText id="ncrClientaddress" 
                                                              value="#{nonConformiteRequestController.selected.ncrClientaddress}" 
@@ -215,7 +215,7 @@
                                             </h:panelGrid>
 
 
-                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientphone}"  for="ncrClientphone" />
+                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientphone1}"  for="ncrClientphone" />
                                             <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
                                                 <p:inputText id="ncrClientphone" 
                                                              value="#{nonConformiteRequestController.selected.ncrClientphone}" 
@@ -226,7 +226,7 @@
                                             </h:panelGrid>
 
 
-                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientemail}"  for="ncrClientemail" />
+                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClientemail1}"  for="ncrClientemail" />
                                             <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
                                                 <p:inputText id="ncrClientemail" 
                                                              value="#{nonConformiteRequestController.selected.ncrClientemail}" 
@@ -237,7 +237,7 @@
                                             </h:panelGrid>
 
 
-                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClienttype}"  for="ncrClienttype" />
+                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrClienttype1}"  for="ncrClienttype" />
                                             <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
                                                 <p:inputText id="ncrClienttype" 
                                                              value="#{nonConformiteRequestController.selected.ncrClienttype}" 
@@ -261,7 +261,9 @@
                                                    title="#{ism.NonConformiteRequestFieldInfo_ncrLink}" 
                                                    />
                                     <ic:inputCropper id="ncrLinkCropper" for="ncrLink"
+                                                     uploadUrl="/ISM/faces/upload"
                                                      aspectRatio="photo"
+                                                     image="/rsc/img/ncr/#{nonConformiteRequestController.selected.ncrLink}"
                                                      loadingGif="/resources/img/ism/std/Onload.gif"
                                                      header="Image de non conformite" >
                                         <p:ajax event="cropped" listener="#{nonConformiteRequestController.handleCroppedImage}" update="growl" />
@@ -341,6 +343,7 @@
                         </div>
                     </div>
                 </div>
+
 
             </h:form>
 

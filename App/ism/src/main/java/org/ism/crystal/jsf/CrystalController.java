@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.ism.jsf.util.JsfUtil;
 import org.ism.services.Util;
+import org.ism.services.file.FileService;
 
 /**
  * <h1>crystalController</h1><br>
@@ -149,7 +150,7 @@ public class CrystalController implements Serializable {
         }
 
         try {
-            String filename = Util.writeResourceToFileSystem(fileReport, reloadFile);
+            String filename = FileService.writeResourceToFileSystem(fileReport, reloadFile);
 
             // Start by openning the report
             ReportClientDocument reportClientDocument = new ReportClientDocument();
@@ -191,7 +192,7 @@ public class CrystalController implements Serializable {
                 Logger.getLogger(CrystalController.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
-            Util.out("No resource found to be closed");
+            //Util.out("No resource found to be closed");
         }
     }
     

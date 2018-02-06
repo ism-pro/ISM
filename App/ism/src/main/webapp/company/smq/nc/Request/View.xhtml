@@ -379,9 +379,9 @@
                         </div>
                     </div>
                 </h:panelGroup>
-                
-                
-                
+
+
+
 
 
 
@@ -392,98 +392,103 @@
 
 
                 <h:panelGroup id="btn-crud-zone_id">
-                    <p:commandButton icon="ui-btn-Print"
-                                     styleClass="ui-btn">
-                        <p:printer target="bodyForm"  />
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Edit"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Edit}"
-                                     action="Edit.xhtml?faces-redirect=true"
-                                     title="Permet d'éditer la non conformité sélectionné."
-                                     disabled="#{empty nonConformiteRequestController.selected 
-                                                 or empty nonConformiteRequestController.selected.ncrId}"
-                                     rendered="#{nonConformiteRequestController.selected.ncrState.id==1}"
-                                     />
-                    <p:commandButton icon="ui-btn-Approuve"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Validate}"
-                                     action="Validate.xhtml?faces-redirect=true"
-                                     title="Permet d'accepter ou refuser la non conformité sélectionné."
-                                     disabled="#{empty nonConformiteRequestController.selected 
-                                                 or empty nonConformiteRequestController.selected.ncrId}"
-                                     rendered="#{nonConformiteRequestController.selected.ncrState.id==1
-                                                 and request.isUserInRole('SNC_REQUEST_VA')}"
-                                     />
-                    <p:commandButton icon="ui-btn-Actions"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Action}"
-                                     action="Action.xhtml?faces-redirect=true"
-                                     title="Permet d'ajouter une action à la non conformité sélectionné."
-                                     actionListener="#{nonConformiteActionsController.prepareAction(
-                                                       nonConformiteRequestController.selected)}"
-                                     disabled="#{empty nonConformiteRequestController.selected 
-                                                 or empty nonConformiteRequestController.selected.ncrId
-                                                 or (nonConformiteRequestController.selected.ncrState.id!=2 
-                                                 and nonConformiteRequestController.selected.ncrState.id!=3)}"
-                                     />
-                    <p:commandButton icon="ui-btn-Postpone"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Review}"
-                                     action="Review.xhtml?faces-redirect=true"
-                                     title="Permet d'approuver l'action et donc de la postposer"
-                                     actionListener="#{nonConformiteActionsController.prepareReview(
-                                                       nonConformiteRequestController.selected)}"
-                                     disabled="#{empty nonConformiteRequestController.selected 
-                                                 or empty nonConformiteRequestController.selected.ncrId
-                                                 or (nonConformiteRequestController.selected.ncrState.id!=2 
-                                                 and nonConformiteRequestController.selected.ncrState.id!=3)}"
-                                     />
-                    <p:commandButton icon="ui-btn-Cloture"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Cloture}"
-                                     action="View.xhtml?faces-redirect=true"
-                                     title="Permet d'ajouter une action à la non conformité sélectionné."
-                                     actionListener="#{nonConformiteActionsController.updateOnCloture(
-                                                       nonConformiteRequestController.selected)}"
-                                     disabled="#{empty nonConformiteRequestController.selected 
-                                                 or empty nonConformiteRequestController.selected.ncrId
-                                                 or (nonConformiteRequestController.selected.ncrState.id!=2 
-                                                 and nonConformiteRequestController.selected.ncrState.id!=3)}"
-                                     rendered="#{request.isUserInRole('SNC_REQUEST_CL') and 
-                                                 nonConformiteActionsController.getItemsDesc(nonConformiteRequestController.selected).get(0).ncaState.id==1}"
-                                     >
-                        <p:confirm header="#{ism.NonConformiteRequestDlgHeader_Cloture}"
-                                   message="#{ism.NonConformiteRequestDlgMessage_Cloture}" 
-                                   icon="alert"/>
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Delete"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Delete}"
-                                     action="./List.xhtml?faces-redirect=true"
-                                     title="Permet de supprimer la non conformité sélectionné !"
-                                     actionListener="#{nonConformiteRequestController.destroy()}"
-                                     update=":bodyForm,:growl"
-                                     onstart=";
-                                     #{viewConfirmDialog.dlg.setHeader(ism.NonConformiteRequestDlgHeader)};
-                                     #{viewConfirmDialog.dlg.setSeverity('alert')};
-                                     #{viewConfirmDialog.dlg.setMessage(ism.NonConformiteRequestDlgMessage)}
-                                     PF('mainConfirmDialog').show()"
-                                     disabled="#{empty nonConformiteRequestController.selected 
-                                                 or empty nonConformiteRequestController.selected.ncrId}"
-                                     rendered="#{request.isUserInRole('CO_SMQNCREQUEST_W')
-                                                 and nonConformiteRequestController.selected.ncrState.id==1}"
-                                     >
-                        <p:confirm  />
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Cancel"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Cancel}" 
-                                     action="./List.xhtml?faces-redirect=true"
-                                     update=":bodyForm,:growl"
-                                     immediate="true"
-                                     />
-
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-12 col-sm-12">
+                                <p:commandButton icon="ui-btn-Print"
+                                                 styleClass="ui-btn">
+                                    <p:printer target="bodyForm"  />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Edit"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Edit}"
+                                                 action="Edit.xhtml?faces-redirect=true"
+                                                 title="Permet d'éditer la non conformité sélectionné."
+                                                 disabled="#{empty nonConformiteRequestController.selected 
+                                                             or empty nonConformiteRequestController.selected.ncrId}"
+                                                 rendered="#{nonConformiteRequestController.selected.ncrState.id==1}"
+                                                 />
+                                <p:commandButton icon="ui-btn-Approuve"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Validate}"
+                                                 action="Validate.xhtml?faces-redirect=true"
+                                                 title="Permet d'accepter ou refuser la non conformité sélectionné."
+                                                 disabled="#{empty nonConformiteRequestController.selected 
+                                                             or empty nonConformiteRequestController.selected.ncrId}"
+                                                 rendered="#{nonConformiteRequestController.selected.ncrState.id==1
+                                                             and request.isUserInRole('SNC_REQUEST_VA')}"
+                                                 />
+                                <p:commandButton icon="ui-btn-Actions"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Action}"
+                                                 action="Action.xhtml?faces-redirect=true"
+                                                 title="Permet d'ajouter une action à la non conformité sélectionné."
+                                                 actionListener="#{nonConformiteActionsController.prepareAction(
+                                                                   nonConformiteRequestController.selected)}"
+                                                 disabled="#{empty nonConformiteRequestController.selected 
+                                                             or empty nonConformiteRequestController.selected.ncrId
+                                                             or (nonConformiteRequestController.selected.ncrState.id!=2 
+                                                             and nonConformiteRequestController.selected.ncrState.id!=3)}"
+                                                 />
+                                <p:commandButton icon="ui-btn-Postpone"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Review}"
+                                                 action="Review.xhtml?faces-redirect=true"
+                                                 title="Permet d'approuver l'action et donc de la postposer"
+                                                 actionListener="#{nonConformiteActionsController.prepareReview(
+                                                                   nonConformiteRequestController.selected)}"
+                                                 disabled="#{empty nonConformiteRequestController.selected 
+                                                             or empty nonConformiteRequestController.selected.ncrId
+                                                             or (nonConformiteRequestController.selected.ncrState.id!=2 
+                                                             and nonConformiteRequestController.selected.ncrState.id!=3)}"
+                                                 />
+                                <p:commandButton icon="ui-btn-Cloture"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cloture}"
+                                                 action="View.xhtml?faces-redirect=true"
+                                                 title="Permet d'ajouter une action à la non conformité sélectionné."
+                                                 actionListener="#{nonConformiteActionsController.updateOnCloture(
+                                                                   nonConformiteRequestController.selected)}"
+                                                 disabled="#{empty nonConformiteRequestController.selected 
+                                                             or empty nonConformiteRequestController.selected.ncrId
+                                                             or (nonConformiteRequestController.selected.ncrState.id!=2 
+                                                             and nonConformiteRequestController.selected.ncrState.id!=3)}"
+                                                 rendered="#{request.isUserInRole('SNC_REQUEST_CL') and 
+                                                             nonConformiteActionsController.getItemsDesc(nonConformiteRequestController.selected).get(0).ncaState.id==1}"
+                                                 >
+                                    <p:confirm header="#{ism.NonConformiteRequestDlgHeader_Cloture}"
+                                               message="#{ism.NonConformiteRequestDlgMessage_Cloture}" 
+                                               icon="alert"/>
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Delete"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Delete}"
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 title="Permet de supprimer la non conformité sélectionné !"
+                                                 actionListener="#{nonConformiteRequestController.destroy()}"
+                                                 update=":bodyForm,:growl"
+                                                 onstart=";
+                                                 #{viewConfirmDialog.dlg.setHeader(ism.NonConformiteRequestDlgHeader)};
+                                                 #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                                 #{viewConfirmDialog.dlg.setMessage(ism.NonConformiteRequestDlgMessage)}
+                                                 PF('mainConfirmDialog').show()"
+                                                 disabled="#{empty nonConformiteRequestController.selected 
+                                                             or empty nonConformiteRequestController.selected.ncrId}"
+                                                 rendered="#{request.isUserInRole('CO_SMQNCREQUEST_W')
+                                                             and nonConformiteRequestController.selected.ncrState.id==1}"
+                                                 >
+                                    <p:confirm  />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Cancel"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cancel}" 
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 update=":bodyForm,:growl"
+                                                 immediate="true"
+                                                 />
+                            </div>
+                        </div>
+                    </div>
                 </h:panelGroup>
 
             </h:form>

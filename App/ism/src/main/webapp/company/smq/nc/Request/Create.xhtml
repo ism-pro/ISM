@@ -30,9 +30,9 @@
 
 
                                 <p:outputLabel value="#{ism.NonConformiteRequestField_ncrId}" rendered="false" for="ncrId" />
-                                <p:inputText id="ncrId" rendered="false"
-                                             value="#{nonConformiteRequestController.selected.ncrId}" 
-                                             title="#{ism.NonConformiteRequestFieldInfo_ncrId}" />
+                                <p:outputLabel id="ncrId" rendered="false"
+                                               value="#{nonConformiteRequestController.selected.ncrId}" 
+                                               title="#{ism.NonConformiteRequestFieldInfo_ncrId}" />
 
 
                                 <p:outputLabel value="#{ism.NonConformiteRequestField_ncrTitle}" for="ncrTitle" />
@@ -257,6 +257,7 @@
                                                    title="#{ism.NonConformiteRequestFieldInfo_ncrLink}" 
                                                    />
                                     <ic:inputCropper id="ncrLinkCropper" for="ncrLink"
+                                                     uploadUrl="/ISM/faces/upload"
                                                      aspectRatio="photo"
                                                      loadingGif="/resources/img/ism/std/Onload.gif"
                                                      header="Image de non conformite" >

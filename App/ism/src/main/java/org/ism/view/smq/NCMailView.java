@@ -17,7 +17,6 @@ import org.ism.entities.admin.Maillist;
 import org.ism.entities.hr.Staff;
 import org.ism.entities.hr.StaffGroups;
 import org.ism.entities.smq.Processus;
-import org.ism.entities.smq.nc.NonConformiteActions;
 import org.ism.jsf.admin.MailaddressController;
 import org.ism.jsf.admin.MaillistController;
 import org.ism.jsf.app.IsmMailtypeController;

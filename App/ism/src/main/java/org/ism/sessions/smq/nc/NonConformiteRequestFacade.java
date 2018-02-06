@@ -64,6 +64,8 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
     private final String FIND_BY_CODE = "";
     private final String FIND_BY_DESIGNATION = "NonConformiteRequest.findByNcrTitle";            // query = "SELECT n FROM NonConformiteRequest n WHERE n.ncrTitle = :ncrTitle"
 
+    private final String FIND_BY_ID = "NonConformiteRequest.findByNcrId"; 
+    private final String FIND_BY_ID_OF_COMPANY = "NonConformiteRequest.findByNcrId";  // ID IS UNIQUE NO NEED OF COMPANY
     private final String FIND_BY_DESIGNATION_OF_COMPANY = "NonConformiteRequest.findByNcrTitleOfCompany";
 
     private final String COUNT_ITEMS_CREATE_IN_RANGE = "NonConformiteRequest.countItemsCreateInRange";
@@ -369,17 +371,12 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         return Integer.valueOf(q.getSingleResult().toString());
     }
 
-    public List<NonConformiteRequest> findByCode(String code, Company company) {
-        /*
+    public List<NonConformiteRequest> findByCode(Integer code, Company company) {
         em.flush();
-        Query q = em.createNamedQuery(FIND_BY_PROCESSUS).setParameter("pProcessus", code);
-        q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
-        int count = q.getResultList().size();
-        if (count > 0) {
-            return q.getResultList();
-        }
-         */
-        return null;
+        Query q = em.createNamedQuery(FIND_BY_ID_OF_COMPANY)
+                .setParameter("ncrId", code)
+                .setParameter("ncrCompany", company);
+        return q.getResultList();
     }
 
     public List<NonConformiteRequest> findByDesignation(String designation, Company company) {

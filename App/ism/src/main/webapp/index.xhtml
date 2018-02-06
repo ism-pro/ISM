@@ -172,16 +172,17 @@
                                                 </div>
                                             </div>
 
-
-                                            <p:commandButton id="btnLogIn"
-                                                             type="submit"
-                                                             value="#{ism.LogIn}"
-                                                             action="#{staffAuthController.login}"
-                                                             update=":growl"
-                                                             class="btn btn-primary bg-primary"
-                                                             icon="fa fa-sign-in "
-                                                             style="width: 100%"
-                                                             />
+                                            <div class="input-group input-group-sm small p-0 mb-2" data-toggle="tooltip" data-placement="left" title="Valider vos informations de connexion">
+                                                <p:commandButton id="btnLogIn"
+                                                                 type="submit"
+                                                                 value="#{ism.LogIn}"
+                                                                 action="#{staffAuthController.login}"
+                                                                 update=":growl"
+                                                                 class="btn btn-primary bg-primary"
+                                                                 icon="fa fa-sign-in "
+                                                                 style="width: 100%"
+                                                                 />
+                                            </div>
 
                                             <hr />
 
@@ -237,7 +238,7 @@
         };
         $(function () {
             $('[data-toggle="tooltip"]').tooltip();
-        })
+        });
     </script>
 
 </html>

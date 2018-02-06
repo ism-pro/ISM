@@ -1,14 +1,6 @@
 package org.ism.jsf.smq.nc;
 
-import java.awt.Image;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import org.ism.entities.smq.nc.NonConformiteRequest;
 import org.ism.jsf.util.JsfUtil;
 import org.ism.jsf.util.JsfUtil.PersistAction;
@@ -16,7 +8,6 @@ import org.ism.sessions.smq.nc.NonConformiteRequestFacade;
 import org.ism.entities.app.IsmNcrstate;
 
 import java.io.Serializable;
-import java.net.URL;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +20,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
-import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
@@ -38,10 +28,7 @@ import org.primefaces.model.Visibility;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.context.FacesContext;
-import javax.imageio.ImageIO;
 import javax.servlet.http.Part;
-import org.apache.commons.io.FilenameUtils;
 import org.ism.entities.admin.Company;
 import org.ism.entities.admin.Maillist;
 import org.ism.entities.smq.Processus;
@@ -57,7 +44,6 @@ import org.ism.model.cropper.CroppedImage;
 import org.ism.services.TableSet;
 import org.ism.services.admin.Mail;
 import org.ism.services.file.FileService;
-import org.ism.util.UtilImage;
 import org.primefaces.event.data.FilterEvent;
 import org.primefaces.event.data.SortEvent;
 import org.primefaces.model.SortMeta;
@@ -472,27 +458,42 @@ public class NonConformiteRequestController implements Serializable {
     public void handleCroppedImage(CroppedEvent event) {
 
         croppedImage = (CroppedImage) event.getCroppedImage();
-        if(croppedImage==null){
+        if (croppedImage == null) {
             JsfUtil.addErrorMessage("Aucune image n'a été rognée !");
             return;
         }
         FileService.tmpRemoveOld(croppedImage);
         //FileService.imgCreate(croppedImage);
     }
-    
-    public void handleCropError(CropErrorEvent  cropErrorEvent){
+
+    public void handleCropError(CropErrorEvent cropErrorEvent) {
         JsfUtil.addErrorMessage("Crop Error", cropErrorEvent.getCropError().getSize().msg);
     }
 
-    private void manageCroppedImage(){
-        
-        if(croppedImage==null)
+    /**
+     * On creation complete, clean preview file and move it to the permanent
+     * directory
+     */
+    private void handleCreateCroppedImage() {
+
+        if (croppedImage == null) {
             return;
-        
-        
+        }
+
         FileService.tmpMoveSmqNC(croppedImage);
         croppedImage = null;
     }
+
+    private void handleEditCroppedImage(String previewFilename) {
+
+        handleCreateCroppedImage();
+
+        // Suppression du fichier existant avant
+        if (previewFilename != null) {
+            FileService.deleteImgFromSMQNC(previewFilename);
+        }
+    }
+
     /**
      * ************************************************************************
      * CRUD OPTIONS
@@ -504,11 +505,11 @@ public class NonConformiteRequestController implements Serializable {
         selected.setNcrChanged(new Date());
         selected.setNcrCreated(new Date());
         selected.setNcrState(new IsmNcrstate(IsmNcrstate.CREATE_ID));
-        if(croppedImage!=null){
-            if(selected.getNcrLink()==null || selected.getNcrLink().trim().isEmpty())
-            selected.setNcrLink(FileService.filenameComplete(croppedImage));
+        if (croppedImage != null) {
+            if (selected.getNcrLink() == null || selected.getNcrLink().trim().isEmpty()) {
+                selected.setNcrLink(FileService.filenameComplete(croppedImage));
+            }
         }
-
 
         persist(PersistAction.CREATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
@@ -520,7 +521,7 @@ public class NonConformiteRequestController implements Serializable {
         if (!JsfUtil.isValidationFailed()) {
             // Récupère l'élément nouvellement crée
             selected = getLast();
-            manageCroppedImage();
+            handleCreateCroppedImage();
             handleMailOnCreate();
 
             if (isReleaseSelected) {
@@ -540,6 +541,14 @@ public class NonConformiteRequestController implements Serializable {
     public void update() {
         // Set time on creation action
         selected.setNcrChanged(new Date());
+        String fileToRemove = null;
+        if (croppedImage != null) {
+            if (selected.getNcrLink() == null || selected.getNcrLink().trim().isEmpty()) {
+            } else {
+                fileToRemove = selected.getNcrLink();
+            }
+            selected.setNcrLink(FileService.filenameComplete(croppedImage));
+        }
 
         persist(PersistAction.UPDATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
@@ -547,6 +556,10 @@ public class NonConformiteRequestController implements Serializable {
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
                         getString("NonConformiteRequestPersistenceUpdatedDetail")
                 + selected.getNcrTitle());
+
+        if (!JsfUtil.isValidationFailed()) {
+            handleEditCroppedImage(fileToRemove);
+        }
     }
 
     public void updateOnValidate() {
@@ -563,6 +576,8 @@ public class NonConformiteRequestController implements Serializable {
     }
 
     public void destroy() {
+        NonConformiteRequest ncrs = selected;
+
         persist(PersistAction.DELETE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
                         getString("NonConformiteRequestPersistenceDeletedSummary"),
@@ -570,6 +585,12 @@ public class NonConformiteRequestController implements Serializable {
                         getString("NonConformiteRequestPersistenceDeletedDetail")
                 + selected.getNcrTitle());
         if (!JsfUtil.isValidationFailed()) {
+
+            if (ncrs.getNcrLink() == null || ncrs.getNcrLink().trim().isEmpty()) {
+            } else {
+                FileService.deleteImgFromSMQNC(ncrs.getNcrLink());
+            }
+
             items = null;    // Invalidate list of items to trigger re-query.
             selected = null;
         }
@@ -641,7 +662,7 @@ public class NonConformiteRequestController implements Serializable {
     }
 
     public List<NonConformiteRequest> getItemsByCode(String code, Company company) {
-        return getFacade().findByCode(code, company);
+        return getFacade().findByCode(Integer.valueOf(code), company);
     }
 
     public Integer countByProcessus(String processusCode) {
@@ -875,10 +896,6 @@ public class NonConformiteRequestController implements Serializable {
         this.uploadedStringFile = uploadedStringFile;
     }
 
-    
-
-    
-    
     ////////////////////////////////////////////////////////////////////////////
     /// Injection
     ///

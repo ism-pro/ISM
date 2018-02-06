@@ -18,8 +18,8 @@ import javax.mail.Multipart;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 import org.ism.entities.smq.nc.NonConformiteActions;
-import org.ism.services.Util;
 import org.ism.entities.smq.nc.NonConformiteRequest;
+import org.ism.services.file.FileService;
 import org.ism.util.DateUtil;
 
 /**
@@ -309,7 +309,7 @@ public class Mail {
             multipart.addBodyPart(messageBodyPart);
 
             messageBodyPart = new MimeBodyPart();
-            DataSource fds = new FileDataSource(Util.writeResourceToFileSystem("img/ism/ism.png"));
+                DataSource fds = new FileDataSource(FileService.writeResourceToFileSystem("img/ism/ism.png"));
             messageBodyPart.setDataHandler(new DataHandler(fds));
             messageBodyPart.setHeader("Content-ID", "<image>");
 
@@ -338,7 +338,7 @@ public class Mail {
             multipart.addBodyPart(messageBodyPart);
 
             messageBodyPart = new MimeBodyPart();
-            DataSource fds = new FileDataSource(Util.writeResourceToFileSystem("img/ism/ism.png"));
+            DataSource fds = new FileDataSource(FileService.writeResourceToFileSystem("img/ism/ism.png"));
             messageBodyPart.setDataHandler(new DataHandler(fds));
             messageBodyPart.setHeader("Content-ID", "<image>");
 
@@ -373,16 +373,16 @@ public class Mail {
                     .replace("%nc_clientphone%", (nc.getNcrClientphone() == null ? "" : nc.getNcrClientphone())).replace("%nc_clientmail%", (nc.getNcrClientemail() == null ? "" : nc.getNcrClientemail()))
                     .replace("%nc_clienttype%", (nc.getNcrClienttype() == null ? "" : nc.getNcrClienttype()))
                     .replace("%nc_emettor", nc.getNcrStaff().toString()).replace("%nc_created%", DateUtil.format("dd/MM/yyyy hh:mm:ss", nc.getNcrCreated()))
-                    .replace("%nc_description%", nc.getNcrDescription()).replace("%nc_image%", (nc.getNcrLink() == null ? "" : nc.getNcrLink()));
+                    .replace("%nc_description%", nc.getNcrDescription());//.replace("%nc_imagePath%", (nc.getNcrLink() == null ? "" : FileService.NC_REQUEST + nc.getNcrLink()));
             // Manage nca
             if (nca != null) {
                 int j = nca.size();
                 for (int i = 0; i < nca.size(); i++) {
                     htmlText = htmlText.replace("%nca_id_" + i + "%", nca.get(i).getNcaId().toString())
                             .replace("%nca_staff_" + i + "%", nca.get(i).getNcaStaff().toString())
-                            .replace("%nca_approbeur_" + i + "%", (nca.get(i).getNcaStaffApprouver()==null?"":nca.get(i).getNcaStaffApprouver().toString()))
-                            .replace("%nca_action_" + i + "%", (nca.get(i).getNcaDescription()==null?"":nca.get(i).getNcaDescription()))
-                            .replace("%nca_refus_" + i + "%", (nca.get(i).getNcaDescApprouver()==null?"":nca.get(i).getNcaDescApprouver()))
+                            .replace("%nca_approbeur_" + i + "%", (nca.get(i).getNcaStaffApprouver() == null ? "" : nca.get(i).getNcaStaffApprouver().toString()))
+                            .replace("%nca_action_" + i + "%", (nca.get(i).getNcaDescription() == null ? "" : nca.get(i).getNcaDescription()))
+                            .replace("%nca_refus_" + i + "%", (nca.get(i).getNcaDescApprouver() == null ? "" : nca.get(i).getNcaDescApprouver()))
                             .replace("%nca_endding_" + i + "%", DateUtil.formatD(nca.get(i).getNcaDeadline()))
                             .replace("%nca_state_" + i + "%", nca.get(i).getNcaState().toString())
                             .replace("%nca_created_" + i + "%", DateUtil.formatD(nca.get(i).getNcaCreated()));
@@ -392,13 +392,27 @@ public class Mail {
             // add it
             multipart.addBodyPart(messageBodyPart);
 
+            // Add Logo To multipart
             messageBodyPart = new MimeBodyPart();
-            DataSource fds = new FileDataSource(Util.writeResourceToFileSystem("img/ism/ism.png"));
-            messageBodyPart.setDataHandler(new DataHandler(fds));
-            messageBodyPart.setHeader("Content-ID", "<image>");
-
+            String logoPath = FileService.writeResourceToFileSystem("img/ism/ism.png");
+            System.out.println(logoPath);
+            DataSource fdsLogo = new FileDataSource(logoPath);
+            messageBodyPart.setDataHandler(new DataHandler(fdsLogo));
+            messageBodyPart.setHeader("Content-ID", "<cidLogo>");
             // add image to the multipart
             multipart.addBodyPart(messageBodyPart);
+
+            // Add Image NC to multipart
+            if (nc.getNcrLink() != null) {
+                messageBodyPart = new MimeBodyPart();
+                String ncPath = FileService.NC_REQUEST + FileService.SEP + nc.getNcrLink();
+                System.out.println(logoPath);
+                DataSource fdsNC = new FileDataSource(ncPath);
+                messageBodyPart.setDataHandler(new DataHandler(fdsNC));
+                messageBodyPart.setHeader("Content-ID", "<cidNC>");
+                // add image to the multipart
+                multipart.addBodyPart(messageBodyPart);
+            }
 
             return multipart;
         } catch (MessagingException ex) {
@@ -549,7 +563,7 @@ public class Mail {
                 + "      <p>Cette non-conformité vient d'être <span style=\"color: #FF6600; font-weight:bold;\">" + state + "</span> <br/>Prennez en connaissance ci-dessous :      </p>\n"
                 + "      <div style=\"width: 100%; color: red;border: 1px dashed red;margin: 10px;padding: 10px;  " + (code != 5 ? "display:none;" : "") + "\"><p>%nc_refusDesc%</p></div>"
                 + "      "
-                + "      <table border=\"0\" cellpadding=\"0\"  cellspacing=\"0\" class=\"nca_table\" style=\"" + (ncaCounter==0 ? "display:none;" : "") + "\">\n"
+                + "      <table border=\"0\" cellpadding=\"0\"  cellspacing=\"0\" class=\"nca_table\" style=\"" + (ncaCounter == 0 ? "display:none;" : "") + "\">\n"
                 + "          <tr><th width=\"20px\" scope=\"col\">N°</th><th  scope=\"col\">Emetteur<br/>Approbateur</th><th  scope=\"col\">Actions<br/>Cause Refus</th><th width=\"125px\" scope=\"col\">Echéance</th><th width=\"125px\" scope=\"col\">Etats<br/>Création</th></tr>\n";
 
         for (int i = 0; i < ncaCounter; i++) {
@@ -585,14 +599,15 @@ public class Mail {
                 + "        <tr><td class=\"nc_table_field\">Emetteur</td><td>%nc_emettor</td></tr>\n"
                 + "        <tr><td>Création</td><td>%nc_created%</td></tr>\n"
                 + "        <tr><td>Description</td><td>%nc_description%</td></tr>\n"
-                + "        <tr><td>Image</td><td>%nc_image%</td></tr>\n"
+                //+ "        <tr><td>Image</td><td>%nc_imagePath%</td></tr>\n"
+                + "        <tr><td>Image</td><td><img src=\"cid:cidNC\" alt=\"nc image\" width=\"50%\"  border=\"0\" /></td></tr>\n"
                 + "        </table>\n"
                 + "      </p>\n"
                 + "    </div>\n"
                 + "    \n"
                 + "    <div class=\"signature\">\n"
                 + "    	<table width=\"510\" class=\"sign_table\">\n"
-                + "        <tr><td width=\"179\" rowspan=\"4\"><img src=\"cid:image\" alt=\"Header image\" width=\"179\" height=\"68\" border=\"0\" /></td>\n"
+                + "        <tr><td width=\"179\" rowspan=\"4\"><img src=\"cid:cidLogo\" alt=\"Header image\" width=\"94\" height=\"94\" border=\"0\" /></td>\n"
                 + "        <td width=\"329\" class=\"sign_name\">ISM MESSAGER</td>\n"
                 + "        </tr>         <tr><td class=\"sign_complement\">RESTER INFORMER</td></tr>\n"
                 + "        <tr><td class=\"sign_complement\">Industrial System Manager</td></tr>\n"
