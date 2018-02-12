@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item active">#{ism.CrumbProcess}</li>
+            <li class="breadcrumb-item active"><p:link value="#{ism.CrumbAnalyseAllowed}" outcome="/company/process/ctrl/AnalyseAllowed/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbManage}</li>
+        </ui:define>
+
+        <ui:define name="body">
+
+            <style>
+                .ui-picklist-list-wrapper{width: 45%!important;}
+                .ui-picklist-buttons-cell{ max-width: 24px!important;}
+            </style>
+
+            <h:form id="bodyForm">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-group input-group-sm mb-2 ">
+                                <div class="input-group-addon input-group-sm" style="width:150px;">
+                                    <span class="input-group-text">#{ism.Mode}</span>
+                                </div>
+                                <p:selectOneButton id="fieldMode" 
+                                                   value="#{analyseAllowedView.displayMode}" 
+                                                   class="form-control pr-0 py-0 mr-0"
+
+                                                   >
+                                    <p:ajax event="change" update=":bodyForm,:growl" />
+                                    <f:selectItem itemLabel="#{ism.AnalyseAllowedField_aaPoint}" itemValue="1"  />
+                                    <f:selectItem itemLabel="#{ism.AnalyseAllowedField_aaType}" itemValue="2"/>
+                                </p:selectOneButton>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="input-group input-group-sm mb-2 ">
+                                <div class="input-group-addon input-group-sm" style="width:150px;">
+                                    <span class="input-group-text">
+                                        <p:outputLabel value="#{ism.AnalyseAllowedField_aaPoint}"  for="aaPoint"  rendered="#{analyseAllowedView.displayMode==1?true:false}"/>
+                                        <p:outputLabel value="#{ism.AnalyseAllowedField_aaType}"  for="aaType" rendered="#{analyseAllowedView.displayMode==2?true:false}"/>
+                                    </span>
+                                </div>
+                                <h:panelGrid columns="2" class="form-control pr-0 py-0 mr-0"  rendered="#{analyseAllowedView.displayMode==1?true:false}">                
+                                    <p:selectOneMenu id="aaPoint"  widgetVar="aaPoint" style="width:410px;"
+                                                     filter="true" filterMatchMode="contains"
+                                                     class="form-control pr-0 py-0 mr-0"
+                                                     value="#{analyseAllowedView.selected.aaPoint}"
+                                                     converter="#{analysePointConverter}"
+                                                     required="false" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaPoint}"
+                                                     valueChangeListener="#{analyseAllowedView.handleAnalysePointChanged}"
+                                                     >
+                                        <p:ajax event="change"  update="westGroup @form, :growl" />
+                                        <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{analysePointController.itemsAvailableSelectOne}"
+                                                       var="aaPointItem"
+                                                       itemLabel="#{aaPointItem.apPoint} - #{aaPointItem.apDesignation}" 
+                                                       itemValue="#{aaPointItem}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="aaPoint" />
+                                </h:panelGrid>
+
+                                <h:panelGrid columns="2" class="form-control pr-0 py-0 mr-0" rendered="#{analyseAllowedView.displayMode==2?true:false}">                    
+                                    <p:selectOneMenu id="aaType"  widgetVar="aaType"  style="width:410px;"
+                                                     filter="true" filterMatchMode="contains"
+                                                     class="form-control pr-0 py-0 mr-0"
+                                                     value="#{analyseAllowedView.selected.aaType}"
+                                                     converter="#{analyseTypeConverter}"
+                                                     validator="#{analyseAllowedOnPointTypeValidator.validate}"
+                                                     required="true" 
+                                                     requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaType}" 
+                                                     >
+                                        <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{analyseTypeController.itemsAvailableSelectOne}"
+                                                       var="aaTypeItem"
+                                                       itemLabel="#{aaTypeItem.atType} - #{aaTypeItem.atDesignation}" 
+                                                       itemValue="#{aaTypeItem}"/>
+                                    </p:selectOneMenu>
+                                    <p:message for="aaType" />
+                                </h:panelGrid>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p:pickList id="analysePointPickList" value="#{analyseAllowedView.analyseTypeModel}" 
+                                        var="type" effect="bounce"
+                                        itemLabel="#{type}"
+                                        itemValue="#{type}"
+
+                                        showCheckbox="true" responsive="true"
+                                        showSourceFilter="true" showTargetFilter="true"
+                                        filterMatchMode="contains" converter="#{analyseTypeConverter}"
+                                        rendered="#{analyseAllowedView.selected.aaPoint!=null and analyseAllowedView.displayMode==1}"
+                                        >
+
+                                <f:facet name="sourceCaption">#{ism.Unaffected}</f:facet>
+                                <f:facet name="targetCaption">#{ism.Affected}</f:facet>
+
+                                <p:ajax event="transfer" listener="#{analyseAllowedView.handleAnalyseTypeTransfer}" update="datalist,:growl" />
+                                <p:ajax event="select" listener="#{analyseAllowedView.handleAnalyseTypeSelect}" update=":growl" />
+                                <p:ajax event="unselect" listener="#{analyseAllowedView.handleAnalyseTypeUnselect}" update=":growl" />
+                                <p:ajax event="reorder" listener="#{analyseAllowedView.handleAnalyseTypeReorder}" update=":growl" />
+
+                                <p:column style="width:90%;">
+                                    <h:outputText value="#{type}" style="font-size: 0.7em;" />
+                                </p:column> 
+                            </p:pickList>  
+
+                            <p:pickList id="analyseTypePickList" value="#{analyseAllowedView.analysePointModel}" 
+                                        var="point" effect="bounce"
+                                        itemLabel="#{point}"
+                                        itemValue="#{point}"
+                                        showCheckbox="true" responsive="true"
+                                        showSourceFilter="true" showTargetFilter="true"
+                                        filterMatchMode="contains" converter="#{analysePointConverter}"
+                                        rendered="#{analyseAllowedView.selected.aaType!=null and analyseAllowedView.displayMode==2}"
+                                        >
+
+                                <f:facet name="sourceCaption">#{ism.Unaffected}</f:facet>
+                                <f:facet name="targetCaption">#{ism.Affected}</f:facet>
+
+                                <p:ajax event="transfer" listener="#{analyseAllowedView.handleAnalysePointTransfer}" update=":growl" />
+                                <p:ajax event="select" listener="#{analyseAllowedView.handleAnalysePointSelect}" update=":growl" />
+                                <p:ajax event="unselect" listener="#{analyseAllowedView.handleAnalysePointUnselect}" update=":growl" />
+                                <p:ajax event="reorder" listener="#{analyseAllowedView.handleAnalysePointReorder}" update=":growl" />
+
+                                <p:column style="width:90%;">
+                                    <h:outputText value="#{point}" style="font-size: 0.7em;" />
+                                </p:column> 
+                            </p:pickList>  
+                        </div>   
+
+
+                        <div class="col-md-8">
+                            <p:dataTable id="datalist" widgetVar="datalist"
+                                         var="item"
+                                         value="#{analyseAllowedView.preset}"
+                                         rowKey="#{item.aaType}"
+                                         selection="#{analyseAllowedView.selections}"
+                                         rowSelectMode="checkbox"
+                                         editable="true"
+                                         rendered="#{analyseAllowedView.preset!=null and !analyseAllowedView.preset.isEmpty()}"
+                                         >
+
+                                <p:ajax event="rowSelect" listener="#{analyseAllowedView.handleTableSelection}" update="bodyForm, growl" />
+                                <p:ajax event="rowSelectCheckbox" listener="#{analyseAllowedView.handleTableSelection}" update="bodyForm, growl" />
+                                <p:ajax event="rowUnselectCheckbox" listener="#{analyseAllowedView.handleTableSelection}" update="bodyForm, growl" />
+
+
+                                <p:column selectionMode="multiple" style="text-align:center" width="48" 
+                                          selectRow="true" >
+                                </p:column>
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaId}" width="48"
+                                          sortBy="#{item.aaId}" filterBy="#{item.aaId}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aaId}" >
+                                            <f:convertNumber  locale="fr_FR" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaPoint}" 
+                                          sortBy="#{item.aaPoint}" 
+                                          filterBy="#{item.aaPoint}" 
+                                          rendered="#{analyseAllowedView.displayMode==2}"
+                                          >
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('datalist').filter()"
+                                                         filter="true" filterMatchMode="contains">
+                                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"  />
+                                            <f:selectItems value="#{analysePointController.itemsAvailableSelectOne}" 
+                                                           var="point"
+                                                           itemLabel="#{point.apPoint} - #{point.apDesignation}"
+                                                           itemValue="#{point}"
+                                                           /> 
+                                        </p:selectOneMenu>
+                                    </f:facet> 
+                                    <h:outputText value="#{item.aaPoint.apPoint} - #{item.aaPoint.apDesignation}"/>
+                                </p:column>
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaType}" 
+                                          sortBy="#{item.aaType}" 
+                                          filterBy="#{item.aaType}" rendered="#{analyseAllowedView.displayMode==1}">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('datalist').filter()" filter="true" filterMatchMode="contains">
+                                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"  />
+                                            <f:selectItems value="#{analyseTypeController.itemsAvailableSelectOne}" 
+                                                           var="type"
+                                                           itemLabel="#{type.atType} - #{type.atDesignation}"
+                                                           itemValue="#{type}"
+                                                           /> 
+                                        </p:selectOneMenu>
+                                    </f:facet> 
+                                    <h:outputText value="#{item.aaType.atType} - #{item.aaType.atDesignation}"/>
+                                </p:column>
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitHH}" width="48"
+                                          sortBy="#{item.aaenlimitHH}" filterBy="#{item.aaenlimitHH}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitHH?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitHH}"  width="78"
+                                          sortBy="#{item.aalimitHH}" filterBy="#{item.aalimitHH}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitHH}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitH}" width="48"
+                                          sortBy="#{item.aaenlimitH}" filterBy="#{item.aaenlimitH}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitH?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitH}"  width="78"
+                                          sortBy="#{item.aalimitH}" filterBy="#{item.aalimitH}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitH}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitB}" width="48"
+                                          sortBy="#{item.aaenlimitB}" filterBy="#{item.aaenlimitB}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitB?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitB}"  width="78"
+                                          sortBy="#{item.aalimitB}" filterBy="#{item.aalimitB}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitB}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitBB}" width="48"
+                                          sortBy="#{item.aaenlimitBB}" filterBy="#{item.aaenlimitBB}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitBB?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitBB}" width="78"
+                                          sortBy="#{item.aalimitBB}" filterBy="#{item.aalimitBB}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitBB}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+                            </p:dataTable>
+                        </div>
+
+                        <script>
+                            //var rows = $('.ui-datatable tbody tr td.nchild(1) input[type="checkbox"]');
+                            var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
+                            var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
+                            //console.log(rows);
+                            console.log(selbox);
+
+                            selbox.removeClass('ui-icon-check');
+                            selbox.addClass('ui-icon-blank');
+                            sel.attr('aria-checked', false);
+                            $(selbox.parentElement).removeClass('ui-state-active');
+ 
+  
+
+                            selbox.click(function () {
+                                var p = $(this.parentElement.parentElement.parentElement.parentElement);
+                                //console.log(p);
+                                var datari = p.attr('data-ri');
+                                var datark = p.attr('data-rk');
+                                var ariaselected = new Boolean(p.attr('aria-selected'));
+                                if (ariaselected === true) {
+                                    $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
+                                } else {
+                                    $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
+                                }
+                                //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
+                            });
+                            /*sel.click(function(){
+                             console.log('sel change');
+                             });*/
+                        </script>
+
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h:panelGroup id="btn-crud-zone_id"  >
+                                <p:outputLabel  value="#{ism.CreateMultiple}" style="margin-right: 10px;"/>
+                                <p:selectBooleanButton  value="#{analyseAllowedController.isOnMultiCreation}" 
+                                                        onLabel="#{ism.Yes}" offLabel="#{ism.No}" 
+                                                        onIcon="ui-icon-check" offIcon="ui-icon-close" 
+                                                        styleClass="ui-btn"
+                                                        >
+                                    <p:ajax update=":bodyForm:btn-crud-zone_id,westGroup,:growl" listener="#{analyseAllowedController.toggleMultiCreationFake()}"  />
+                                </p:selectBooleanButton>
+
+                                <p:commandButton icon="ui-btn-Save"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Save}" 
+                                                 actionListener="#{analyseAllowedController.create}" 
+                                                 update=":bodyForm,:growl" 
+                                                 rendered="#{analyseAllowedController.isOnMultiCreation}"
+                                                 />
+                                <p:commandButton icon="ui-btn-SaveOne"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Save}" 
+                                                 actionListener="#{analyseAllowedController.createUnReleasded()}" 
+                                                 update=":bodyForm,:growl"
+                                                 action="List.xhtml?faces-redirect=true"
+                                                 rendered="#{!analyseAllowedController.isOnMultiCreation}"
+                                                 />
+
+                                <p:commandButton icon="ui-btn-Cancel"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cancel}" 
+                                                 update=":bodyForm,:growl"
+                                                 actionListener="#{analyseAllowedController.prepareCreate()}"
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 immediate="true"
+                                                 />
+
+                            </h:panelGroup>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:messages showDetail="true" showSummary="false" escape="false"/>
+                        </div>
+                    </div>
+                </div>
+
+            </h:form>
+
+        </ui:define>
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton icon="ui-btn-Save"
+                                 styleClass="options-btn"
+                                 value="#{ism.Save}" 
+                                 actionListener="#{analyseAllowedController.create}" 
+                                 update=":bodyForm,:growl" 
+                                 rendered="#{analyseAllowedController.isOnMultiCreation}"
+                                 form="bodyForm"
+                                 />
+                <p:commandButton icon="ui-btn-SaveOne"
+                                 styleClass="options-btn"
+                                 value="#{ism.Save}" 
+                                 actionListener="#{analyseAllowedController.createUnReleasded()}" 
+                                 update=":bodyForm,:growl"
+                                 action="List.xhtml?faces-redirect=true"
+                                 rendered="#{!analyseAllowedController.isOnMultiCreation}"
+                                 form="bodyForm"
+                                 />
+
+                <p:commandButton icon="ui-btn-Cancel"
+                                 styleClass="options-btn"
+                                 value="#{ism.Cancel}" 
+                                 update=":bodyForm,:growl"
+                                 actionListener="#{analyseAllowedController.prepareCreate()}"
+                                 action="./List.xhtml?faces-redirect=true"
+                                 immediate="true"
+                                 />
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

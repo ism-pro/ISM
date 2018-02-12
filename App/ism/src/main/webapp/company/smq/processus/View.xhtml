@@ -9,93 +9,109 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbProcessus}" outcome="/company/smq/processus/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbView}</li>
+        </ui:define>
+
         <ui:define name="body">
-            <h1><h:outputText value="#{ism.ProcessusTitleView}"/></h1>
+
 
             <h:form id="bodyForm">
 
-                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
-                             rendered="#{processusController.selected != null}">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                         rendered="#{processusController.selected != null}">
 
-                    <h:outputText value="#{ism.ProcessusField_pId}"/>
-                    <h:outputText value="#{processusController.selected.PId}" 
-                                  title="#{ism.ProcessusFieldInfo_pId}"/>
+                                <h:outputText value="#{ism.ProcessusField_pId}"/>
+                                <h:outputText value="#{processusController.selected.PId}" 
+                                              title="#{ism.ProcessusFieldInfo_pId}"/>
 
-                    <h:outputText value="#{ism.ProcessusField_pProcessus}"/>
-                    <h:outputText value="#{processusController.selected.PProcessus}" 
-                                  title="#{ism.ProcessusFieldInfo_pProcessus}"/>
+                                <h:outputText value="#{ism.ProcessusField_pProcessus}"/>
+                                <h:outputText value="#{processusController.selected.PProcessus}" 
+                                              title="#{ism.ProcessusFieldInfo_pProcessus}"/>
 
-                    <h:outputText value="#{ism.ProcessusField_pDesignation}"/>
-                    <h:outputText value="#{processusController.selected.PDesignation}" 
-                                  title="#{ism.ProcessusFieldInfo_pDesignation}"/>
+                                <h:outputText value="#{ism.ProcessusField_pDesignation}"/>
+                                <h:outputText value="#{processusController.selected.PDesignation}" 
+                                              title="#{ism.ProcessusFieldInfo_pDesignation}"/>
 
-                    <h:outputText value="#{ism.ProcessusField_pStaffManager}"/>
-                    <h:outputText value="[#{processusController.selected.PStaffmanager.stStaff}] #{processusController.selected.PStaffmanager.stFirstname} - #{processusController.selected.PStaffmanager.stLastname}"
-                                  title="#{ism.ProcessusFieldInfo_pStaffManager}"/>
+                                <h:outputText value="#{ism.ProcessusField_pStaffManager}"/>
+                                <h:outputText value="[#{processusController.selected.PStaffmanager.stStaff}] #{processusController.selected.PStaffmanager.stFirstname} - #{processusController.selected.PStaffmanager.stLastname}"
+                                              title="#{ism.ProcessusFieldInfo_pStaffManager}"/>
 
-                    <h:outputText value="#{ism.ProcessusField_pDeleted}"/>
-                    <p:selectBooleanCheckbox 
-                        value="#{processusController.selected.PDeleted}" disabled="true"/>
+                                <h:outputText value="#{ism.ProcessusField_pDeleted}"/>
+                                <p:selectBooleanCheckbox 
+                                    value="#{processusController.selected.PDeleted}" disabled="true"/>
 
-                    <h:outputText value="#{ism.ProcessusField_pCreated}"/>
-                    <h:outputText value="#{processusController.selected.PCreated}" 
-                                  title="#{ism.ProcessusFieldInfo_pCreated}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                    </h:outputText>
+                                <h:outputText value="#{ism.ProcessusField_pCreated}"/>
+                                <h:outputText value="#{processusController.selected.PCreated}" 
+                                              title="#{ism.ProcessusFieldInfo_pCreated}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                </h:outputText>
 
-                    <h:outputText value="#{ism.ProcessusField_pChanged}"/>
-                    <h:outputText value="#{processusController.selected.PChanged}" 
-                                  title="#{ism.ProcessusFieldInfo_pChanged}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                    </h:outputText>
+                                <h:outputText value="#{ism.ProcessusField_pChanged}"/>
+                                <h:outputText value="#{processusController.selected.PChanged}" 
+                                              title="#{ism.ProcessusFieldInfo_pChanged}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                </h:outputText>
 
-                    <h:outputText value="#{ism.ProcessusField_pCompany}"/>
-                    <h:outputText value="#{processusController.selected.PCompany.CCompany} - #{processusController.selected.PCompany.CDesignation}" 
-                                  title="#{ism.ProcessusFieldInfo_pCompany}"/>
+                                <h:outputText value="#{ism.ProcessusField_pCompany}"/>
+                                <h:outputText value="#{processusController.selected.PCompany.CCompany} - #{processusController.selected.PCompany.CDesignation}" 
+                                              title="#{ism.ProcessusFieldInfo_pCompany}"/>
 
 
-                </p:panelGrid>
+                            </p:panelGrid>
 
-                <h:panelGroup id="btn-crud-zone_id">
-                    <p:commandButton icon="ui-btn-Print"
-                                     styleClass="ui-btn">
-                        <p:printer target="bodyForm"  />
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Edit"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Edit}"
-                                     action="Edit.xhtml?faces-redirect=true"
-                                     title="Permet d'éditer le processus sélectionné."
-                                     disabled="#{empty processusController.selected 
-                                                 or empty processusController.selected.PId}"
-                                     />
-                    <p:commandButton icon="ui-btn-Delete"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Delete}"
-                                     action="./List.xhtml?faces-redirect=true"
-                                     title="Permet de supprimer le processus sélectionné !"
-                                     actionListener="#{processusController.destroy()}"
-                                     update=":bodyForm,:growl"
-                                     onstart=";
-                                     #{viewConfirmDialog.dlg.setHeader(ism.ProcessusDlgHeader)};
-                                     #{viewConfirmDialog.dlg.setSeverity('alert')};
-                                     #{viewConfirmDialog.dlg.setMessage(ism.ProcessusDlgMessage)}
-                                     PF('mainConfirmDialog').show()"
-                                     disabled="#{empty processusController.selected 
-                                                 or empty processusController.selected.PId}"
-                                     >
-                        <p:confirm  />
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Cancel"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Cancel}" 
-                                     action="./List.xhtml?faces-redirect=true"
-                                     update=":bodyForm,:growl"
-                                     immediate="true"
-                                     />
+                        </div>
+                    </div>
 
-                </h:panelGroup>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h:panelGroup id="btn-crud-zone_id">
+                                <p:commandButton icon="ui-btn-Print"
+                                                 styleClass="ui-btn">
+                                    <p:printer target="bodyForm"  />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Edit"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Edit}"
+                                                 action="Edit.xhtml?faces-redirect=true"
+                                                 title="Permet d'éditer le processus sélectionné."
+                                                 disabled="#{empty processusController.selected 
+                                                             or empty processusController.selected.PId}"
+                                                 />
+                                <p:commandButton icon="ui-btn-Delete"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Delete}"
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 title="Permet de supprimer le processus sélectionné !"
+                                                 actionListener="#{processusController.destroy()}"
+                                                 update=":bodyForm,:growl"
+                                                 onstart=";
+                                                 #{viewConfirmDialog.dlg.setHeader(ism.ProcessusDlgHeader)};
+                                                 #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                                 #{viewConfirmDialog.dlg.setMessage(ism.ProcessusDlgMessage)}
+                                                 PF('mainConfirmDialog').show()"
+                                                 disabled="#{empty processusController.selected 
+                                                             or empty processusController.selected.PId}"
+                                                 >
+                                    <p:confirm  />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Cancel"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cancel}" 
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 update=":bodyForm,:growl"
+                                                 immediate="true"
+                                                 />
 
+                            </h:panelGroup>
+
+                        </div>
+                    </div>
+                </div>
             </h:form>
 
         </ui:define>

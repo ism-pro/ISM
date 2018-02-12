@@ -9,7 +9,7 @@
     
     <groupId>org.ism</groupId>
     <artifactId>app</artifactId>
-    <version>1802.05</version>
+    <version>1802.09</version>
     <packaging>war</packaging>
 
     <name>ism-app</name>
@@ -144,7 +144,7 @@
         <dependency>
             <groupId>org.ism.charts</groupId>
             <artifactId>charts</artifactId>
-            <version>1712.20</version>
+            <version>1802.05</version>
         </dependency>
         <!--
         <dependency>
@@ -469,5 +469,5 @@
 - Possibilité de configurer l'envoi d'email pour les non conformités
 - Envoi des email en fonction des différents états.
 
-    </description>
+    c80e3077c6243c81dba2854b6950dd14b3cba6c3</description>
 </project>

@@ -9,354 +9,397 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item active">#{ism.CrumbProcess}</li>
+            <li class="breadcrumb-item active">#{ism.CrumbAnalyseAllowed}</li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbList}</li>
+        </ui:define>
+
         <ui:define name="body">
-            <h1><h:outputText value="#{ism.AnalyseAllowedTitleList}"/></h1>
+
 
             <h:form id="bodyForm">
-                <p:contextMenu id="contextMenu" for="datalist" >
-                    <p:menuitem icon="ui-btn-Create"
-                                styleClass="options-btn"
-                                value="#{ism.Create}"
-                                actionListener="#{analyseAllowedController.prepareCreate}"
-                                action="Create.xhtml?faces-redirect=true"
-                                title="Permet de créer un nouveau AnalyseAllowed"
-                                />
-                    <p:separator />
-                    <p:menuitem icon="ui-btn-View" iconPos="left"
-                                styleClass="options-btn"
-                                value="#{ism.View}"
-                                action="View.xhtml?faces-redirect=true"
-                                title="Permet de visualiser le AnalyseAllowed sélectionné."
-                                disabled="#{empty analyseAllowedController.selected}"
-                                />
-                    <p:menuitem icon="ui-btn-Edit"
-                                styleClass="options-btn"
-                                value="#{ism.Edit}"
-                                action="Edit.xhtml?faces-redirect=true"
-                                title="Permet d'editer le AnalyseAllowed sélectionné."
-                                disabled="#{empty analyseAllowedController.selected}"
-                                />
-                    <p:menuitem icon="ui-btn-Delete"
-                                styleClass="options-btn"
-                                value="#{ism.Delete}"
-                                title="Permet de supprimer le AnalyseAllowed sélectionné !"
-                                actionListener="#{viewTabManager.handleDestroy('analyseallowed')}"
-                                update=":bodyForm:datalist, westGroup,:growl"
-                                onstart=";
-                                #{viewConfirmDialog.dlg.setHeader(ism.AnalyseAllowedDlgHeader)};
-                                #{viewConfirmDialog.dlg.setSeverity('alert')};
-                                #{viewConfirmDialog.dlg.setMessage(ism.AnalyseAllowedDlgMessage)};
-                                PF('mainConfirmDialog').show();"
-                                disabled="#{empty analyseAllowedController.selected}"
-                                >
-                        <p:confirm  />
-                    </p:menuitem>
-                    <p:menuitem icon="ui-btn-Refresh"
-                                styleClass="options-btn"
-                                value="#{ism.Refresh}"
-                                title="Permet de rafraichir la table des AnalyseAllowed "
-                                actionListener="#{analyseAllowedController.releaseSelected()}"
-                                update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
-                                disabled="#{empty analyseAllowedController.selected }"
-                                />
-                </p:contextMenu>
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:contextMenu id="contextMenu" for="datalist" >
+                                <p:menuitem icon="ui-btn-Create"
+                                            styleClass="options-btn"
+                                            value="#{ism.Create}"
+                                            actionListener="#{analyseAllowedController.prepareCreate}"
+                                            action="Create.xhtml?faces-redirect=true"
+                                            title="Permet de créer un nouveau AnalyseAllowed"
+                                            />
+                                <p:separator />
+                                <p:menuitem icon="ui-btn-View" iconPos="left"
+                                            styleClass="options-btn"
+                                            value="#{ism.View}"
+                                            action="View.xhtml?faces-redirect=true"
+                                            title="Permet de visualiser le AnalyseAllowed sélectionné."
+                                            disabled="#{empty analyseAllowedController.selected}"
+                                            />
+                                <p:menuitem icon="ui-btn-Edit"
+                                            styleClass="options-btn"
+                                            value="#{ism.Edit}"
+                                            action="Edit.xhtml?faces-redirect=true"
+                                            title="Permet d'editer le AnalyseAllowed sélectionné."
+                                            disabled="#{empty analyseAllowedController.selected}"
+                                            />
+                                <p:menuitem icon="ui-btn-Delete"
+                                            styleClass="options-btn"
+                                            value="#{ism.Delete}"
+                                            title="Permet de supprimer le AnalyseAllowed sélectionné !"
+                                            actionListener="#{viewTabManager.handleDestroy('analyseallowed')}"
+                                            update=":bodyForm:datalist, westGroup,:growl"
+                                            onstart=";
+                                            #{viewConfirmDialog.dlg.setHeader(ism.AnalyseAllowedDlgHeader)};
+                                            #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                            #{viewConfirmDialog.dlg.setMessage(ism.AnalyseAllowedDlgMessage)};
+                                            PF('mainConfirmDialog').show();"
+                                            disabled="#{empty analyseAllowedController.selected}"
+                                            >
+                                    <p:confirm  />
+                                </p:menuitem>
+                                <p:menuitem icon="ui-btn-Refresh"
+                                            styleClass="options-btn"
+                                            value="#{ism.Refresh}"
+                                            title="Permet de rafraichir la table des AnalyseAllowed "
+                                            actionListener="#{analyseAllowedController.releaseSelected()}"
+                                            update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
+                                            disabled="#{empty analyseAllowedController.selected }"
+                                            />
+                            </p:contextMenu>
 
 
 
 
 
 
-                <p:dataTable id="datalist" widgetVar="datalist"
-                             value="#{viewTabManager.analyseallowed}" var="item"
-                             filteredValue="#{viewTabManager.analyseallowedFiltered}"
+                            <p:dataTable id="datalist" widgetVar="datalist"
+                                         value="#{viewTabManager.analyseallowed}" var="item"
+                                         filteredValue="#{viewTabManager.analyseallowedFiltered}"
 
-                             selectionMode="single" selection="#{analyseAllowedController.selected}"
-                             rowIndexVar="_rowIndex"
-                             rowKey="#{item.aaId}"
-                             paginator="#{tableView.paginator}"
-                             rows="#{tableView.rows}"
-                             resizableColumns="#{tableView.resizableColumns}"
-                             rowsPerPageTemplate="#{tableView.rowsPerPageTemplate}"
-                             paginatorTemplate="#{tableView.paginatorTemplate}"
-                             currentPageReportTemplate="#{tableView.currentPageReportTemplate}"
-                             liveResize="#{tableView.liveResize}"
-                             reflow="#{tableView.reflow}"
-                             draggableColumns="#{tableView.draggableColumns}"
-                             sortMode="#{tableView.sortMode}"
-                             emptyMessage="#{ism.EmptyList}"
-                             multiViewState="true"
-                             >
-
-
+                                         selectionMode="single" selection="#{analyseAllowedController.selected}"
+                                         rowIndexVar="_rowIndex"
+                                         rowKey="#{item.aaId}"
+                                         paginator="#{tableView.paginator}"
+                                         rows="#{tableView.rows}"
+                                         resizableColumns="#{tableView.resizableColumns}"
+                                         rowsPerPageTemplate="#{tableView.rowsPerPageTemplate}"
+                                         paginatorTemplate="#{tableView.paginatorTemplate}"
+                                         currentPageReportTemplate="#{tableView.currentPageReportTemplate}"
+                                         liveResize="#{tableView.liveResize}"
+                                         reflow="#{tableView.reflow}"
+                                         draggableColumns="#{tableView.draggableColumns}"
+                                         sortMode="#{tableView.sortMode}"
+                                         emptyMessage="#{ism.EmptyList}"
+                                         multiViewState="true"
+                                         >
 
 
 
-                    <f:facet name="{Exporters}">
-                        <div style="float:right" >
-                            <p:commandLink ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
-                                <p:graphicImage library="img" name="ism/std/ExtXLS.png" width="24" height="24"/>
-                                <p:dataExporter type="xls" target="datalist" fileName="#{ism.AnalyseAllowedTitleList}_#{viewUtil.maintenant}" 
-                                                postProcessor="#{tableView.handlePostProcessXLS}"/>
-                            </p:commandLink>
-                            <p:commandLink ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
-                                <p:graphicImage library="img" name="ism/std/ExtPDF.png" width="24" height="24"/>
-                                <p:dataExporter type="pdf" target="datalist" fileName="#{ism.AnalyseAllowedTitleList}_#{viewUtil.maintenant}"  />
-                            </p:commandLink>
+
+
+                                <f:facet name="{Exporters}">
+                                    <div style="float:right" >
+                                        <p:commandLink ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+                                            <p:graphicImage library="img" name="ism/std/ExtXLS.png" width="24" height="24"/>
+                                            <p:dataExporter type="xls" target="datalist" fileName="#{ism.AnalyseAllowedTitleList}_#{viewUtil.maintenant}" 
+                                                            postProcessor="#{tableView.handlePostProcessXLS}"/>
+                                        </p:commandLink>
+                                        <p:commandLink ajax="false" onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)">
+                                            <p:graphicImage library="img" name="ism/std/ExtPDF.png" width="24" height="24"/>
+                                            <p:dataExporter type="pdf" target="datalist" fileName="#{ism.AnalyseAllowedTitleList}_#{viewUtil.maintenant}"  />
+                                        </p:commandLink>
+                                    </div>                                  
+
+                                    <p:commandButton id="toggler" type="button" value="Columns" 
+                                                     style="float:left;" icon="ui-icon-calculator" 
+                                                     />
+
+                                    <p:columnToggler id="tableColToggler" datasource="datalist" trigger="toggler" >
+                                        <p:ajax event="toggle" update=":growl"
+                                                listener="#{analyseAllowedController.handleColumnToggle}" />
+                                    </p:columnToggler>
+
+
+                                </f:facet>
+
+
+
+
+                                <p:ajax event="rowSelect" update="westGroup bodyForm"  />
+                                <p:ajax event="rowUnselect" update="westGroup bodyForm" />
+                                <p:ajax event="rowDblselect" listener="#{tableView.handleRowDoubleClick}" />
+                                <p:ajax event="colReorder" update="datalist,tableColToggler,:growl" listener="#{analyseAllowedController.handleColumnReorder}"  />
+
+
+
+
+
+
+                                <p:column headerText="#{ism.CtrlShort}"
+                                          exportable="false" class="py-0" width="36"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.CtrlShort)}" >
+                                    <div class="input-group text-center" data-toggle="tooltip" data-placement="left" title="#{ism.View}">
+                                        <p:commandLink  class="btn-block btn-sm"
+                                                        action="View.xhtml?faces-redirect=true">
+                                            <span class="fa fa-eye" />
+                                            <f:setPropertyActionListener value="#{item}" target="#{analyseAllowedController.selected}" />
+                                        </p:commandLink>
+                                    </div>
+                                </p:column>
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaId}" width="48"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaId)}"
+                                          sortBy="#{item.aaId}" filterBy="#{item.aaId}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aaId}" >
+                                            <f:convertNumber  locale="fr_FR" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaPoint}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaPoint)}"
+                                          sortBy="#{item.aaPoint}" 
+                                          filterBy="#{item.aaPoint}" 
+                                          >
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('datalist').filter()"
+                                                         filter="true" filterMatchMode="contains">
+                                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"  />
+                                            <f:selectItems value="#{analysePointController.itemsAvailableSelectOne}" 
+                                                           var="point"
+                                                           itemLabel="#{point.apPoint} - #{point.apDesignation}"
+                                                           itemValue="#{point}"
+                                                           /> 
+                                        </p:selectOneMenu>
+                                    </f:facet> 
+                                    <h:outputText value="#{item.aaPoint.apPoint} - #{item.aaPoint.apDesignation}"/>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaType}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaType)}"
+                                          sortBy="#{item.aaType}" 
+                                          filterBy="#{item.aaType}" >
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('datalist').filter()" filter="true" filterMatchMode="contains">
+                                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"  />
+                                            <f:selectItems value="#{analyseTypeController.itemsAvailableSelectOne}" 
+                                                           var="type"
+                                                           itemLabel="#{type.atType} - #{type.atDesignation}"
+                                                           itemValue="#{type}"
+                                                           /> 
+                                        </p:selectOneMenu>
+                                    </f:facet> 
+                                    <h:outputText value="#{item.aaType.atType} - #{item.aaType.atDesignation}"/>
+                                </p:column>
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitHH}" width="48"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitHH)}"
+                                          sortBy="#{item.aaenlimitHH}" filterBy="#{item.aaenlimitHH}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitHH?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitHH}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitHH)}"
+                                          sortBy="#{item.aalimitHH}" filterBy="#{item.aalimitHH}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitHH}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitH}" width="48"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitH)}"
+                                          sortBy="#{item.aaenlimitH}" filterBy="#{item.aaenlimitH}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitH?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitH}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitH)}"
+                                          sortBy="#{item.aalimitH}" filterBy="#{item.aalimitH}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitH}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitB}" width="48"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitB)}"
+                                          sortBy="#{item.aaenlimitB}" filterBy="#{item.aaenlimitB}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitB?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitB}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitB)}"
+                                          sortBy="#{item.aalimitB}" filterBy="#{item.aalimitB}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitB}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitBB}" width="48"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitBB)}"
+                                          sortBy="#{item.aaenlimitBB}" filterBy="#{item.aaenlimitBB}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaenlimitBB?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aalimitBB}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitBB)}"
+                                          sortBy="#{item.aalimitBB}" filterBy="#{item.aalimitBB}" 
+                                          filterMatchMode="contains" >
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.aalimitBB}" >
+                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                        </h:outputText>
+                                    </div>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaObservation}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaObservation)}"
+                                          sortBy="#{item.aaObservation}" filterBy="#{item.aaObservation}" 
+                                          filterMatchMode="contains" >
+                                    <h:outputText value="#{item.aaObservation}"/>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.DeleteDel}" width="48"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaDeleted)}"
+                                          sortBy="#{item.aaDeleted}" filterBy="#{item.aaDeleted}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:triStateCheckbox value="#{item.aaDeleted?1:2}" disabled="true"
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </div>  
+                                </p:column> 
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaCreated}"  width="72"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaCreated)}"
+                                          sortBy="#{item.aaCreated}" filterBy="#{item.aaCreated}" 
+                                          filterFunction="#{viewTabManager.handleDateRangeFilters}" >
+                                    <f:facet name="filter">
+                                        <p:inputText id="filterAaCreated" 
+                                                     onclick="$(this).daterangepicker({datepickerOptions: {initialText: 'Période...', applyButtonText: 'Ok', clearButtonText: 'Reset', cancelButtonText: 'Annuler', numberOfMonths: 2}})" 
+                                                      >
+                                            <p:ajax event="change" oncomplete="PF('datalist').filter()" update="datalist"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.aaCreated}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaChanged}" width="72"
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaChanged)}"
+                                          sortBy="#{item.aaChanged}" filterBy="#{item.aaChanged}" 
+                                          filterFunction="#{viewTabManager.handleDateRangeFilters}" >
+                                    <f:facet name="filter">
+                                        <p:inputText id="filterAaChanged" 
+                                                     onclick="$(this).daterangepicker({datepickerOptions: {initialText: 'Période...', applyButtonText: 'Ok', clearButtonText: 'Reset', cancelButtonText: 'Annuler', numberOfMonths: 2}})" 
+                                                      >
+                                            <p:ajax event="change" oncomplete="PF('datalist').filter()" update="datalist"/>
+                                        </p:inputText>
+                                    </f:facet>
+                                    <h:outputText value="#{item.aaChanged}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy" />
+                                    </h:outputText>
+                                </p:column>
+
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaCompany}" 
+                                          visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaCompany)}"
+                                          sortBy="#{item.aaCompany}" filterBy="#{item.aaCompany}" 
+                                          filterMatchMode="contains" >
+                                    <h:outputText value="#{item.aaCompany}"/>
+                                </p:column>
+
+
+                            </p:dataTable>
                         </div>
-                    </f:facet>
-
-
-                    <f:facet name="header">
-                        <p:commandButton id="toggler" type="button" value="Columns" 
-                                         style="float:left;" icon="ui-icon-calculator" 
-                                         />
-                        <p:commandButton type="button" icon="ui-icon-print" style="float:left;">
-                            <p:printer target="datalist"  />
-                        </p:commandButton>
-
-                        <p:columnToggler id="tableColToggler" datasource="datalist" trigger="toggler" >
-                            <p:ajax event="toggle" update=":growl"
-                                    listener="#{analyseAllowedController.handleColumnToggle}" />
-                        </p:columnToggler>
-
-                        <p:outputPanel style="float:right;">
-                            <h:outputText value="#{ism.Search}"  />
-                            <p:inputText id="globalFilter" onkeyup="PF('datalist').filter()" 
-                                         style="width:150px;" placeholder="#{ism.EnterKeyWord}" />
-                        </p:outputPanel>
-
-                    </f:facet>
-
-
-
-
-
-
-                    <p:ajax event="rowSelect" update="westGroup bodyForm"  />
-                    <p:ajax event="rowUnselect" update="westGroup bodyForm" />
-                    <p:ajax event="rowDblselect" listener="#{tableView.handleRowDoubleClick}" />
-                    <p:ajax event="colReorder" update="datalist,tableColToggler,:growl" listener="#{analyseAllowedController.handleColumnReorder}"  />
-
-
-
-
-
-
-                    <p:column headerText="#{ism.CtrlShort}" style="width:32px;text-align: center"
-                              exportable="false"
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.CtrlShort)}" >
-                        <p:commandButton icon="ui-btn-View" style="width: 22px; height: 16px;"
-                                         title="#{ism.View}" action="View.xhtml?faces-redirect=true">
-                            <f:setPropertyActionListener value="#{item}" target="#{analyseAllowedController.selected}" />
-                        </p:commandButton>
-                    </p:column>
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaId}" style="max-width: 24px;" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaId)}"
-                              sortBy="#{item.aaId}" filterBy="#{item.aaId}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aaId}"/>
-                    </p:column>
-
-
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaPoint}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaPoint)}"
-                              sortBy="#{item.aaPoint.apPoint} - #{item.aaPoint.apDesignation}" 
-                              filterBy="#{item.aaPoint.apPoint} - #{item.aaPoint.apDesignation}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aaPoint.apPoint} - #{item.aaPoint.apDesignation}"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaType}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaType)}"
-                              sortBy="#{item.aaType.atType} - #{item.aaType.atDesignation}" 
-                              filterBy="#{item.aaType.atType} - #{item.aaType.atDesignation}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aaType.atType} - #{item.aaType.atDesignation}"/>
-                    </p:column>
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitHH}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitHH)}"
-                              sortBy="#{item.aaenlimitHH}" filterBy="#{item.aaenlimitHH}" 
-                              filterMatchMode="equals" >
-                        <f:facet name="filter">
-                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
-                                <f:converter converterId="javax.faces.Boolean" />
-                                <f:selectItem itemLabel="" itemValue="" />
-                                <f:selectItem itemLabel="" itemValue="true" />
-                                <f:selectItem itemLabel="" itemValue="false" />
-                            </p:selectOneButton>
-                        </f:facet>
-                        <p:selectBooleanCheckbox value="#{item.aaenlimitHH}" disabled="true"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aalimitHH}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitHH)}"
-                              sortBy="#{item.aalimitHH}" filterBy="#{item.aalimitHH}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aalimitHH}"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitH}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitH)}"
-                              sortBy="#{item.aaenlimitH}" filterBy="#{item.aaenlimitH}" 
-                              filterMatchMode="equals" >
-                        <f:facet name="filter">
-                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
-                                <f:converter converterId="javax.faces.Boolean" />
-                                <f:selectItem itemLabel="" itemValue="" />
-                                <f:selectItem itemLabel="" itemValue="true" />
-                                <f:selectItem itemLabel="" itemValue="false" />
-                            </p:selectOneButton>
-                        </f:facet>
-                        <p:selectBooleanCheckbox value="#{item.aaenlimitH}" disabled="true"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aalimitH}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitH)}"
-                              sortBy="#{item.aalimitH}" filterBy="#{item.aalimitH}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aalimitH}"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitB}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitB)}"
-                              sortBy="#{item.aaenlimitB}" filterBy="#{item.aaenlimitB}" 
-                              filterMatchMode="equals" >
-                        <f:facet name="filter">
-                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
-                                <f:converter converterId="javax.faces.Boolean" />
-                                <f:selectItem itemLabel="" itemValue="" />
-                                <f:selectItem itemLabel="" itemValue="true" />
-                                <f:selectItem itemLabel="" itemValue="false" />
-                            </p:selectOneButton>
-                        </f:facet>
-                        <p:selectBooleanCheckbox value="#{item.aaenlimitB}" disabled="true"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aalimitB}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitB)}"
-                              sortBy="#{item.aalimitB}" filterBy="#{item.aalimitB}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aalimitB}"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaenlimitBB}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaenlimitBB)}"
-                              sortBy="#{item.aaenlimitBB}" filterBy="#{item.aaenlimitBB}" 
-                              filterMatchMode="equals" >
-                        <f:facet name="filter">
-                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
-                                <f:converter converterId="javax.faces.Boolean" />
-                                <f:selectItem itemLabel="" itemValue="" />
-                                <f:selectItem itemLabel="" itemValue="true" />
-                                <f:selectItem itemLabel="" itemValue="false" />
-                            </p:selectOneButton>
-                        </f:facet>
-                        <p:selectBooleanCheckbox value="#{item.aaenlimitBB}" disabled="true"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aalimitBB}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aalimitBB)}"
-                              sortBy="#{item.aalimitBB}" filterBy="#{item.aalimitBB}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aalimitBB}"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaObservation}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaObservation)}"
-                              sortBy="#{item.aaObservation}" filterBy="#{item.aaObservation}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aaObservation}"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaDeleted}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaDeleted)}"
-                              sortBy="#{item.aaDeleted}" filterBy="#{item.aaDeleted}" 
-                              filterMatchMode="equals" >
-                        <f:facet name="filter">
-                            <p:selectOneButton onchange="PF('datalist').filter()" styleClass="ui-btn-filters" >
-                                <f:converter converterId="javax.faces.Boolean" />
-                                <f:selectItem itemLabel="" itemValue="" />
-                                <f:selectItem itemLabel="" itemValue="true" />
-                                <f:selectItem itemLabel="" itemValue="false" />
-                            </p:selectOneButton>
-                        </f:facet>
-                        <p:selectBooleanCheckbox value="#{item.aaDeleted}" disabled="true"/>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaCreated}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaCreated)}"
-                              sortBy="#{item.aaCreated}" filterBy="#{item.aaCreated}" 
-                              filterFunction="#{viewTabManager.handleDateRangeFilters}" >
-                        <f:facet name="filter">
-                            <p:inputText id="filterAaCreated" 
-                                         onclick="$(this).daterangepicker({datepickerOptions: {initialText: 'Période...', applyButtonText: 'Ok', clearButtonText: 'Reset', cancelButtonText: 'Annuler', numberOfMonths: 2}})" 
-                                         style="width: 100px!important;" >
-                                <p:ajax event="change" oncomplete="PF('datalist').filter()" update="datalist"/>
-                            </p:inputText>
-                        </f:facet>
-                        <h:outputText value="#{item.aaCreated}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaChanged}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaChanged)}"
-                              sortBy="#{item.aaChanged}" filterBy="#{item.aaChanged}" 
-                              filterFunction="#{viewTabManager.handleDateRangeFilters}" >
-                        <f:facet name="filter">
-                            <p:inputText id="filterAaChanged" 
-                                         onclick="$(this).daterangepicker({datepickerOptions: {initialText: 'Période...', applyButtonText: 'Ok', clearButtonText: 'Reset', cancelButtonText: 'Annuler', numberOfMonths: 2}})" 
-                                         style="width: 100px!important;" >
-                                <p:ajax event="change" oncomplete="PF('datalist').filter()" update="datalist"/>
-                            </p:inputText>
-                        </f:facet>
-                        <h:outputText value="#{item.aaChanged}">
-                            <f:convertDateTime pattern="dd/MM/yyyy" />
-                        </h:outputText>
-                    </p:column>
-
-
-
-                    <p:column headerText="#{ism.AnalyseAllowedField_aaCompany}" 
-                              visible="#{analyseAllowedController.getIsVisibleColKey(ism.AnalyseAllowedField_aaCompany)}"
-                              sortBy="#{item.aaCompany}" filterBy="#{item.aaCompany}" 
-                              filterMatchMode="contains" >
-                        <h:outputText value="#{item.aaCompany}"/>
-                    </p:column>
-
-
-                </p:dataTable>
+                    </div>
+                </div>
             </h:form>
 
         </ui:define>
@@ -375,6 +418,15 @@
                                  actionListener="#{analyseAllowedController.prepareCreate()}"
                                  action="Create.xhtml?faces-redirect=true"
                                  title="Permet de créer un nouveau AnalyseAllowed"
+                                 />
+                <br />
+                <p:commandButton id="manageButton" 
+                                 icon="fa fa-map-signs"
+                                 styleClass="options-btn"
+                                 value="Organiser" 
+                                 actionListener="#{analyseAllowedController.prepareCreate()}"
+                                 action="Manage.xhtml?faces-redirect=true"
+                                 title="Permet d'oragniser les analyse possible"
                                  />
                 <br />
                 <p:commandButton id="viewButton"

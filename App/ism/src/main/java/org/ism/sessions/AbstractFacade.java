@@ -22,6 +22,7 @@ import javax.persistence.metamodel.Metamodel;
 /**
  *
  * @author r.hendrick
+ * @param <T>
  */
 public abstract class AbstractFacade<T> {
 

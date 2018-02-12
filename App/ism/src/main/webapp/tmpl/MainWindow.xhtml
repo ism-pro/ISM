@@ -42,6 +42,11 @@
             <!-- DATE RANGE PIKER -->
             <h:outputStylesheet library="vendor" name="daterangepicker/0.6.0/jquery.comiseo.daterangepicker.min.css" />
 
+            <!-- CSS3-microsoft Metro Buttons -->
+            <!-- INCOMPATIBLE ACTUELLEMENT
+            <h:outputStylesheet library="vendor" name="css3-microsoft-metro-buttons/css/m-styles.min.css" />
+            -->
+            
             <!-- After bootstrap is mendatory -->
             <h:outputStylesheet library="css" name="ism.min.css" /> 
 
@@ -59,29 +64,23 @@
             <!-- JQUERY UI : NECESSAIRE POUR L'USAGE DE DATRERANGE PICKER -->
             <h:outputScript library="vendor" name="jquery-ui/1.12.1/jquery-ui.min.js" target="head" />
 
-            <!-- ISM JS -->
-            <h:outputScript library="js" name="ism-global.min.js" />
-
             <!-- Date Range Piker -->
             <h:outputScript library="js" name="moment/2.18.1/moment.min.js" target="head" />
             <h:outputScript library="vendor" name="daterangepicker/0.6.0/jquery.comiseo.daterangepicker.js" />
 
-            <!-- BOOTSTRAP -->
-            <!--
-            <h:outputScript library="webjars" name="bootstrap/3.3.7/js/bootstrap.min.js"  />
-            -->
+            <!-- Bootstrap -->
             <h:outputScript library="webjars" name="popper.js/1.12.9/dist/umd/popper.min.js" />
             <h:outputScript library="webjars" name="bootstrap/4.0.0-beta.2/js/bootstrap.bundle.min.js" />
-            <script>
-                $(function () {
-                    $('[data-toggle="tooltip"]').tooltip()
-                })
-            </script>
-            <style>
-
-            </style>
-
-
+            
+            <!-- CSS3 MICROSOFT METRO -->
+            <!--
+            <h:outputScript library="vendor" name="css3-microsoft-metro-buttons/js/m-dropdown.min.js" />
+            <h:outputScript library="vendor" name="css3-microsoft-metro-buttons/js/m-radio.min.js" />
+            -->
+            
+            <!-- ISM JS -->
+            <h:outputScript library="js" name="ism-global.min.js" />
+            
         </f:facet>
 
     </h:head>
@@ -89,8 +88,7 @@
     <h:body id="body" rendered="#{request.session.getAttribute('authenticated')}">
 
         <!-- Affichage message maximum 5S -->
-        <p:growl id="growl" life="5000" 
-                 showDetail="true" showSummary="true" escape="false"/>  
+        <p:growl id="growl" life="4000" showDetail="true" showSummary="true" escape="false"/>  
 
 
 

@@ -151,7 +151,7 @@ public class AnalyseDataController implements Serializable {
 
         visibleColMap = new HashMap<>();
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"), true);
-        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_01), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_01), true);
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_02), true);
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_03), true);
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_04), true);

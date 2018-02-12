@@ -383,6 +383,14 @@ public class AnalyseAllowedController implements Serializable {
     }
     
     
+    /**
+     * Count number of result int the allowed 
+     * @return 
+     */
+    public Integer getCount(){
+        return getFacade().count();
+    }
+    
 
     /**
      * ************************************************************************

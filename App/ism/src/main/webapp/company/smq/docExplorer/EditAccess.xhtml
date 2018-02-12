@@ -8,11 +8,19 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbDocumentation}" outcome="/company/smq/docExplorer/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbEditAccess}</li>
+        </ui:define>
+
         <ui:define name="body">
-            <h1><h:outputText value="#{ism.ProcessAccessTitleEdit}"/></h1>
+
 
             <h:form id="bodyForm">
 
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
                 <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
                              rendered="#{processAccessController.selected != null}">
 

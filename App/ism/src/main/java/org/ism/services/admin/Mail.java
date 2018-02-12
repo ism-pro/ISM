@@ -309,7 +309,7 @@ public class Mail {
             multipart.addBodyPart(messageBodyPart);
 
             messageBodyPart = new MimeBodyPart();
-                DataSource fds = new FileDataSource(FileService.writeResourceToFileSystem("img/ism/ism.png"));
+            DataSource fds = new FileDataSource(FileService.writeResourceToFileSystem("img/ism/ism.png"));
             messageBodyPart.setDataHandler(new DataHandler(fds));
             messageBodyPart.setHeader("Content-ID", "<image>");
 
@@ -374,6 +374,20 @@ public class Mail {
                     .replace("%nc_clienttype%", (nc.getNcrClienttype() == null ? "" : nc.getNcrClienttype()))
                     .replace("%nc_emettor", nc.getNcrStaff().toString()).replace("%nc_created%", DateUtil.format("dd/MM/yyyy hh:mm:ss", nc.getNcrCreated()))
                     .replace("%nc_description%", nc.getNcrDescription());//.replace("%nc_imagePath%", (nc.getNcrLink() == null ? "" : FileService.NC_REQUEST + nc.getNcrLink()));
+            
+            // Insert Html image if needed
+            if (nc.getNcrLink() != null) {
+                if (!nc.getNcrLink().trim().isEmpty()) {
+                    htmlText = htmlText.replace("%nc_image_html%", "<img src=\"cid:cidNC\" alt=\"nc image\" width=\"50%\"  border=\"0\" />");
+                }else{
+                    htmlText = htmlText.replace("%nc_image_html%", "-");
+                }
+            }else{
+                htmlText = htmlText.replace("%nc_image_html%", "-");
+            }
+            
+
+            
             // Manage nca
             if (nca != null) {
                 int j = nca.size();
@@ -404,14 +418,16 @@ public class Mail {
 
             // Add Image NC to multipart
             if (nc.getNcrLink() != null) {
-                messageBodyPart = new MimeBodyPart();
-                String ncPath = FileService.NC_REQUEST + FileService.SEP + nc.getNcrLink();
-                System.out.println(logoPath);
-                DataSource fdsNC = new FileDataSource(ncPath);
-                messageBodyPart.setDataHandler(new DataHandler(fdsNC));
-                messageBodyPart.setHeader("Content-ID", "<cidNC>");
-                // add image to the multipart
-                multipart.addBodyPart(messageBodyPart);
+                if (!nc.getNcrLink().trim().isEmpty()) {
+                    messageBodyPart = new MimeBodyPart();
+                    String ncPath = FileService.NC_REQUEST + FileService.SEP + nc.getNcrLink();
+                    System.out.println(logoPath);
+                    DataSource fdsNC = new FileDataSource(ncPath);
+                    messageBodyPart.setDataHandler(new DataHandler(fdsNC));
+                    messageBodyPart.setHeader("Content-ID", "<cidNC>");
+                    // add image to the multipart
+                    multipart.addBodyPart(messageBodyPart);
+                }
             }
 
             return multipart;
@@ -600,7 +616,7 @@ public class Mail {
                 + "        <tr><td>Création</td><td>%nc_created%</td></tr>\n"
                 + "        <tr><td>Description</td><td>%nc_description%</td></tr>\n"
                 //+ "        <tr><td>Image</td><td>%nc_imagePath%</td></tr>\n"
-                + "        <tr><td>Image</td><td><img src=\"cid:cidNC\" alt=\"nc image\" width=\"50%\"  border=\"0\" /></td></tr>\n"
+                + "        <tr><td>Image</td><td>%nc_image_html%</td></tr>\n"
                 + "        </table>\n"
                 + "      </p>\n"
                 + "    </div>\n"

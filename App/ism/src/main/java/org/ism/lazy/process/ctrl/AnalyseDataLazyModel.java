@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.ejb.Stateless;
 import org.ism.entities.process.ctrl.AnalyseData;
 import org.ism.sessions.process.ctrl.AnalyseDataFacade;
 import org.primefaces.model.LazyDataModel;
@@ -32,14 +31,13 @@ public class AnalyseDataLazyModel extends LazyDataModel<AnalyseData> implements 
     private List<AnalyseData> datasource;
     private List<SortMeta> multiSortMeta = null;
     private Map<String, Object> filters = null;
-    
+
     public static final String DEFAULT_SORT_ORDER = "adsampleTime";
-    
+
     /**
      * Retained filtre value of table
      */
     private List<AnalyseData> filtredValue;
-    
 
     public AnalyseDataLazyModel() {
     }
@@ -104,17 +102,22 @@ public class AnalyseDataLazyModel extends LazyDataModel<AnalyseData> implements 
 
         // Restore filter if required
         if (multiSortMeta == null) {
-            // Sorting default by date d'échantillonnage
-            multiSortMeta = new ArrayList<>();
-            SortMeta metaSort = new SortMeta(null, DEFAULT_SORT_ORDER, SortOrder.DESCENDING, null);
-            multiSortMeta.add(metaSort);
+            if (this.multiSortMeta == null) {
+                // Sorting default by date d'échantillonnage
+                multiSortMeta = new ArrayList<>();
+                SortMeta metaSort = new SortMeta(null, DEFAULT_SORT_ORDER, SortOrder.DESCENDING, null);
+                multiSortMeta.add(metaSort);
+                this.multiSortMeta = multiSortMeta;
+            }
+        } else {
+            this.multiSortMeta = multiSortMeta;
         }
 
         if (this.filters != null && this.filters != filters) {
             filters = this.filters;
         }
         // Get data
-        datasource = ejbFacade.findByCriterias(first, pageSize, convertSortMeta(multiSortMeta), filters);
+        datasource = ejbFacade.findByCriterias(first, pageSize, convertSortMeta(this.multiSortMeta), filters);
         // Count rows
         this.setRowCount(ejbFacade.countByCriterias(filters));
 
@@ -206,7 +209,5 @@ public class AnalyseDataLazyModel extends LazyDataModel<AnalyseData> implements 
     public void setFiltredValue(List<AnalyseData> filtredValue) {
         this.filtredValue = filtredValue;
     }
-    
-    
 
 }

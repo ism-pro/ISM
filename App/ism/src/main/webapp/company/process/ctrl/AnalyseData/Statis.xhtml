@@ -11,75 +11,60 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item active">#{ism.CrumbProcess}</li>
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbAnalyseData}" outcome="/company/process/ctrl/AnalyseData/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbAnalyseDataGraphics}</li>
+        </ui:define>
+
         <ui:define name="body">
 
-            <style>
-                .columnFieldClassSmall { min-width: 100px; }
-                .ui-selectlistbox-listcontainer{ width: 100%; }
-                .columnContentClassBig{
-                    width: 100%;
-                }
-                .ui-autocomplete{   width: 100%;    }
-                .ui-autocomplete-multiple-container.ui-widget.ui-inputfield.ui-state-default.ui-corner-all{
-                    width: 100%;
-                }
 
-                .tab-content{
-                    border:1px solid #ddd; 
-                    border-top: none;
-                    padding: 5px;
-                }
-                .tab-content h4, h3{
-                    margin-top: 0px;
-                }
+            <h:form id="bodyForm">
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            <div>
+                                <p:progressBar widgetVar="w_progress" ajax="true" 
+                                               value="#{viewAnalyseChart.modelProgress}" 
+                                               interval="1500"
+                                               labelTemplate="{value}%" styleClass="animated" global="false">
+                                    <p:ajax event="complete" update="bodyForm" oncomplete="PF('btnSearchRequest').enable()"/>
+                                </p:progressBar>
+
+                            </div>
+
+                            <h3>#{ism.Statistics}</h3>
+
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li class="nav-item"><h:link outcome="Request.xhtml" value="#{ism.Criteria}" /><a class="nav-link" data-toggle="tab" role="tab" aria-controls="criteria" aria-selected="true" id="tabCriteria" href="#criteria" ></a></li>
+                                <li class="nav-item"><a class="nav-link active" data-toggle="tab" role="tab" aria-controls="statis" aria-selected="false" id="tabStatis" href="#statis" >#{ism.Statistics}</a></li>
+                            </ul>
 
 
-                .nav>li>a {
-                    padding: 5px 10px;
-                    border-radius: initial;
-                }
-            </style>
 
-            <h:form id="bodyForm" >
-                <div>
-                    <p:progressBar widgetVar="w_progress" ajax="true" 
-                                   value="#{viewAnalyseChart.modelProgress}" 
-                                   interval="1500"
-                                   labelTemplate="{value}%" styleClass="animated" global="false">
-                        <p:ajax event="complete" update="bodyForm" oncomplete="PF('btnSearchRequest').enable()"/>
-                    </p:progressBar>
+                            <h:panelGroup style="width: 100%"
+                                          rendered="#{viewAnalyseChart.models!=null?true:false}"
+                                          >  
+                                <c:forEach var="model" items="#{viewAnalyseChart.models}" varStatus="count" >
+                                    <ic:chart  id="statisticsChart_#{count.index}" type="line"
+                                               model="#{model}"
+                                               style="min-width: 310px; height: 400px; margin: 0 auto"
+                                               exporting="true" debug="false"
+                                               />
 
+                                    <hr />
+                                </c:forEach>
+                            </h:panelGroup>
+
+                            <p:outputLabel value="Pas de données dans le model..." rendered="#{viewAnalyseChart.models!=null?false:true}" />
+
+                        </div>
+                    </div>
                 </div>
 
-                <h3>#{ism.Statistics}</h3>
-
-
-                <ul class="nav nav-tabs">
-                    <li><h:link outcome="Request" value="#{ism.Criteria}"/></li>
-                    <li class="active"><h:link outcome="Statis" value="#{ism.Statistics}"/></li>
-                </ul>
-
-
-                <h:panelGroup style="width: 100%"
-                              rendered="#{viewAnalyseChart.models!=null?true:false}"
-                              >  
-                    <c:forEach var="model" items="#{viewAnalyseChart.models}" varStatus="count" >
-                        <ic:chart  id="statisticsChart_#{count.index}" type="line"
-                                   model="#{model}"
-                                   style="min-width: 310px; height: 400px; margin: 0 auto"
-                                   exporting="true" debug="false"
-                                   />
-
-                        <hr />
-                    </c:forEach>
-                </h:panelGroup>
-
-                <p:outputLabel value="Pas de données dans le model..." rendered="#{viewAnalyseChart.models!=null?false:true}" />
-
-
-                <script>
-
-                </script>
 
 
             </h:form>

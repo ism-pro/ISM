@@ -14,32 +14,19 @@ function showStatus() {
 function hideStatus() {
     PF('statusDialog').hide();
 }
-/*
- function handleRibbonTabHomeClick() {
- PF('fpLayoutWidget').toggle('north');
- alert('Hello handleRibbonTabHomeClick');
- PF('fpLayoutWidget').toggle('north');
- }
- 
- $("#main").click(function () {
- alert("Tab Acceuil click");
- PF('fpLayoutWidget').toggle('north')
- });
- */
-
 
 
 
 /*******************************************************************************
  * 
+ *  Main JS Application
  * 
  ******************************************************************************/
-$(function () {
-    $('#main').click(function () {
-        //alert($('#unitNorth').height());
-
+$(function () {    
+    $(document).ready(function(e){
+        // Bootstrap on ready enable tooltip
+        $('[data-toggle="tooltip"]').tooltip();
     });
-
 }); 
 
 

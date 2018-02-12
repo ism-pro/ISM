@@ -73,9 +73,9 @@
                             <div class="card " >
                                 <div class="card-header  p-0 m-0">
                                     <h:graphicImage value="/rsc/img/ncr/#{nonConformiteRequestController.selected.ncrLink}"
-                                                    class="card-img-top" alt="Card image cap" rendered="#{nonConformiteRequestController.selected.ncrLink!=null}"/>
+                                                    class="card-img-top" alt="Aucune Image" rendered="#{nonConformiteRequestController.selected.ncrLink!=null}"/>
                                     <h:graphicImage library="img" name="ism/bg/imgCap.svg" 
-                                                    class="card-img-top" alt="Card image cap" rendered="#{nonConformiteRequestController.selected.ncrLink==null}"/>
+                                                    class="card-img-top" alt="CardImageCap" rendered="#{nonConformiteRequestController.selected.ncrLink==null}"/>
                                 </div>
 
 
@@ -440,7 +440,9 @@
                                                  disabled="#{empty nonConformiteRequestController.selected 
                                                              or empty nonConformiteRequestController.selected.ncrId
                                                              or (nonConformiteRequestController.selected.ncrState.id!=2 
-                                                             and nonConformiteRequestController.selected.ncrState.id!=3)}"
+                                                             and nonConformiteRequestController.selected.ncrState.id!=3
+                                                             or nonConformiteActionsController.getItemsDesc(nonConformiteRequestController.selected).get(0).ncaState.id!=1)}"
+                                                 rendered="#{request.isUserInRole('SNC_REQUEST_R')}"
                                                  />
                                 <p:commandButton icon="ui-btn-Cloture"
                                                  styleClass="ui-btn"

@@ -9,110 +9,304 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbNCRequest}" outcome="/company/smq/nc/Request/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbAction}</li>
+        </ui:define>
+
         <ui:define name="body">
-            <h1><h:outputText value="#{ism.NonConformiteRequestTitleAction}"/></h1>
+
 
             <h:form id="bodyForm">
 
-                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
-                             rendered="#{nonConformiteActionsController.selected != null}">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                         rendered="#{nonConformiteActionsController.selected != null}">
 
 
-                    <p:outputLabel value="#{ism.NonConformiteActionsField_ncaId}" rendered="false" for="ncaId" />
-                    <p:inputText id="ncaId" rendered="false"
-                                 value="#{nonConformiteActionsController.selected.ncaId}" 
-                                 title="#{ism.NonConformiteActionsFieldInfo_ncaId}" />
+                                <p:outputLabel value="#{ism.NonConformiteActionsField_ncaId}" rendered="false" for="ncaId" />
+                                <p:inputText id="ncaId" rendered="false"
+                                             value="#{nonConformiteActionsController.selected.ncaId}" 
+                                             title="#{ism.NonConformiteActionsFieldInfo_ncaId}" />
 
 
-                    <p:outputLabel value="#{ism.NonConformiteActionsField_ncaNc}" for="ncaNc" />
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:inputText id="ncaNc" widgetVar="ncaNc"
-                                     value="#{nonConformiteActionsController.selected.ncaNc = nonConformiteRequestController.selected}" 
-                                     style="display: none" 
-                                     required="true" disabled="true" 
-                                     requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaNc}"/>
-                        <p:outputLabel style="margin-left: 5px;"
-                                       value="#{nonConformiteRequestController.selected.ncrId} - #{nonConformiteRequestController.selected.ncrTitle}" />
-                    </h:panelGrid>
+                                <p:outputLabel value="#{ism.NonConformiteActionsField_ncaNc}" for="ncaNc" />
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:inputText id="ncaNc" widgetVar="ncaNc"
+                                                 value="#{nonConformiteActionsController.selected.ncaNc = nonConformiteRequestController.selected}" 
+                                                 style="display: none" 
+                                                 required="true" disabled="true" 
+                                                 requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaNc}"/>
+                                    <p:outputLabel style="margin-left: 5px;"
+                                                   value="#{nonConformiteRequestController.selected.ncrId} - #{nonConformiteRequestController.selected.ncrTitle}" />
+                                </h:panelGrid>
 
 
-                    <p:outputLabel value="#{ism.NonConformiteActionsField_ncaDeadline}" for="ncaDeadline"/>
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:calendar id="ncaDeadline" pattern="dd/MM/yyyy" locale="fr" navigator="true"  placeholder="#{ism.DatePattern}" mindate="#{viewUtil.now}"
-                                    value="#{nonConformiteActionsController.selected.ncaDeadline}" 
-                                    title="#{ism.NonConformiteActionsFieldInfo_ncaDeadline}"  
-                                    required="true" requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaDeadline}" 
-                                    />
-                        <p:message for="ncaDeadline"   />
-                    </h:panelGrid>
+                                <p:outputLabel value="#{ism.NonConformiteActionsField_ncaDeadline}" for="ncaDeadline"/>
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:calendar id="ncaDeadline" pattern="dd/MM/yyyy" locale="fr" navigator="true"  placeholder="#{ism.DatePattern}" mindate="#{viewUtil.now}"
+                                                value="#{nonConformiteActionsController.selected.ncaDeadline}" 
+                                                title="#{ism.NonConformiteActionsFieldInfo_ncaDeadline}"  
+                                                required="true" requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaDeadline}" 
+                                                />
+                                    <p:message for="ncaDeadline"   />
+                                </h:panelGrid>
 
 
-                    <p:commandLink  onclick="PF('ncaDescription').clear();" title="Activate">
-                        <p:outputLabel value="#{ism.NonConformiteActionsField_ncaDescription}" for="ncaDescription" />
-                    </p:commandLink>
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:editor id="ncaDescription" widgetVar="ncaDescription"
-                                  value="#{nonConformiteActionsController.selected.ncaDescription}"
-                                  required="true" requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaDescription}"
-                                  />
-                        <p:message for="ncaDescription"   />
-                    </h:panelGrid>
-
-
-
-                    <p:outputLabel value="#{ism.NonConformiteActionsField_ncaStaff}" for="ncaStaff" />
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:inputText id="ncaStaff" widgetVar="ncaStaff"
-                                     value="#{nonConformiteActionsController.selected.ncaStaff = staffAuthController.staff}" 
-                                     style="display: none" 
-                                     required="true" disabled="true" 
-                                     requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaStaff}"/>
-                        <p:outputLabel style="margin-left: 5px;"
-                                       value="#{staffAuthController.staff.stFirstname} #{staffAuthController.staff.stLastname} #{staffAuthController.staff.stMiddlename} [#{staffAuthController.staff.stStaff}]" />
-                    </h:panelGrid>
-
-
-                </p:panelGrid>
+                                <p:commandLink  onclick="PF('ncaDescription').clear();" title="Activate">
+                                    <p:outputLabel value="#{ism.NonConformiteActionsField_ncaDescription}" for="ncaDescription" />
+                                </p:commandLink>
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:editor id="ncaDescription" widgetVar="ncaDescription"
+                                              value="#{nonConformiteActionsController.selected.ncaDescription}"
+                                              required="true" requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaDescription}"
+                                              />
+                                    <p:message for="ncaDescription"   />
+                                </h:panelGrid>
 
 
 
-                <h:panelGroup id="btn-crud-zone_id"  >
-                    <p:commandButton icon="ui-btn-Save"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Save}" 
-                                     actionListener="#{nonConformiteActionsController.create()}"
-                                     onstart="#{p:widgetVar('bodyForm:ncaNc')}.enable();
-                                     #{p:widgetVar('bodyForm:ncaStaff')}.enable();"
-                                     update=":bodyForm,:growl"
-                                     action="View.xhtml?faces-redirect=true"
-                                     />
-                    <p:commandButton icon="ui-btn-Cancel"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Cancel}" 
-                                     update=":bodyForm,:growl"
-                                     action="./View.xhtml?faces-redirect=true"
-                                     immediate="true"
-                                     />
-                </h:panelGroup>
+                                <p:outputLabel value="#{ism.NonConformiteActionsField_ncaStaff}" for="ncaStaff" />
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:inputText id="ncaStaff" widgetVar="ncaStaff"
+                                                 value="#{nonConformiteActionsController.selected.ncaStaff = staffAuthController.staff}" 
+                                                 style="display: none" 
+                                                 required="true" disabled="true" 
+                                                 requiredMessage="#{ism.NonConformiteActionsRequiredMsg_ncaStaff}"/>
+                                    <p:outputLabel style="margin-left: 5px;"
+                                                   value="#{staffAuthController.staff.stFirstname} #{staffAuthController.staff.stLastname} #{staffAuthController.staff.stMiddlename} [#{staffAuthController.staff.stStaff}]" />
+                                </h:panelGrid>
 
-                <p:messages showDetail="true" showSummary="false" escape="false"/>
 
+                            </p:panelGrid>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h:panelGroup id="btn-crud-zone_id"  >
+                                <p:commandButton icon="ui-btn-Save"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Save}" 
+                                                 actionListener="#{nonConformiteActionsController.create()}"
+                                                 onstart="#{p:widgetVar('bodyForm:ncaNc')}.enable();
+                                                 #{p:widgetVar('bodyForm:ncaStaff')}.enable();"
+                                                 update=":bodyForm,:growl"
+                                                 action="View.xhtml?faces-redirect=true"
+                                                 />
+                                <p:commandButton icon="ui-btn-Cancel"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cancel}" 
+                                                 update=":bodyForm,:growl"
+                                                 action="./View.xhtml?faces-redirect=true"
+                                                 immediate="true"
+                                                 />
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:messages showDetail="true" showSummary="false" escape="false"/>
+                        </div>
+                    </div>
+                </div>
 
             </h:form>         
 
-            <p:panel rendered="#{nonConformiteActionsController.itemsByNCFirst!=null}"
-                     style="margin-top: 20px;"
-                     >
-                <h2>#{ism.NonConformiteActionsTitleSolution} <span style="color: grey">[#{nonConformiteActionsController.itemsByNCFirst.ncaState.istate} - #{nonConformiteActionsController.itemsByNCFirst.ncaState.statename}]</span></h2>
-                <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaId}" /> <br />
-                <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stFirstname} #{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stLastname} #{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stMiddlename} [#{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stStaff}]" /> <br />
-                <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaCreated}" >
-                    <f:convertDateTime pattern="dd/MM/yyyy" />
-                </h:outputText> <br />
-                <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaDescription}" escape="false" style="white-space:pre-line;" />
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <hr class="py-1" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <h:panelGroup rendered="#{nonConformiteActionsController.itemsByNCFirst!=null}">
+                            #{ism.NonConformiteActionsTitleSolution} <span style="color: grey">[#{nonConformiteActionsController.itemsByNCFirst.ncaState.istate} - #{nonConformiteActionsController.itemsByNCFirst.ncaState.statename}]</span>
+                            Non Conformité : 
+                            <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaId}" /> <br />
+                            <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stFirstname} #{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stLastname} #{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stMiddlename} [#{nonConformiteActionsController.itemsByNCFirst.ncaStaff.stStaff}]" />  au 
+                            <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaCreated}" >
+                                <f:convertDateTime pattern="dd/MM/yyyy" />
+                            </h:outputText> <br />
+                            <h:outputText value="#{nonConformiteActionsController.itemsByNCFirst.ncaDescription}" escape="false" style="white-space:pre-line;" />
 
-            </p:panel>
+                        </h:panelGroup>
+                    </div>
+                </div>
 
+
+            </div>
+
+
+            <h:panelGroup >
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="card " >
+                                <div class="card-header  p-0 m-0">
+                                    <div class="card-header text-light bg-info p-1">
+                                        <div class="d-flex ">
+                                            <div class="align-self-center mr-auto p-0">
+                                                #{nonConformiteRequestController.selected.ncrTitle}
+                                            </div>
+                                            <div class="align-self-center p-0">
+                                                <button class="btn btn-secondary btn-sm" type="button" data-toggle="collapse" data-target="#ncCardBody" aria-expanded="true" aria-controls="ncCardBody">
+                                                    <span class="fa f1x fa-angle-double-up" /> 
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="card-body collapse py-0 px-1" id="ncCardBody" >
+
+                                    <div class="row py-2">
+
+                                        <!-- Description de la non conformité -->
+                                        <div class="col-lg-4 col-md-6 col-sm-12 py-2">
+                                            <div class="card " >
+                                                <div class="card-header  p-0 m-0">
+                                                    <h:graphicImage value="/rsc/img/ncr/#{nonConformiteRequestController.selected.ncrLink}"
+                                                                    class="card-img-top" alt="Aucune Image" rendered="#{nonConformiteRequestController.selected.ncrLink!=null}"/>
+                                                    <h:graphicImage library="img" name="ism/bg/imgCap.svg" 
+                                                                    class="card-img-top" alt="CardImageCap" rendered="#{nonConformiteRequestController.selected.ncrLink==null}"/>
+                                                </div>
+
+
+                                                <div class="card-body">
+                                                    <h5 class="card-title">
+                                                        <h:outputText value="#{nonConformiteRequestController.selected.ncrStaff.stStaff} - #{nonConformiteRequestController.selected.ncrStaff.stFirstname} #{nonConformiteRequestController.selected.ncrStaff.stLastname} #{nonConformiteRequestController.selected.ncrStaff.stMiddlename}" />
+                                                    </h5>
+                                                    <p class="card-text">
+                                                        <h:outputText value="#{nonConformiteRequestController.selected.ncrDescription}" escape="false" style="white-space:pre-line;" />
+                                                    </p>
+
+
+
+                                                    <p:outputLabel class="small smallTxt"  value=" #{nonConformiteRequestController.selected.ncrLink}"  rendered="#{nonConformiteRequestController.selected.ncrLink!=null}"/>
+
+                                                </div>
+                                                <div class="card-footer p-1 small smallTxt container-fluid">
+                                                    <div class=" row">
+                                                        <div class="col-md-8  col-sm-8  col-12">
+                                                            <p:outputLabel  value="#{ism.NonConformiteRequestField_ncrCreated} :" />
+                                                            <h:outputText  value="#{nonConformiteRequestController.selected.ncrCreated}"
+                                                                           ><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>
+                                                        </div>
+
+                                                        <div class="col-md-8  col-sm-8 col-12">
+                                                            <p:outputLabel value="#{ism.NonConformiteRequestField_ncrOccured} : " />
+                                                            <h:outputText value="#{nonConformiteRequestController.selected.ncrOccured}" 
+                                                                          ><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Information de base de non conformité -->
+                                        <div class="col-lg-4 col-md-6 col-sm-12 py-2">
+
+                                            <div class="card">
+                                                <div class="card-header text-light bg-dark p-1">
+                                                    <div class="d-flex ">
+                                                        <div class="align-self-center mr-auto p-2">
+                                                            #{nonConformiteRequestController.selected.ncrapprouvedDate==null?
+                                                              ism.NonConformiteRequestTitleCreate:
+                                                              nonConformiteRequestController.selected.ncrApprouved?
+                                                              ism.NonConformiteRequestSubTitle_Accepted:
+                                                              ism.NonConformiteRequestSubTitle_Refused } 
+                                                            <p:outputLabel value="
+                                                                           #{nonConformiteRequestController.selected.ncrApprouver.stFirstname} 
+                                                                           #{nonConformiteRequestController.selected.ncrApprouver.stLastname} 
+                                                                           #{nonConformiteRequestController.selected.ncrApprouver.stMiddlename} 
+                                                                           #{nonConformiteRequestController.selected.ncrApprouver.stStaff}" 
+                                                                           style="color: 
+                                                                           #{nonConformiteRequestController.selected.ncrApprouved?
+                                                                             'green':'red' } ;"
+                                                                           />
+                                                            #{nonConformiteRequestController.selected.ncrapprouvedDate==null?'':ism.DateOn}
+                                                            <h:outputText value="#{nonConformiteRequestController.selected.ncrapprouvedDate}"
+                                                                          ><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText>
+                                                        </div>
+                                                        <div class="align-self-center p-2">
+                                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#infoCardBody" aria-expanded="true" aria-controls="infoCardBody">
+                                                                <span class="fa f1x fa-angle-double-up" /> 
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card-body collapse show" id="infoCardBody" >
+                                                    <dl class="row small smallTxt">
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrId}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrId}"/></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrCompany}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrCompany.CCompany} - #{nonConformiteRequestController.selected.ncrCompany.CDesignation}"/></dd>
+                                                        <dt class="col-md-4 col-sm-12">#{ism.NonConformiteRequestField_ncrProcessus}</dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrProcessus.PProcessus} - #{nonConformiteRequestController.selected.ncrProcessus.PDesignation}"/></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrOccured}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrOccured}" ><f:convertDateTime pattern="dd/MM/yyyy" /></h:outputText></dd>
+                                                    </dl>
+                                                    <hr class="py-0" />
+                                                    <dl class="row small smallTxt">
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrNature}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrNature}" /></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrGravity}"/></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrGravity}" /></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrFrequency}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrFrequency}" /></dd>
+                                                    </dl>
+                                                    <hr class="py-0" />
+                                                    <dl class="row small smallTxt">
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrProduct}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrProduct}"/></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrTrace}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrTrace}"/></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrQuantity}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrQuantity}"/></dd>
+                                                        <dt class="col-md-4 col-sm-12"><p:outputLabel value="#{ism.NonConformiteRequestField_ncrUnite}" /></dt><dd class="col-md-8 col-sm-12"><h:outputText value="#{nonConformiteRequestController.selected.ncrUnite}" /></dd>
+
+                                                    </dl>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Information - client -->
+                                        <div class="col-lg-4 col-md-12 col-sm-12 py-2">
+
+                                            <div class="card">
+                                                <div class="card-header text-light bg-secondary p-1">
+                                                    <div class="d-flex ">
+                                                        <div class="align-self-center mr-auto p-2">
+                                                            Information #{ism.NonConformiteRequestField_ncrClientTitle}
+                                                        </div>
+                                                        <div class="align-self-center p-2">
+                                                            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#clientCardBody" aria-expanded="true" aria-controls="clientCardBody">
+                                                                <span class="fa f1x fa-angle-double-#{nonConformiteRequestController.selected.ncrClientname==null || nonConformiteRequestController.selected.ncrClientname.trim()==''?'down':'up'}" />
+                                                            </button>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="card-body collapse #{nonConformiteRequestController.selected.ncrClientname==null || nonConformiteRequestController.selected.ncrClientname.trim()==''?'':' show'}" id="clientCardBody">
+                                                    <dl class="row small smallTxt">
+                                                        <dt class="col-md-4 col-sm-12">#{ism.NonConformiteRequestField_ncrClientname1}</dt><dd class="col-md-8 col-sm-12">#{nonConformiteRequestController.selected.ncrClientname}</dd>
+                                                        <dt class="col-md-4 col-sm-12">#{ism.NonConformiteRequestField_ncrClientaddress1}</dt><dd class="col-md-8 col-sm-12">#{nonConformiteRequestController.selected.ncrClientaddress}</dd>
+                                                        <dt class="col-md-4 col-sm-12">#{ism.NonConformiteRequestField_ncrClientphone1}</dt><dd class="col-md-8 col-sm-12">#{nonConformiteRequestController.selected.ncrClientphone}</dd>
+                                                        <dt class="col-md-4 col-sm-12">#{ism.NonConformiteRequestField_ncrClientemail1}</dt><dd class="col-md-8 col-sm-12">#{nonConformiteRequestController.selected.ncrClientemail}</dd>
+                                                        <dt class="col-md-4 col-sm-12">#{ism.NonConformiteRequestField_ncrClienttype1}</dt><dd class="col-md-8 col-sm-12">#{nonConformiteRequestController.selected.ncrClienttype}</dd>
+                                                    </dl>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </h:panelGroup>
         </ui:define>
 
 

@@ -9,90 +9,104 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbTypeDocs}" outcome="/company/smq/docType/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbView}</li>
+        </ui:define>
+
         <ui:define name="body">
-            <h1><h:outputText value="#{ism.DocTypeTitleView}"/></h1>
+
 
             <h:form id="bodyForm">
 
-                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
-                             rendered="#{docTypeController.selected != null}">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                         rendered="#{docTypeController.selected != null}">
 
-                    <h:outputText value="#{ism.DocTypeField_dctId}"/>
-                    <h:outputText value="#{docTypeController.selected.dctId}" 
-                                  title="#{ism.DocTypeFieldInfo_dctId}"/>
+                                <h:outputText value="#{ism.DocTypeField_dctId}"/>
+                                <h:outputText value="#{docTypeController.selected.dctId}" 
+                                              title="#{ism.DocTypeFieldInfo_dctId}"/>
 
-                    <h:outputText value="#{ism.DocTypeField_dctType}"/>
-                    <h:outputText value="#{docTypeController.selected.dctType}" 
-                                  title="#{ism.DocTypeFieldInfo_dctType}"/>
+                                <h:outputText value="#{ism.DocTypeField_dctType}"/>
+                                <h:outputText value="#{docTypeController.selected.dctType}" 
+                                              title="#{ism.DocTypeFieldInfo_dctType}"/>
 
-                    <h:outputText value="#{ism.DocTypeField_dctDesignation}"/>
-                    <h:outputText value="#{docTypeController.selected.dctDesignation}" 
-                                  title="#{ism.DocTypeFieldInfo_dctDesignation}"/>
+                                <h:outputText value="#{ism.DocTypeField_dctDesignation}"/>
+                                <h:outputText value="#{docTypeController.selected.dctDesignation}" 
+                                              title="#{ism.DocTypeFieldInfo_dctDesignation}"/>
 
-                    <h:outputText value="#{ism.DocTypeField_dctDeleted}"/>
-                    <p:selectBooleanCheckbox 
-                        value="#{docTypeController.selected.dctDeleted}" disabled="true"/>
+                                <h:outputText value="#{ism.DocTypeField_dctDeleted}"/>
+                                <p:selectBooleanCheckbox 
+                                    value="#{docTypeController.selected.dctDeleted}" disabled="true"/>
 
-                    <h:outputText value="#{ism.DocTypeField_dctCreated}"/>
-                    <h:outputText value="#{docTypeController.selected.dctCreated}" 
-                                  title="#{ism.DocTypeFieldInfo_dctCreated}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                    </h:outputText>
+                                <h:outputText value="#{ism.DocTypeField_dctCreated}"/>
+                                <h:outputText value="#{docTypeController.selected.dctCreated}" 
+                                              title="#{ism.DocTypeFieldInfo_dctCreated}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                </h:outputText>
 
-                    <h:outputText value="#{ism.DocTypeField_dctChanged}"/>
-                    <h:outputText value="#{docTypeController.selected.dctChanged}" 
-                                  title="#{ism.DocTypeFieldInfo_dctChanged}">
-                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
-                    </h:outputText>
+                                <h:outputText value="#{ism.DocTypeField_dctChanged}"/>
+                                <h:outputText value="#{docTypeController.selected.dctChanged}" 
+                                              title="#{ism.DocTypeFieldInfo_dctChanged}">
+                                    <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" />
+                                </h:outputText>
 
-                    <h:outputText value="#{ism.DocTypeField_dctCompany}"/>
-                    <h:outputText value="#{docTypeController.selected.dctCompany.CCompany} - #{docTypeController.selected.dctCompany.CDesignation}" 
-                                  title="#{ism.DocTypeFieldInfo_dctCompany}"/>
+                                <h:outputText value="#{ism.DocTypeField_dctCompany}"/>
+                                <h:outputText value="#{docTypeController.selected.dctCompany.CCompany} - #{docTypeController.selected.dctCompany.CDesignation}" 
+                                              title="#{ism.DocTypeFieldInfo_dctCompany}"/>
 
 
 
-                </p:panelGrid>
+                            </p:panelGrid>
+                        </div>
+                    </div>
 
-                <h:panelGroup id="btn-crud-zone_id">
-                    <p:commandButton icon="ui-btn-Print"
-                                     styleClass="ui-btn">
-                        <p:printer target="bodyForm"  />
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Edit"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Edit}"
-                                     action="Edit.xhtml?faces-redirect=true"
-                                     title="Permet d'éditer le type de document sélectionné."
-                                     disabled="#{empty docTypeController.selected 
-                                                 or empty docTypeController.selected.dctId}"
-                                     />
-                    <p:commandButton icon="ui-btn-Delete"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Delete}"
-                                     action="./List.xhtml?faces-redirect=true"
-                                     title="Permet de supprimer le type de document sélectionné !"
-                                     actionListener="#{docTypeController.destroy()}"
-                                     update=":bodyForm,:growl"
-                                     onstart=";
-                                     #{viewConfirmDialog.dlg.setHeader(ism.DocTypeDlgHeader)};
-                                     #{viewConfirmDialog.dlg.setSeverity('alert')};
-                                     #{viewConfirmDialog.dlg.setMessage(ism.DocTypeDlgMessage)}
-                                     PF('mainConfirmDialog').show()"
-                                     disabled="#{empty docTypeController.selected 
-                                                 or empty docTypeController.selected.dctId}"
-                                     >
-                        <p:confirm  />
-                    </p:commandButton>
-                    <p:commandButton icon="ui-btn-Cancel"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Cancel}" 
-                                     action="./List.xhtml?faces-redirect=true"
-                                     update=":bodyForm,:growl"
-                                     immediate="true"
-                                     />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h:panelGroup id="btn-crud-zone_id">
+                                <p:commandButton icon="ui-btn-Print"
+                                                 styleClass="ui-btn">
+                                    <p:printer target="bodyForm"  />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Edit"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Edit}"
+                                                 action="Edit.xhtml?faces-redirect=true"
+                                                 title="Permet d'éditer le type de document sélectionné."
+                                                 disabled="#{empty docTypeController.selected 
+                                                             or empty docTypeController.selected.dctId}"
+                                                 />
+                                <p:commandButton icon="ui-btn-Delete"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Delete}"
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 title="Permet de supprimer le type de document sélectionné !"
+                                                 actionListener="#{docTypeController.destroy()}"
+                                                 update=":bodyForm,:growl"
+                                                 onstart=";
+                                                 #{viewConfirmDialog.dlg.setHeader(ism.DocTypeDlgHeader)};
+                                                 #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                                 #{viewConfirmDialog.dlg.setMessage(ism.DocTypeDlgMessage)}
+                                                 PF('mainConfirmDialog').show()"
+                                                 disabled="#{empty docTypeController.selected 
+                                                             or empty docTypeController.selected.dctId}"
+                                                 >
+                                    <p:confirm  />
+                                </p:commandButton>
+                                <p:commandButton icon="ui-btn-Cancel"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cancel}" 
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 update=":bodyForm,:growl"
+                                                 immediate="true"
+                                                 />
 
-                </h:panelGroup>
-
+                            </h:panelGroup>
+                        </div>
+                    </div>
+                </div>
             </h:form>
 
         </ui:define>

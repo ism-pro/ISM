@@ -109,8 +109,8 @@ time, mark, audio, video {
 #file-layout .ui-widget-content,
 #file-layout .ui-widget-header .ui-widget-header,
 #file-layout .ui-widget-content .ui-widget-content {
-/*    font-family: calibri, Helvetica,"Trebuchet MS",  sans-serif !important;
-    font-size: 10pt;*/
+    /*    font-family: calibri, Helvetica,"Trebuchet MS",  sans-serif !important;
+        font-size: 10pt;*/
 }
 
 .ui-selectonemenu-trigger.ui-state-default.ui-corner-right{
@@ -120,6 +120,40 @@ time, mark, audio, video {
 .ui-menu{
     width: 15.5em!important;
 }
+
+
+/** ==== Affichage 100% des filtres */
+thead .ui-inputfield, 
+thead .ui-inputtext,
+thead .ui-column-customfilter input,
+thead .ui-selectonemenu{
+    min-width: 0px!important;
+    width: 100%!important;
+}
+.ui-datatable thead th, .ui-datatable tbody td, .ui-datatable tfoot td, .ui-datatable tfoot th {
+    padding: 1px 3px !important;
+}
+
+/** ==== Contrôle du column toggler pour affichage personnalisé */
+.ui-columntoggler{ min-width: 200px!important;}
+.ui-columntoggler .ui-columntoggler-close {
+    float: right;
+    margin:0px;
+    padding:0px;
+    display: none;
+}
+.ui-columntoggler .ui-columntoggler-items {
+    /* padding: 1em .4em .4em .4em; */
+    padding: 0px!important;
+    border-bottom: 1px solid #f2f2f2 !important;
+}
+.ui-columntoggler .ui-columntoggler-item label {
+    display: block;
+    padding-left: 1.5em !important;
+    margin-bottom: 0px;
+    border-bottom: 1px solid #f2f2f2 !important;
+}
+
 
 /* =============================================================================
  * Manage CRUD BUTTON / OPTIONS
@@ -588,9 +622,6 @@ a ui-panel-titlebar-icon ui-corner-all ui-state-default
 
 a span ui-icon ui-icon-minusthick
 */
-
-
-
 
 
 

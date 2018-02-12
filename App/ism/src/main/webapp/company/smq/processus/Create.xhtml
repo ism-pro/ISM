@@ -9,154 +9,168 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbProcessus}" outcome="/company/smq/processus/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbCreate}</li>
+        </ui:define>
+
         <ui:define name="body">
-            <h1><h:outputText value="#{ism.ProcessusTitleCreate}"/></h1>
+
 
             <h:form id="bodyForm">
 
-                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
-                             rendered="#{processusController.selected != null}">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                                         rendered="#{processusController.selected != null}">
 
-                    <p:outputLabel value="#{ism.ProcessusField_pId}" rendered="false" for="PId" />
-                    <p:inputText id="PId" rendered="false"
-                                 value="#{processusController.selected.PId}" 
-                                 title="#{ism.ProcessusFieldInfo_pId}" />
+                                <p:outputLabel value="#{ism.ProcessusField_pId}" rendered="false" for="PId" />
+                                <p:inputText id="PId" rendered="false"
+                                             value="#{processusController.selected.PId}" 
+                                             title="#{ism.ProcessusFieldInfo_pId}" />
 
-                    <p:outputLabel value="#{ism.ProcessusField_pProcessus}" for="PProcessus" />
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:inputText id="PProcessus" 
-                                     value="#{processusController.selected.PProcessus}" 
-                                     title="#{ism.ProcessusFieldInfo_pProcessus}" 
-                                     validator="#{processusCodeValidator.validate}" 
-                                     required="true" requiredMessage="#{ism.ProcessusRequiredMsg_pProcessus}"/>
-                        <p:message for="PProcessus" />
-                    </h:panelGrid>
-
-
-                    <p:outputLabel value="#{ism.ProcessusField_pDesignation}" for="PDesignation" />
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:inputText id="PDesignation" 
-                                     value="#{processusController.selected.PDesignation}"
-                                     title="#{ism.ProcessusFieldInfo_pDesignation}" 
-                                     validator="#{processusDesignationValidator.validate}"
-                                     required="true" requiredMessage="#{ism.ProcessusRequiredMsg_pDesignation}"/>
-                        <p:message for="PDesignation"   />
-                    </h:panelGrid>
+                                <p:outputLabel value="#{ism.ProcessusField_pProcessus}" for="PProcessus" />
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:inputText id="PProcessus" 
+                                                 value="#{processusController.selected.PProcessus}" 
+                                                 title="#{ism.ProcessusFieldInfo_pProcessus}" 
+                                                 validator="#{processusCodeValidator.validate}" 
+                                                 required="true" requiredMessage="#{ism.ProcessusRequiredMsg_pProcessus}"/>
+                                    <p:message for="PProcessus" />
+                                </h:panelGrid>
 
 
-
-                    <p:outputLabel value="#{ism.ProcessusField_pStaffManager}" for="PStaffmanager" />
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:selectOneMenu id="PStaffmanager" 
-                                         filter="true" filterMatchMode="contains"
-                                         value="#{processusController.selected.PStaffmanager}" 
-                                         converter="#{staffConverter}" 
-                                         required="true" 
-                                         requiredMessage="#{ism.ProcessusRequiredMsg_pStaffManager}"
-                                         >
-                            <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
-                            <f:selectItems value="#{staffController.itemsAvailableSelectOne}"
-                                           var="PStaffmanagerItem"
-                                           itemValue="#{PStaffmanagerItem}"
-                                           itemLabel="#{PStaffmanagerItem.stFirstname} #{PStaffmanagerItem.stLastname} #{PStaffmanagerItem.stMiddlename} [#{PStaffmanagerItem.stStaff}] "
-                                           />
-                        </p:selectOneMenu>
-                        <p:message for="PStaffmanager" />
-                    </h:panelGrid>
+                                <p:outputLabel value="#{ism.ProcessusField_pDesignation}" for="PDesignation" />
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:inputText id="PDesignation" 
+                                                 value="#{processusController.selected.PDesignation}"
+                                                 title="#{ism.ProcessusFieldInfo_pDesignation}" 
+                                                 validator="#{processusDesignationValidator.validate}"
+                                                 required="true" requiredMessage="#{ism.ProcessusRequiredMsg_pDesignation}"/>
+                                    <p:message for="PDesignation"   />
+                                </h:panelGrid>
 
 
 
-                    <p:outputLabel value="#{ism.ProcessusField_pDeleted}" for="PDeleted" />
-                    <p:selectBooleanCheckbox id="PDeleted" 
-                                             value="#{processusController.selected.PDeleted}" 
-                                             required="true" 
-                                             requiredMessage="#{ism.ProcessusRequiredMsg_pDeleted}"/>
+                                <p:outputLabel value="#{ism.ProcessusField_pStaffManager}" for="PStaffmanager" />
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:selectOneMenu id="PStaffmanager" 
+                                                     filter="true" filterMatchMode="contains"
+                                                     value="#{processusController.selected.PStaffmanager}" 
+                                                     converter="#{staffConverter}" 
+                                                     required="true" 
+                                                     requiredMessage="#{ism.ProcessusRequiredMsg_pStaffManager}"
+                                                     >
+                                        <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
+                                        <f:selectItems value="#{staffController.itemsAvailableSelectOne}"
+                                                       var="PStaffmanagerItem"
+                                                       itemValue="#{PStaffmanagerItem}"
+                                                       itemLabel="#{PStaffmanagerItem.stFirstname} #{PStaffmanagerItem.stLastname} #{PStaffmanagerItem.stMiddlename} [#{PStaffmanagerItem.stStaff}] "
+                                                       />
+                                    </p:selectOneMenu>
+                                    <p:message for="PStaffmanager" />
+                                </h:panelGrid>
 
 
 
-                    <p:outputLabel value="#{ism.ProcessusField_pCreated}" 
-                                   rendered="false" for="PCreated" />
-                    <p:calendar id="PCreated" pattern="dd/MM/yyyy HH:mm:ss" rendered="false"
-                                value="#{processusController.selected.PCreated}" 
-                                title="#{ism.ProcessusFieldInfo_pCreated}" 
-                                required="true" 
-                                requiredMessage="#{ism.ProcessusRequiredMsg_pCreated}" 
-                                showOn="button"/>
+                                <p:outputLabel value="#{ism.ProcessusField_pDeleted}" for="PDeleted" />
+                                <p:selectBooleanCheckbox id="PDeleted" 
+                                                         value="#{processusController.selected.PDeleted}" 
+                                                         required="true" 
+                                                         requiredMessage="#{ism.ProcessusRequiredMsg_pDeleted}"/>
 
 
 
-                    <p:outputLabel value="#{ism.ProcessusField_pChanged}" 
-                                   rendered="false" for="PChanged" />
-                    <p:calendar id="PChanged"  rendered="false"
-                                pattern="dd/MM/yyyy HH:mm:ss" 
-                                value="#{processusController.selected.PChanged}" 
-                                title="#{ism.ProcessusFieldInfo_pChanged}" 
-                                required="true" 
-                                requiredMessage="#{ism.ProcessusRequiredMsg_pChanged}" 
-                                showOn="button"/>
-
-                    <p:outputLabel value="#{ism.ProcessusField_pCompany}" for="PCompany" />
-                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
-                        <p:inputText id="PCompany" widgetVar="PCompany"
-                                     value="#{processusController.selected.PCompany = staffAuthController.company}" 
-                                     style="display: none" 
-                                     required="true" disabled="true" 
-                                     requiredMessage="#{ism.ProcessusRequiredMsg_pCompany}"/>
-                        <p:outputLabel style="margin-left: 5px;"
-                                       value="#{staffAuthController.company.CCompany} - #{staffAuthController.company.CDesignation}" />
-                    </h:panelGrid>
-                </p:panelGrid>
+                                <p:outputLabel value="#{ism.ProcessusField_pCreated}" 
+                                               rendered="false" for="PCreated" />
+                                <p:calendar id="PCreated" pattern="dd/MM/yyyy HH:mm:ss" rendered="false"
+                                            value="#{processusController.selected.PCreated}" 
+                                            title="#{ism.ProcessusFieldInfo_pCreated}" 
+                                            required="true" 
+                                            requiredMessage="#{ism.ProcessusRequiredMsg_pCreated}" 
+                                            showOn="button"/>
 
 
 
+                                <p:outputLabel value="#{ism.ProcessusField_pChanged}" 
+                                               rendered="false" for="PChanged" />
+                                <p:calendar id="PChanged"  rendered="false"
+                                            pattern="dd/MM/yyyy HH:mm:ss" 
+                                            value="#{processusController.selected.PChanged}" 
+                                            title="#{ism.ProcessusFieldInfo_pChanged}" 
+                                            required="true" 
+                                            requiredMessage="#{ism.ProcessusRequiredMsg_pChanged}" 
+                                            showOn="button"/>
+
+                                <p:outputLabel value="#{ism.ProcessusField_pCompany}" for="PCompany" />
+                                <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;">
+                                    <p:inputText id="PCompany" widgetVar="PCompany"
+                                                 value="#{processusController.selected.PCompany = staffAuthController.company}" 
+                                                 style="display: none" 
+                                                 required="true" disabled="true" 
+                                                 requiredMessage="#{ism.ProcessusRequiredMsg_pCompany}"/>
+                                    <p:outputLabel style="margin-left: 5px;"
+                                                   value="#{staffAuthController.company.CCompany} - #{staffAuthController.company.CDesignation}" />
+                                </h:panelGrid>
+                            </p:panelGrid>
+                        </div>
+                    </div>
 
 
 
 
 
-                <h:panelGroup id="btn-crud-zone_id"  >
-                    <p:outputLabel  value="#{ism.CreateMultiple}" style="margin-right: 10px;"/>
-                    <p:selectBooleanButton  value="#{processusController.isOnMultiCreation}" 
-                                            onLabel="#{ism.Yes}" offLabel="#{ism.No}" 
-                                            onIcon="ui-icon-check" offIcon="ui-icon-close" 
-                                            styleClass="ui-btn"
-                                            >
-                        <p:ajax update=":bodyForm:btn-crud-zone_id,westGroup,:growl" listener="#{processusController.toggleMultiCreationFake()}"  />
-                    </p:selectBooleanButton>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <h:panelGroup id="btn-crud-zone_id"  >
+                                <p:outputLabel  value="#{ism.CreateMultiple}" style="margin-right: 10px;"/>
+                                <p:selectBooleanButton  value="#{processusController.isOnMultiCreation}" 
+                                                        onLabel="#{ism.Yes}" offLabel="#{ism.No}" 
+                                                        onIcon="ui-icon-check" offIcon="ui-icon-close" 
+                                                        styleClass="ui-btn"
+                                                        >
+                                    <p:ajax update=":bodyForm:btn-crud-zone_id,westGroup,:growl" listener="#{processusController.toggleMultiCreationFake()}"  />
+                                </p:selectBooleanButton>
 
-                    <p:commandButton icon="ui-btn-Save"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Save}" 
-                                     actionListener="#{processusController.create}" 
-                                     onstart="#{p:widgetVar('bodyForm:PCompany')}.enable();"
-                                     update=":bodyForm,:growl" 
-                                     rendered="#{processusController.isOnMultiCreation}"
-                                     />
-                    <p:commandButton icon="ui-btn-SaveOne"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Save}" 
-                                     actionListener="#{processusController.createUnReleasded()}" 
-                                     onstart="#{p:widgetVar('bodyForm:PCompany')}.enable();"
-                                     update=":bodyForm,:growl"
-                                     action="List.xhtml?faces-redirect=true"
-                                     rendered="#{!processusController.isOnMultiCreation}"
-                                     />
+                                <p:commandButton icon="ui-btn-Save"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Save}" 
+                                                 actionListener="#{processusController.create}" 
+                                                 onstart="#{p:widgetVar('bodyForm:PCompany')}.enable();"
+                                                 update=":bodyForm,:growl" 
+                                                 rendered="#{processusController.isOnMultiCreation}"
+                                                 />
+                                <p:commandButton icon="ui-btn-SaveOne"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Save}" 
+                                                 actionListener="#{processusController.createUnReleasded()}" 
+                                                 onstart="#{p:widgetVar('bodyForm:PCompany')}.enable();"
+                                                 update=":bodyForm,:growl"
+                                                 action="List.xhtml?faces-redirect=true"
+                                                 rendered="#{!processusController.isOnMultiCreation}"
+                                                 />
 
-                    <p:commandButton icon="ui-btn-Cancel"
-                                     styleClass="ui-btn"
-                                     value="#{ism.Cancel}" 
-                                     update=":bodyForm,:growl"
-                                     actionListener="#{processusController.prepareCreate()}"
-                                     action="./List.xhtml?faces-redirect=true"
-                                     immediate="true"
-                                     />
+                                <p:commandButton icon="ui-btn-Cancel"
+                                                 styleClass="ui-btn"
+                                                 value="#{ism.Cancel}" 
+                                                 update=":bodyForm,:growl"
+                                                 actionListener="#{processusController.prepareCreate()}"
+                                                 action="./List.xhtml?faces-redirect=true"
+                                                 immediate="true"
+                                                 />
 
-                </h:panelGroup>
+                            </h:panelGroup>
 
-                <p:messages showDetail="true" showSummary="false"
-                            escape="false"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p:messages showDetail="true" showSummary="false" escape="false"/>
+                        </div>
+                    </div>
 
-
+                </div>
             </h:form>
 
         </ui:define>

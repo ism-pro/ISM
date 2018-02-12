@@ -16,13 +16,6 @@
 
         <ui:define name="body">
 
-            <style>
-                .ui-datatable thead th {
-                    padding: 1px 3px; 
-                }
-                .ui-datatable .ui-column-filter{max-min: calc(100% - 10px);max-width: calc(100% - 10px);}
-            </style>
-
             <h:form id="bodyForm">
                 <p:contextMenu id="contextMenu" for="datalist" >
                     <p:menuitem icon="ui-btn-Create"
@@ -134,7 +127,6 @@
                                          lazy="#{nonConformiteRequestController.tableSet.lazy}"
                                          emptyMessage="#{ism.EmptyList}"
 
-
                                          >
 
 
@@ -178,22 +170,29 @@
 
 
 
-                                <p:column headerText="#{ism.CtrlShort}" style="width:32px;text-align: center"
-                                          exportable="false"
+                                <p:column headerText="#{ism.CtrlShort}"
+                                          exportable="false" class="py-0" width="36"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.CtrlShort)}" >
-                                    <p:commandButton icon="ui-btn-View" style="width: 22px; height: 16px;"
-                                                     title="#{ism.View}" action="View.xhtml?faces-redirect=true">
-                                        <f:setPropertyActionListener value="#{item}" target="#{nonConformiteRequestController.selected}" />
-                                    </p:commandButton>
+                                    <div class="input-group text-center" data-toggle="tooltip" data-placement="left" title="#{ism.View}">
+                                        <p:commandLink  class="btn-block btn-sm"
+                                                        action="View.xhtml?faces-redirect=true">
+                                            <span class="fa fa-eye" />
+                                            <f:setPropertyActionListener value="#{item}" target="#{nonConformiteRequestController.selected}" />
+                                        </p:commandLink>
+                                    </div>
                                 </p:column>
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrId}"
-                                          style="width: 24px;" 
+                                          width="48"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrId)}"
                                           sortBy="#{item.ncrId}" 
                                           filterBy="#{item.ncrId}" filterMatchMode="contains">
-                                    <h:outputText value="#{item.ncrId}"/>
+                                    <div class="text-right">
+                                        <h:outputText class="text-right" value="#{item.ncrId}" >
+                                            <f:convertNumber  locale="fr_FR" />
+                                        </h:outputText>
+                                    </div>
                                 </p:column>
 
 
@@ -215,6 +214,7 @@
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrProcessus}" 
+                                          width="200"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrProcessus)}"
                                           sortBy="#{item.ncrProcessus}" 
                                           filterBy="#{item.ncrProcessus}">
@@ -234,6 +234,7 @@
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrState}" 
+                                          width="96"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrState)}"
                                           sortBy="#{item.ncrState}"
                                           filterBy="#{item.ncrState}">
@@ -310,13 +311,13 @@
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrOccured}" 
-                                          style="width: 72px;" 
+                                          width="72"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrOccured)}"
                                           sortBy="#{item.ncrOccured}" filterBy="#{item.ncrOccured}"
                                           filterFunction="#{nonConformiteRequestController.handleFilterDateRange}"
                                           >
                                     <f:facet name="filter">
-                                        <p:inputText id="filterOccured"  style="width: 100px!important;"
+                                        <p:inputText id="filterOccured" 
                                                      onmouseover="$(this).daterangepicker();" >
                                             <p:ajax event="change" oncomplete="PF('datalist').filter()" />
                                         </p:inputText>
@@ -380,13 +381,13 @@
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrCreated}" 
-                                          style="width: 72px;" 
+                                          width="72"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrCreated)}"
                                           sortBy="#{item.ncrCreated}" filterBy="#{item.ncrCreated}"
                                           filterFunction="#{nonConformiteRequestController.handleFilterDateRange}"
                                           >
                                     <f:facet name="filter">
-                                        <p:inputText id="filterCreated"  style="width: 100px!important;"
+                                        <p:inputText id="filterCreated" 
                                                      onmouseover="$(this).daterangepicker();" >
                                             <p:ajax event="change" oncomplete="PF('datalist').filter()" />
                                         </p:inputText>
@@ -398,13 +399,13 @@
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrChanged}" 
-                                          style="width: 72px;" 
+                                          width="72"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrChanged)}"
                                           sortBy="#{item.ncrChanged}" filterBy="#{item.ncrChanged}"
                                           filterFunction="#{nonConformiteRequestController.handleFilterDateRange}"
                                           >
                                     <f:facet name="filter">
-                                        <p:inputText id="filterChanged"  style="width: 100px!important;"
+                                        <p:inputText id="filterChanged"
                                                      onmouseover="$(this).daterangepicker();" >
                                             <p:ajax event="change" oncomplete="PF('datalist').filter()" />
                                         </p:inputText>
@@ -416,13 +417,13 @@
 
 
                                 <p:column headerText="#{ism.NonConformiteRequestField_ncrEnddingAction}" 
-                                          style="width: 72px;" 
+                                          width="72"
                                           visible="#{nonConformiteRequestController.getIsVisibleColKey(ism.NonConformiteRequestField_ncrEnddingAction)}"
                                           sortBy="#{item.ncrenddingAction}" filterBy="#{item.ncrenddingAction}"
                                           filterFunction="#{nonConformiteRequestController.handleFilterDateRange}"
                                           >
                                     <f:facet name="filter">
-                                        <p:inputText id="filterEnddingAction"  style="width: 100px!important;"
+                                        <p:inputText id="filterEnddingAction"
                                                      onmouseover="$(this).daterangepicker({datepickerOptions: {maxDate: null}});" >
                                             <p:ajax event="change" oncomplete="PF('datalist').filter()" />
                                         </p:inputText>

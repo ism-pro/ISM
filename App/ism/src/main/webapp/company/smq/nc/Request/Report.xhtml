@@ -8,17 +8,31 @@
 
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
-        <ui:define name="body" >
-            <h:form id="bodyForm" >
-                <iframe name="Viewer" 
-                        id="Viewer" 
-                        src="/ISM/crystalview/CrystalReportViewer.jsp" 
-                        height="100vh" width="100%" style="margin: 0px; padding: 0px;"
-                        frameborder="0" 
-                        marginheight="0"  
-                        marginwidth="0">
-                </iframe>
-            </h:form>
+        <ui:define name="breadcrumblist">
+            <li class="breadcrumb-item"><p:link value="#{ism.CrumbNCRequest}" outcome="/company/smq/nc/Request/List.xhtml?faces-redirect=true"/></li>
+            <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbRapport}</li>
+        </ui:define>
+
+        <ui:define name="body">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <h:form id="bodyForm">
+                            <iframe name="Viewer" 
+                                    id="Viewer" 
+                                    src="/ISM/crystalview/CrystalReportViewer.jsp" 
+                                    height="100vh" width="100%" style="margin: 0px; padding: 0px;"
+                                    frameborder="0" 
+                                    marginheight="0"  
+                                    marginwidth="0">
+                            </iframe>
+                        </h:form>
+                    </div>
+                </div>
+
+            </div>
+
+
         </ui:define>
 
 

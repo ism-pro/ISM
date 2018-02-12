@@ -141,7 +141,7 @@ public class NonConformiteRequestController implements Serializable {
 
         visibleColMap = new HashMap<>();
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"), true);
-        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("NonConformiteRequestField_ncrId"), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("NonConformiteRequestField_ncrId"), true);
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("NonConformiteRequestField_ncrStaff"), false);
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("NonConformiteRequestField_ncrTitle"), true);
         visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("NonConformiteRequestField_ncrProcessus"), true);
@@ -510,6 +510,13 @@ public class NonConformiteRequestController implements Serializable {
                 selected.setNcrLink(FileService.filenameComplete(croppedImage));
             }
         }
+        // Reset Link if undefined
+        if(selected.getNcrLink()!=null){
+            if(selected.getNcrLink().trim().isEmpty()){
+                selected.setNcrLink(null);
+            }
+        }
+        
 
         persist(PersistAction.CREATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
