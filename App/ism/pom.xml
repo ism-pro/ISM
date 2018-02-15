@@ -9,7 +9,7 @@
     
     <groupId>org.ism</groupId>
     <artifactId>app</artifactId>
-    <version>1802.09</version>
+    <version>1802.10</version>
     <packaging>war</packaging>
 
     <name>ism-app</name>

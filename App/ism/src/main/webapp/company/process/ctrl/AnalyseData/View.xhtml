@@ -48,7 +48,9 @@
 
                                 <h:outputText value="#{ism.AnalyseDataField_adValue}"  />
                                 <h:outputText value="#{analyseDataController.selected.adValue}" 
-                                              title="#{ism.AnalyseDataFieldInfo_adValue}" />
+                                              title="#{ism.AnalyseDataFieldInfo_adValue}" >
+                                    <f:convertNumber  locale="fr_FR" minFractionDigits="4" />
+                                </h:outputText>
 
 
                                 <h:outputText value="#{ism.AnalyseDataField_adValueT}"  />

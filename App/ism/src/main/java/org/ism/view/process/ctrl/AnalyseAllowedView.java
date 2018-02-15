@@ -114,32 +114,48 @@ public class AnalyseAllowedView implements Serializable {
     }
 
     /**
-     * Manage transfert from pick list depending on display mode 
+     * Manage transfert from pick list depending on display mode
+     *
      * @param typeList
-     * @param pointList 
+     * @param pointList
      */
     private void manageTransfertFromPickList(List<AnalyseType> typeList, List<AnalysePoint> pointList) {
         // Finish running if none of the two list is defined
         if (typeList.isEmpty() && pointList.isEmpty()) {
             return;
         }
-        
+
         Integer aaCount = analyseAllowedController.getCount();
 
         // Append new Item to list
-        
         if (displayMode == 1) {
-            
-            for (AnalyseType at : typeList) {
-                AnalyseAllowed aa = new AnalyseAllowed(aaCount+preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
-                aa.setAaPoint(selected.getAaPoint());
-                aa.setAaType(at);
-                preset.add(aa);
+            Boolean isAdd = false;
+            if (analyseTypeModel.getTarget() != null) {
+                if (analyseTypeModel.getTarget().size() > preset.size()) { // add
+                    isAdd = true;
+                }
+            }
+            if (isAdd) {
+                for (AnalyseType at : typeList) {
+                    AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
+                    aa.setAaPoint(selected.getAaPoint());
+                    aa.setAaType(at);
+                    preset.add(aa);
+                }
+            }else{
+                List<Integer> index;
+                for(AnalyseAllowed aa : preset){
+                    for(AnalyseType at : typeList){
+                        if(at == aa.getAaType()){
+                            preset.remove(aa);
+                        }
+                    }
+                }
             }
         } else {
             for (AnalysePoint ap : pointList) {
-                AnalyseAllowed aa = new AnalyseAllowed(aaCount+preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
-                aa.setAaId(aaCount+preset.size());
+                AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
+                aa.setAaId(aaCount + preset.size());
                 aa.setAaPoint(ap);
                 aa.setAaType(selected.getAaType());
                 preset.add(aa);
@@ -201,8 +217,8 @@ public class AnalyseAllowedView implements Serializable {
     }
 
     /**
-     * 
-     * @param event 
+     *
+     * @param event
      */
     public void handleAnalysePointTransfer(TransferEvent event) {
         StringBuilder builder = new StringBuilder();
@@ -218,7 +234,7 @@ public class AnalyseAllowedView implements Serializable {
         msg.setDetail(builder.toString());
 
         FacesContext.getCurrentInstance().addMessage(null, msg);
-        
+
         /// Manage Transfert
         manageTransfertFromPickList(null, pointList);
     }
