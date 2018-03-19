@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ic="http://www.ism.org/charts"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="/tmpl/DeskWindow.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="bodyForm">
+                    <br/>
+                    <h4>Image - Cropper</h4>
+                    <hr />
+                    <hr />
+                    <br/>
+
+
+
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <br />
+
+
+                    <p:panelGrid columns="2" class="gridPanel">
+
+                        <p:outputLabel value="Image" />
+                        <p:inputText   id="ncrLink" 
+                                       value="Test"
+                                       title="Un test" 
+                                       />
+                        <ic:inputCropper id="ncrLinkCropper" for="ncrLink"
+                                         aspectRatio="photo"
+                                         loadingGif="/resources/img/ism/std/Onload.gif"
+                                         header="Image de non conformite" >
+                            <p:ajax event="cropped" listener="#{cropperView.handleCroppedImage}" update="growl" />
+                            <p:ajax event="cropError" listener="#{cropperView.handleCropError}" update="growl" />
+                        </ic:inputCropper>
+
+                    </p:panelGrid>
+
+                    <br/>
+                    <br/><br/><br/><br/>
+
+
+
+
+                </h:form>
+
+
+
+
+
+
+                <style>
+                    .gridPanel{ width: 100%;}
+                    .gridField{}
+                    .gridContent{ width: 100%;}
+                </style>
+                <script  type="text/javascript">
+
+
+                    $(function () {
+                        PrimeFaces.cw("InputCropper", "widget_inputCropper", {id: "inputCropper", stateful: false});
+                    });
+                </script>
+
+
+
+
+
+
+
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

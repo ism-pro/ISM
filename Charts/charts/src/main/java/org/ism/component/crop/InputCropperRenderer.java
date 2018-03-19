@@ -44,24 +44,22 @@ public class InputCropperRenderer extends CoreRenderer {
             String croppedInfosValue = params.get(croppedInfos);
             // parse
             org.ism.model.cropper.CroppedImage croppedImage = org.ism.model.cropper.CroppedImage.unparse(croppedInfosValue);
-            if(croppedImage!=null){
+            if (croppedImage != null) {
                 cropper.setImageCropped(croppedImage);
             }
-            
+
         }
-        
+
         if (params.containsKey(cropError)) {
             // convert to iamge
             String cropErrorValue = params.get(cropError);
             cropper.setCropError(CropError.unparse(cropErrorValue));
         }
-        
-        
+
         if (params.containsKey(croppedData)) {
             // convert to iamge
             String base64Data = params.get(croppedData);
         }
-
 
         decodeBehaviors(context, component);
     }
@@ -71,7 +69,7 @@ public class InputCropperRenderer extends CoreRenderer {
         InputCropper cropper = (InputCropper) component;
 
         encodeMarkup(context, cropper);
-        
+
         encodeScript(context, cropper);
     }
 
@@ -83,9 +81,16 @@ public class InputCropperRenderer extends CoreRenderer {
 
         WidgetBuilder wb = getWidgetBuilder(context); //, clientId + "_image"
         wb.initWithDomReady("InputCropper", widgetVar, clientId)
-                .attr("image", image)
                 .attr("for", cropper.getFor())
+                .attr("image", cropper.getImage())
+                .attr("dragMode", cropper.getDragMode())
+                .attr("rotation", cropper.getRotation())
+                .attr("zoom", cropper.getZoom())
+                .attr("zoomX", cropper.getZoomX())
+                .attr("zoomY", cropper.getZoomY())
+                .attr("uploadUrl", cropper.getUploadUrl())
                 .attr("aspectRatio", cropper.getAspectRatio());
+
 
         if (cropper.getMinSize() != null) {
             wb.append(",minSize:[").append(cropper.getMinSize()).append("]");
@@ -160,7 +165,7 @@ public class InputCropperRenderer extends CoreRenderer {
         writer.writeAttribute("id", inputCropperHolderId, null);
         writer.writeAttribute("name", inputCropperHolderId, null);
         writer.endElement("input");
-        
+
         // Loading
         writer.startElement("div", null);
         writer.writeAttribute("class", "loading", null);
@@ -173,12 +178,10 @@ public class InputCropperRenderer extends CoreRenderer {
         writer.endElement("img");   // == Loading image
         writer.endElement("div");   // == Loading end
 
-        
         //
-        Util.encodeStateHolder(context, clientId + "_croppedInfos",  "");
-        Util.encodeStateHolder(context, clientId + "_cropError",  "");
+        Util.encodeStateHolder(context, clientId + "_croppedInfos", "");
+        Util.encodeStateHolder(context, clientId + "_cropError", "");
         Util.encodeStateHolder(context, clientId + "_croppedData", "");
-    
 
     }
 
@@ -214,6 +217,9 @@ public class InputCropperRenderer extends CoreRenderer {
         writer.writeAttribute("id", clientId + "_cropImg", null);
         writer.writeAttribute("alt", alt, null);
         writer.writeAttribute("class", "ic-crop-img-cropped", null);
+        if (cropper.getImage() != null) {
+            writer.writeAttribute("src", getResourceURL(context, cropper.getImage()), null);
+        }
         writer.endElement("img"); // == image
         writer.endElement("div"); // == input field name in
         writer.endElement("div"); // == input field
@@ -487,6 +493,13 @@ public class InputCropperRenderer extends CoreRenderer {
         writer.endElement("button");   //== Button
     }
 
+    /**
+     *
+     * @param context
+     * @param cropper
+     * @param clientId
+     * @throws IOException
+     */
     private void renderCropperRowViewers(FacesContext context, InputCropper cropper, String clientId) throws IOException {
         ResponseWriter writer = context.getResponseWriter();
 
@@ -499,6 +512,12 @@ public class InputCropperRenderer extends CoreRenderer {
         writer.writeAttribute("class", "col-md-9", null);
         writer.startElement("div", null);
         writer.writeAttribute("class", "img-wrapper", null);
+        //== Image
+        if (cropper.getImage()!=null) {
+            writer.startElement("img", null);
+            //writer.writeAttribute("src", getResourceURL(context, cropper.getImage()), null);
+            writer.endElement("img"); // == image
+        }
         writer.endElement("div");
         writer.endElement("div");   //== Wrapper
         //== Viewers
@@ -536,7 +555,6 @@ public class InputCropperRenderer extends CoreRenderer {
         encodeInputViewer(context, cropper, "dataX", "X", "px");
         encodeInputViewer(context, cropper, "dataY", "Y", "px");
         encodeInputViewer(context, cropper, "dataWidth", "W", "px");
-        encodeInputViewer(context, cropper, "dataHeight", "H", "px");
         encodeInputViewer(context, cropper, "dataHeight", "H", "px");
         encodeInputViewer(context, cropper, "dataRotate", "R", "°");
         encodeInputViewer(context, cropper, "dataScaleX", "FX", "%");
@@ -991,8 +1009,7 @@ public class InputCropperRenderer extends CoreRenderer {
 
         return format;
     }
-    
-    
+
     public org.ism.model.cropper.CroppedImage unparseObj(InputCropper cropper, String croppedInfos) {
         Gson g = new Gson();
         //Util.out("Serie : " + selectedSerie);

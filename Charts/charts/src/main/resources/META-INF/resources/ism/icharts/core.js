@@ -630,7 +630,8 @@ if (!IChartsFaces.env) {
             return !!(a.getContext && a.getContext("2d"))
         }};
     IChartsFaces.env.init();
-};
+}
+;
 
 if (!IChartsFaces.ajax) {
     IChartsFaces.AB_MAPPING = {s: "source", f: "formId", p: "process", u: "update", e: "event", a: "async", g: "global", d: "delay", t: "timeout", sc: "skipChildren", iau: "ignoreAutoUpdate", ps: "partialSubmit", psf: "partialSubmitFilter", rv: "resetValues", fi: "fragmentId", fu: "fragmentUpdate", pa: "params", onst: "onstart", oner: "onerror", onsu: "onsuccess", onco: "oncomplete"};
@@ -743,9 +744,15 @@ if (!IChartsFaces.ajax) {
             }
         },
         Queue: {
-            delays: {}, requests: new Array(), xhrs: new Array(), offer: function (a) {
+            delays: {},
+            requests: new Array(),
+            xhrs: new Array(),
+            offer: function (a) {
                 if (a.delay) {
-                    var b = null, d = this, b = (typeof (a.source) === "string") ? a.source : $(a.source).attr("id"), c = function () {
+                    var b = null;
+                    var d = this;
+                    var b = (typeof (a.source) === "string") ? a.source : $(a.source).attr("id");
+                    var c = function () {
                         return setTimeout(function () {
                             d.requests.push(a);
                             if (d.requests.length === 1) {
@@ -1044,7 +1051,7 @@ if (!IChartsFaces.ajax) {
                     c += " " + a.ext[b]
                 }
                 return c
-            }, 
+            },
             resolveComponentsForAjaxCall: function (a, b) {
                 var c = IChartsFaces.ajax.Request.resolveExpressionsForAjaxCall(a, b);
                 return IChartsFaces.expressions.SearchExpressionFacade.resolveComponents(c)
@@ -1087,7 +1094,7 @@ if (!IChartsFaces.ajax) {
                 }
                 return null
             }
-        }, 
+        },
         Response: {
             handle: function (h, e, m, b) {
                 var n = h.getElementsByTagName("partial-response")[0];
@@ -1161,7 +1168,7 @@ if (!IChartsFaces.ajax) {
                     }
                 }
                 IChartsFaces.customFocus = false
-            }, 
+            },
             destroyDetachedWidgets: function () {
                 for (var a = 0; a < IChartsFaces.detachedWidgets.length; a++) {
                     var d = IChartsFaces.detachedWidgets[a];
@@ -1195,7 +1202,7 @@ if (!IChartsFaces.ajax) {
                 } else {
                     IChartsFaces.ajax.Utils.updateElement(e, b, d)
                 }
-            }, 
+            },
             doEval: function (b) {
                 var a = b.textContent || b.innerText || b.text;
                 $.globalEval(a)
@@ -1214,12 +1221,12 @@ if (!IChartsFaces.ajax) {
                         }
                     }
                 }
-            }, 
-            doError: function (a, b) {}, 
+            },
+            doError: function (a, b) {},
             doDelete: function (a) {
                 var b = a.getAttribute("id");
                 $(IChartsFaces.escapeClientId(b)).remove()
-            }, 
+            },
             doInsert: function (d) {
                 if (!d.childNodes) {
                     return false
@@ -1257,16 +1264,17 @@ if (!IChartsFaces.ajax) {
                     f.attr(a, e)
                 }
             }
-        }, 
+        },
         AjaxRequest: function (a, b) {
             return IChartsFaces.ajax.Request.handle(a, b);
         }
     };
-    
+
     $(window).unload(function () {
         IChartsFaces.ajax.Queue.abortAll();
     });
-};
+}
+;
 
 if (!IChartsFaces.expressions) {
     IChartsFaces.expressions = {};
@@ -1366,7 +1374,8 @@ if (!IChartsFaces.expressions) {
             return e
         }
     }
-};
+}
+;
 
 (function () {
     var a = false, b = /xyz/.test(function () {
@@ -1419,10 +1428,10 @@ if (!IChartsFaces.widget) {
                     }
                 })
             }
-        }, 
+        },
         refresh: function (a) {
             return this.init(a)
-        }, 
+        },
         destroy: function () {
             IChartsFaces.debug("Destroyed detached widget: " + this.widgetVar)
         },
@@ -1477,7 +1486,8 @@ if (!IChartsFaces.widget) {
             }
         }
     });
-};
+}
+;
 
 IChartsFaces.widget.AjaxStatus = IChartsFaces.widget.BaseWidget.extend({
     init: function (a) {

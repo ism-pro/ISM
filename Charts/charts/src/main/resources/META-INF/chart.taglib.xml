@@ -564,6 +564,15 @@
             <renderer-type>org.ism.component.InputCropperRenderer</renderer-type>
         </component>
         
+        
+        <attribute>
+            <description><![CDATA[Alternate text of the image.]]></description>
+            <name>alt</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        
         <attribute>
             <description>
                 <![CDATA[
@@ -575,6 +584,7 @@
             <name>applyLabel</name>
             <type>java.lang.String</type>
         </attribute>
+        
         
         <attribute>
             <description>
@@ -605,6 +615,37 @@
             <required>false</required>
             <type>javax.faces.component.UIComponent</type>
         </attribute>
+      
+        
+        <attribute>
+            <description><![CDATA[Background color of the container.]]></description>
+            <name>backgroundColor</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Background opacity of the container. Default is 0.6]]></description>
+            <name>backgroundOpacity</name>
+            <required>false</required>
+            <type>java.lang.Double</type>
+        </attribute>
+        
+                
+        <attribute>
+            <description><![CDATA[Maximum box height of the cropping area.]]></description>
+            <name>boxHeight</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Maximum box width of the cropping area.]]></description>
+            <name>boxWidth</name>
+            <required>false</required>
+            <type>java.lang.Integer</type>
+        </attribute>
+
         
         <attribute>
             <description>
@@ -616,35 +657,37 @@
             <name>chooseLabel</name>
             <type>java.lang.String</type>
         </attribute>
+        
+
         <attribute>
             <description>
-                <![CDATA[
-                    Closable specify wheter or not closable but has to be display.
-                    Default value is "true". 
-                ]]>
+                <![CDATA[Display or not the close button on modal editor]]>
             </description>
             <name>closable</name>
             <type>java.lang.Boolean</type>
         </attribute>
+        
         <attribute>
             <description>
-                <![CDATA[
-                    Insert a title to the close button.
-                    Default value is "Fermer/Quitter". 
-                    Write null if does not want a title on close button.
-                ]]>
+                <![CDATA[Hearder of the title bar in the modal window. ]]>
             </description>
             <name>closeTitle</name>
             <type>java.lang.String</type>
         </attribute>
+        
         <attribute>
             <description>
-                <![CDATA[
-                    Specify a title bar text header
-                    Default value is "Crop Avatar". 
+                <![CDATA[Define the dragging mode of the cropper :<br>
+                        Default: 'crop' <br>
+                        Options: <br>
+                        <ul>
+                        <li>'crop': create a new crop box<li>
+                        <li>'move': move the canvas<li>
+                        <li>'none': do nothing<li>
+                        <ul>
                 ]]>
             </description>
-            <name>closeTitle</name>
+            <name>dragMode</name>
             <type>java.lang.String</type>
         </attribute>
         
@@ -661,6 +704,7 @@
         </attribute>
         
         
+        
         <attribute>
             <description>
                 <![CDATA[
@@ -673,9 +717,25 @@
             <type>java.lang.String</type>
         </attribute>
         
+
         <attribute>
             <description><![CDATA[Unique identifier of the component in a namingContainer.]]></description>
             <name>id</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Context relative path to the image]]></description>
+            <name>image</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        
+        <attribute>
+            <description><![CDATA[Initial coordinates of the cropper area.]]></description>
+            <name>initialCoords</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
@@ -705,6 +765,19 @@
         </attribute>
 
 
+        <attribute>
+            <description><![CDATA[Minimum size of the cropper area.]]></description>
+            <name>minSize</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Maximum size of the cropper area.]]></description>
+            <name>maxSize</name>
+            <required>false</required>
+            <type>java.lang.String</type>
+        </attribute>
 
 
         <attribute>
@@ -714,8 +787,48 @@
             <type>java.lang.Boolean</type>
         </attribute>
 
+        <attribute>
+            <description><![CDATA[Rotation of the image]]></description>
+            <name>rotation</name>
+            <required>false</required>
+            <type>java.lang.Double</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[Upload Url define the servlet which manage the uplaod content]]></description>
+            <name>uploadUrl</name>
+            <required>true</required>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description><![CDATA[Zoom of the picture in both direction x, y <br>
+                NB : prior is to zoomX and zoomY. Default value 1]]></description>
+            <name>zoom</name>
+            <required>false</required>
+            <type>java.lang.Double</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Zoom of the picture in X direction <br>
+                NB : prior is on zoomX and not zoom. Default value 1]]></description>
+            <name>zoomX</name>
+            <required>false</required>
+            <type>java.lang.Double</type>
+        </attribute>
+        
+        <attribute>
+            <description><![CDATA[Zoom of the picture in Y direction <br>
+                NB : prior is on zoomY and not zoom. Default value 1]]></description>
+            <name>zoomY</name>
+            <required>false</required>
+            <type>java.lang.Double</type>
+        </attribute>
+        
+        
 
 
+        <!-- FROM PARENT -->
 
         <attribute>
             <description><![CDATA[Value of the component.]]></description>
@@ -723,6 +836,7 @@
             <required>false</required>
             <type>java.lang.Object</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[An el expression or a literal text that defines a converter for the component. When it's an EL expression, it's resolved to a converter instance. 
     In case it's a static text, it must refer to a converter id.]]></description>
@@ -730,114 +844,66 @@
             <required>false</required>
             <type>java.faces.convert.Converter</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[When set true, process validations logic is executed at apply request values phase for this component. Default is false.]]></description>
             <name>immediate</name>
             <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[Marks component as required.]]></description>
             <name>required</name>
             <required>false</required>
             <type>java.lang.Boolean</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[A method expression referring to a method validationg the input.]]></description>
             <name>validator</name>
             <required>false</required>
             <type>javax.faces.validator.Validator</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[A method binding expression referring to a method for handling a valuchangeevent.]]></description>
             <name>valueChangeListener</name>
             <required>false</required>
             <type>javax.faces.event.ValueChangeListener</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[Message to display when required field validation fails.]]></description>
             <name>requiredMessage</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[Message to display when conversion fails.]]></description>
             <name>converterMessage</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[Message to display when validation fails.]]></description>
             <name>validatorMessage</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
+        
         <attribute>
             <description><![CDATA[Name of the client side widget.]]></description>
             <name>widgetVar</name>
             <required>false</required>
             <type>java.lang.String</type>
         </attribute>
-        <attribute>
-            <description><![CDATA[Context relative path to the image.]]></description>
-            <name>image</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Alternate text of the image.]]></description>
-            <name>alt</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Aspect ratio of the cropper area.]]></description>
-            <name>aspectRatio</name>
-            <required>false</required>
-            <type>java.lang.Double</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Minimum size of the cropper area.]]></description>
-            <name>minSize</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Maximum size of the cropper area.]]></description>
-            <name>maxSize</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Background color of the container.]]></description>
-            <name>backgroundColor</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Background opacity of the container. Default is 0.6]]></description>
-            <name>backgroundOpacity</name>
-            <required>false</required>
-            <type>java.lang.Double</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Initial coordinates of the cropper area.]]></description>
-            <name>initialCoords</name>
-            <required>false</required>
-            <type>java.lang.String</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Maximum box width of the cropping area.]]></description>
-            <name>boxWidth</name>
-            <required>false</required>
-            <type>java.lang.Integer</type>
-        </attribute>
-        <attribute>
-            <description><![CDATA[Maximum box height of the cropping area.]]></description>
-            <name>boxHeight</name>
-            <required>false</required>
-            <type>java.lang.Integer</type>
-        </attribute>
+
+
+
+        
     </tag>
     <!-- =======================================================================
     // =========================================================================

@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ic="http://www.ism.org/charts"
+      xml:space="preserve"
+      >
+
+    <body>
+
+        <ui:composition template="/tmpl/DeskWindow.xhtml">
+
+            <ui:define name="content">
+
+
+
+                <h2>Desk</h2>
+
+                <div>
+                    <div style="padding: 10px; max-width: 250px;width: auto;  height: 380px; float: left; border: 1px dashed #2b908f;">
+                        <ic:desk id="deskMenu"
+                                 navigatorTitled="true" navigatorTitle="Agrandir et Réduire le menu" 
+                                 headered="true"
+                                 closable="true" closeTitle="Fermer le menu"
+                                 collapsed="true" collapseTitle="Mode auto réduction" collapseSpeed="1000"
+                                 menu="3"
+                                 icon="fa fa-navicon fa-1x"
+                                 >
+
+                            <ic:tab title="Dashboard" 
+                                    faIcon="fa fa-home fa-1x" 
+                                    titletip="Dashboard">
+                                <h5>Contenu Dashboard</h5>
+                            </ic:tab>
+                            <ic:tab  title="Administration" faIcon="fa fa-heartbeat fa-1x">
+                                <h5>Contenu Administration</h5>
+                            </ic:tab>
+                            <ic:tab  title="Ressources" faIcon="fa fa-users fa-1x">
+                                <h5>Contenu Ressources</h5>
+                            </ic:tab>
+                            <ic:tab  title="Process" faIcon="fa fa-industry fa-1x">
+                                <h5>Contenu Process</h5>
+                            </ic:tab>
+                            <ic:tab title="Affichage" faIcon="fa fa-desktop fa-1x">
+                                <h5>Contenu Affichage</h5>
+                            </ic:tab>
+                            <ic:tab title="Options" faIcon="fa fa-plus-circle fa-1x">
+                                <h5>Contenu Options</h5>
+                            </ic:tab>
+                            <ic:tab title="Documentations"  faIcon="fa fa-question fa-1x">
+                                <h5>Contenu Documentation</h5>
+                            </ic:tab>
+                        </ic:desk>
+                    </div>
+
+                    <div style="padding: 10px; width: auto; height: 380px;  border: 1px dashed #2b908f;">
+                        Content Area
+                    </div>
+                </div>
+
+
+
+                <h:form id="bodyForm">
+
+
+                </h:form>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>

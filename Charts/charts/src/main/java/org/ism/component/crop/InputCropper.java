@@ -31,10 +31,9 @@ import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.event.BehaviorEvent;
 import javax.faces.event.FacesEvent;
 import org.ism.event.CropErrorEvent;
+import org.ism.event.CroppedDataEvent;
 import org.ism.event.CroppedEvent;
-import org.ism.event.SerieClickEvent;
 import org.ism.model.cropper.CropError;
-import org.ism.model.json.Options;
 import org.primefaces.event.CloseEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
@@ -93,7 +92,6 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
         applyLabel,
         applyTitle,
         aspectRatio,
-        inputTitle,
         backgroundColor,
         backgroundOpacity,
         boxHeight,
@@ -102,17 +100,24 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
         closable,
         closeTitle,
         cropError,
-        imageCropped,
+        dragMode,
         For,
         header,
         image,
+        imageCropped,
         initialCoords,
+        inputTitle,
         loadingGif,
         minSize,
         maxSize,
+        rotation,
         style,
         styleClass,
-        widgetVar;
+        uploadUrl,
+        widgetVar,
+        zoom,
+        zoomX,
+        zoomY,;
 
         String toString;
 
@@ -270,6 +275,14 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
         getStateHelper().put(PropertyKeys.cropError, cropError);
     }
 
+    public String getDragMode() {
+        return (String) getStateHelper().eval(PropertyKeys.dragMode, "crop");
+    }
+
+    public void setDragMode(String dragMode) {
+        getStateHelper().put(PropertyKeys.dragMode, dragMode);
+    }
+
     public java.lang.String getFor() {
         return (java.lang.String) getStateHelper().eval(PropertyKeys.For, null);
     }
@@ -334,6 +347,14 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
         getStateHelper().put(PropertyKeys.maxSize, _maxSize);
     }
 
+    public Double getRotation() {
+        return (Double) getStateHelper().eval(PropertyKeys.rotation, 180d);
+    }
+
+    public void setRotation(Double rotation) {
+        getStateHelper().put(PropertyKeys.rotation, rotation);
+    }
+
     public java.lang.String getStyle() {
         return (java.lang.String) getStateHelper().eval(PropertyKeys.style, null);
     }
@@ -349,6 +370,14 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
     public void setStyleClass(java.lang.String _styleClass) {
         getStateHelper().put(PropertyKeys.styleClass, _styleClass);
     }
+    
+    public java.lang.String getUploadUrl() {
+        return (java.lang.String) getStateHelper().eval(PropertyKeys.uploadUrl, "/");
+    }
+
+    public void setUploadUrl(java.lang.String uploadUrl) {
+        getStateHelper().put(PropertyKeys.uploadUrl, uploadUrl);
+    }
 
     public java.lang.String getWidgetVar() {
         return (java.lang.String) getStateHelper().eval(PropertyKeys.widgetVar, null);
@@ -356,6 +385,30 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
 
     public void setWidgetVar(java.lang.String _widgetVar) {
         getStateHelper().put(PropertyKeys.widgetVar, _widgetVar);
+    }
+
+    public Double getZoom() {
+        return (Double) getStateHelper().eval(PropertyKeys.zoom, 1d);
+    }
+
+    public void setZoom(Double zoom) {
+        getStateHelper().put(PropertyKeys.rotation, zoom);
+    }
+
+    public Double getZoomX() {
+        return (Double) getStateHelper().eval(PropertyKeys.zoomX, 1d);
+    }
+
+    public void setZoomX(Double zoomX) {
+        getStateHelper().put(PropertyKeys.zoomX, zoomX);
+    }
+
+    public Double getZoomY() {
+        return (Double) getStateHelper().eval(PropertyKeys.zoomY, 1d);
+    }
+
+    public void setZoomY(Double zoomY) {
+        getStateHelper().put(PropertyKeys.zoomY, zoomY);
     }
 
     /// ////////////////////////////////////////////////////////////////////////
@@ -369,6 +422,7 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
         {
             put("cropped", CroppedEvent.class);
             put("cropError", CropErrorEvent.class);
+            put("croppedData", CroppedDataEvent.class);
             put("cropStart", SelectEvent.class);
             put("cropEnd", UnselectEvent.class);
             put("crop", CloseEvent.class);
@@ -382,7 +436,7 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
         return BEHAVIOR_EVENT_MAPPING;
     }
 
-    private final static String DEFAULT_EVENT = "cropped, cropError, cropStart, cropEnd, crop";
+    private final static String DEFAULT_EVENT = "cropped, cropError, croppedData, cropStart, cropEnd, crop";
 
     @Override
     public Collection<String> getEventNames() {
@@ -409,6 +463,9 @@ public class InputCropper extends UIInput implements org.primefaces.component.ap
                 super.queueEvent(evt);
             } else if (eventName.equals("cropError")) {
                 CropErrorEvent evt = new CropErrorEvent(this, behaviorEvent.getBehavior(), getCropError(), null);
+                super.queueEvent(evt);
+            } else if (eventName.equals("croppedData")) {
+                CroppedDataEvent evt = new CroppedDataEvent(this, behaviorEvent.getBehavior(), null, null);
                 super.queueEvent(evt);
             }
         } else {

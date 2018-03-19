@@ -1,0 +1,65 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ic="http://www.ism.org/charts"
+
+      xmlns:p="http://primefaces.org/ui">
+
+    <body>
+
+        <ui:composition template="/tmpl/DeskWindow.xhtml">
+
+            <ui:define name="content">
+
+                <h:form id="bodyForm">
+                    <br/>
+                    <h4>Image - Cropper</h4>
+                    <hr />
+                    <hr />
+                    <br/>
+
+
+
+                    <p:growl id="msgs" showDetail="true"/>
+
+                    <br />
+                    <!--
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">@</span>
+                        </div>
+                        <input type="text" class="form-control"
+                               placeholder="Username" aria-label="Username" 
+                               aria-describedby="basic-addon1" 
+                               value="" />
+
+                    </div>
+                    -->
+
+                    <ic:cropAvatar
+                        id="myCropper"
+                        value="#{cropperView.croppedImage1}" 
+                        image="/img/a/a.jpg" 
+                        boxWidth="340"
+                        boxHeight="340"
+                        minSize="50,100"
+                        initialCoords="150,150,10000,10000"
+
+                        applyLabel="Executer"
+
+                        />
+
+
+                </h:form>
+                
+                
+                
+
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
