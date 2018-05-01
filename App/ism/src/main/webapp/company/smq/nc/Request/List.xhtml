@@ -17,81 +17,76 @@
         <ui:define name="body">
 
             <h:form id="bodyForm">
-                <p:contextMenu id="contextMenu" for="datalist" >
-                    <p:menuitem icon="ui-btn-Create"
-                                styleClass="options-btn"
-                                value="#{ism.Create}" 
-                                actionListener="#{nonConformiteRequestController.prepareCreate()}"
-                                action="Create.xhtml?faces-redirect=true"
-                                title="Permet de créer une nouvelle non conformité"
-                                />
-                    <p:separator />
-                    <p:menuitem icon="ui-btn-View" iconPos="left"
-                                styleClass="options-btn"
-                                value="#{ism.View}"
-                                action="View.xhtml?faces-redirect=true"
-                                title="Permet de visualiser la non conformité sélectionné."
-                                disabled="#{empty nonConformiteRequestController.selected 
-                                            or empty nonConformiteRequestController.selected.ncrId}"
-                                onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)"
-                                />
-                    <p:menuitem icon="ui-btn-Edit"
-                                styleClass="options-btn"
-                                value="#{ism.Edit}"
-                                action="Edit.xhtml?faces-redirect=true"
-                                title="Permet d'editer la non conformité sélectionné."
-                                disabled="#{empty nonConformiteRequestController.selected 
-                                            or empty nonConformiteRequestController.selected.ncrId
-                                            or nonConformiteRequestController.selected.ncrState.id!=1}"
-                                rendered="#{request.isUserInRole('CO_SMQNCVALIDATE_W')}"
-                                />
-                    <p:menuitem icon="ui-btn-Approuve"
-                                styleClass="options-btn"
-                                value="#{ism.Validate}"
-                                action="Validate.xhtml?faces-redirect=true"
-                                title="Permet d'accepter ou refuser la non conformité sélectionné."
-                                disabled="#{empty nonConformiteRequestController.selected 
-                                            or empty nonConformiteRequestController.selected.ncrId
-                                            or nonConformiteRequestController.selected.ncrState.id!=1}"
-                                rendered="#{request.isUserInRole('SNC_REQUEST_VA')}"
-                                />
-                    <p:menuitem icon="ui-btn-Delete"
-                                styleClass="options-btn"
-                                value="#{ism.Delete}"
-                                title="Permet de supprimer la non conformité sélectionné !"
-                                actionListener="#{nonConformiteRequestController.destroy()}"
-                                update=":bodyForm:datalist, westGroup,:growl"
-                                onstart=";
-                                #{viewConfirmDialog.dlg.setHeader(ism.NonConformiteRequestDlgHeader)};
-                                #{viewConfirmDialog.dlg.setSeverity('alert')};
-                                #{viewConfirmDialog.dlg.setMessage(ism.NonConformiteRequestDlgMessage)};
-                                PF('mainConfirmDialog').show();"
-                                disabled="#{empty nonConformiteRequestController.selected 
-                                            or empty nonConformiteRequestController.selected.ncrId
-                                            or nonConformiteRequestController.selected.ncrState.id!=1}"
-                                rendered="#{request.isUserInRole('SNC_REQUEST_E')}"
-                                >
-                        <p:confirm  />
-                    </p:menuitem>
-                    <p:menuitem icon="ui-btn-Refresh"
-                                styleClass="options-btn"
-                                value="#{ism.Refresh}"
-                                title="Permet de rafraichir la table des non conformités "
-                                actionListener="#{nonConformiteRequestController.releaseSelected()}"
-                                update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
-                                disabled="#{empty nonConformiteRequestController.selected }"
-                                />
-                </p:contextMenu>
-
-
-
-
-
-
-
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12 col-sm-12">
+                            <p:contextMenu id="contextMenu" for="datalist" >
+                                <p:menuitem icon="ui-btn-Create"
+                                            styleClass="options-btn"
+                                            value="#{ism.Create}" 
+                                            actionListener="#{nonConformiteRequestController.prepareCreate()}"
+                                            action="Create.xhtml?faces-redirect=true"
+                                            title="Permet de créer une nouvelle non conformité"
+                                            />
+                                <p:separator />
+                                <p:menuitem icon="ui-btn-View" iconPos="left"
+                                            styleClass="options-btn"
+                                            value="#{ism.View}"
+                                            action="View.xhtml?faces-redirect=true"
+                                            title="Permet de visualiser la non conformité sélectionné."
+                                            disabled="#{empty nonConformiteRequestController.selected 
+                                                        or empty nonConformiteRequestController.selected.ncrId}"
+                                            onclick="PrimeFaces.monitorDownload(showStatus, hideStatus)"
+                                            />
+                                <p:menuitem icon="ui-btn-Edit"
+                                            styleClass="options-btn"
+                                            value="#{ism.Edit}"
+                                            action="Edit.xhtml?faces-redirect=true"
+                                            title="Permet d'editer la non conformité sélectionné."
+                                            disabled="#{empty nonConformiteRequestController.selected 
+                                                        or empty nonConformiteRequestController.selected.ncrId
+                                                        or nonConformiteRequestController.selected.ncrState.id!=1}"
+                                            rendered="#{request.isUserInRole('CO_SMQNCVALIDATE_W')}"
+                                            />
+                                <p:menuitem icon="ui-btn-Approuve"
+                                            styleClass="options-btn"
+                                            value="#{ism.Validate}"
+                                            action="Validate.xhtml?faces-redirect=true"
+                                            title="Permet d'accepter ou refuser la non conformité sélectionné."
+                                            disabled="#{empty nonConformiteRequestController.selected 
+                                                        or empty nonConformiteRequestController.selected.ncrId
+                                                        or nonConformiteRequestController.selected.ncrState.id!=1}"
+                                            rendered="#{request.isUserInRole('SNC_REQUEST_VA')}"
+                                            />
+                                <p:menuitem icon="ui-btn-Delete"
+                                            styleClass="options-btn"
+                                            value="#{ism.Delete}"
+                                            title="Permet de supprimer la non conformité sélectionné !"
+                                            actionListener="#{nonConformiteRequestController.destroy()}"
+                                            update=":bodyForm:datalist, westGroup,:growl"
+                                            onstart=";
+                                            #{viewConfirmDialog.dlg.setHeader(ism.NonConformiteRequestDlgHeader)};
+                                            #{viewConfirmDialog.dlg.setSeverity('alert')};
+                                            #{viewConfirmDialog.dlg.setMessage(ism.NonConformiteRequestDlgMessage)};
+                                            PF('mainConfirmDialog').show();"
+                                            disabled="#{empty nonConformiteRequestController.selected 
+                                                        or empty nonConformiteRequestController.selected.ncrId
+                                                        or nonConformiteRequestController.selected.ncrState.id!=1}"
+                                            rendered="#{request.isUserInRole('SNC_REQUEST_E')}"
+                                            >
+                                    <p:confirm  />
+                                </p:menuitem>
+                                <p:menuitem icon="ui-btn-Refresh"
+                                            styleClass="options-btn"
+                                            value="#{ism.Refresh}"
+                                            title="Permet de rafraichir la table des non conformités "
+                                            actionListener="#{nonConformiteRequestController.releaseSelected()}"
+                                            update=":bodyForm,:bodyForm:datalist,westGroup,:growl"
+                                            disabled="#{empty nonConformiteRequestController.selected }"
+                                            />
+                            </p:contextMenu>
+
+
 
 
 

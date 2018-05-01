@@ -52,6 +52,7 @@
                                         <p:outputLabel value="#{ism.AnalyseAllowedField_aaType}"  for="aaType" rendered="#{analyseAllowedView.displayMode==2?true:false}"/>
                                     </span>
                                 </div>
+                                
                                 <h:panelGrid columns="2" class="form-control pr-0 py-0 mr-0"  rendered="#{analyseAllowedView.displayMode==1?true:false}">                
                                     <p:selectOneMenu id="aaPoint"  widgetVar="aaPoint" style="width:410px;"
                                                      filter="true" filterMatchMode="contains"
@@ -155,9 +156,9 @@
                                          rendered="#{analyseAllowedView.preset!=null and !analyseAllowedView.preset.isEmpty()}"
                                          >
 
-                                <p:ajax event="rowSelect" listener="#{analyseAllowedView.handleTableSelection}" update="bodyForm, growl" />
-                                <p:ajax event="rowSelectCheckbox" listener="#{analyseAllowedView.handleTableSelection}" update="bodyForm, growl" />
-                                <p:ajax event="rowUnselectCheckbox" listener="#{analyseAllowedView.handleTableSelection}" update="bodyForm, growl" />
+                                <p:ajax event="rowSelect" listener="#{analyseAllowedView.handleTableSelect}" update="bodyForm, growl" />
+                                <p:ajax event="rowSelectCheckbox" listener="#{analyseAllowedView.handleTableSelect}" update="bodyForm, growl" />
+                                <p:ajax event="rowUnselectCheckbox" listener="#{analyseAllowedView.handleTableSelect}" update="bodyForm, growl" />
 
 
                                 <p:column selectionMode="multiple" style="text-align:center" width="48" 

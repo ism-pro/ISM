@@ -8,6 +8,7 @@ package org.ism.view.process.ctrl;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -127,27 +128,28 @@ public class AnalyseAllowedView implements Serializable {
 
         Integer aaCount = analyseAllowedController.getCount();
 
-        // Append new Item to list
+        // Mode Point d'échantillonnage
         if (displayMode == 1) {
-            Boolean isAdd = false;
+            Boolean isAdd = false; // Correspond à une suppression
             if (analyseTypeModel.getTarget() != null) {
                 if (analyseTypeModel.getTarget().size() > preset.size()) { // add
-                    isAdd = true;
+                    isAdd = true; // Correspond à un ajout 
                 }
             }
-            if (isAdd) {
+            if (isAdd) { // En cas d'ajout
                 for (AnalyseType at : typeList) {
                     AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
                     aa.setAaPoint(selected.getAaPoint());
                     aa.setAaType(at);
                     preset.add(aa);
                 }
-            }else{
+            } else { // En cas de suppression
                 List<Integer> index;
-                for(AnalyseAllowed aa : preset){
-                    for(AnalyseType at : typeList){
-                        if(at == aa.getAaType()){
+                for (AnalyseType at : typeList) {
+                    for (AnalyseAllowed aa : preset) {
+                        if (Objects.equals(at.getAtId(), aa.getAaType().getAtId())) {
                             preset.remove(aa);
+                            break;
                         }
                     }
                 }
