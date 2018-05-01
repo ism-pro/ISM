@@ -5,7 +5,6 @@
  */
 package org.ism.lazy.smq;
 
-import org.ism.lazy.smq.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -103,17 +102,22 @@ public class DocExplorerLazyModel extends LazyDataModel<DocExplorer> implements 
 
         // Restore filter if required
         if (multiSortMeta == null) {
-            // Sorting default by date d'échantillonnage
-            multiSortMeta = new ArrayList<>();
-            SortMeta metaSort = new SortMeta(null, DEFAULT_SORT_ORDER, SortOrder.DESCENDING, null);
-            multiSortMeta.add(metaSort);
+            if (this.multiSortMeta == null) {
+                // Sorting default by date d'échantillonnage
+                multiSortMeta = new ArrayList<>();
+                SortMeta metaSort = new SortMeta(null, DEFAULT_SORT_ORDER, SortOrder.DESCENDING, null);
+                multiSortMeta.add(metaSort);
+                this.multiSortMeta = multiSortMeta;
+            }
+        }else{
+            this.multiSortMeta = multiSortMeta;
         }
 
         if (this.filters != null && this.filters != filters) {
             filters = this.filters;
         }
         // Get data
-        datasource = ejbFacade.findByCriterias(first, pageSize, convertSortMeta(multiSortMeta), filters);
+        datasource = ejbFacade.findByCriterias(first, pageSize, convertSortMeta(this.multiSortMeta), filters);
         // Count rows
         this.setRowCount(ejbFacade.countByCriterias(filters));
 
