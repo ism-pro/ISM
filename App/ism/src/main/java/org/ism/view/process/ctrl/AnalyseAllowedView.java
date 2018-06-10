@@ -21,6 +21,7 @@ import org.ism.entities.process.ctrl.AnalysePoint;
 import org.ism.entities.process.ctrl.AnalyseType;
 import org.ism.jsf.hr.StaffAuthController;
 import org.ism.jsf.process.ctrl.AnalyseAllowedController;
+import org.ism.jsf.process.ctrl.AnalyseDataController;
 import org.ism.jsf.process.ctrl.AnalysePointController;
 import org.ism.jsf.process.ctrl.AnalyseTypeController;
 import org.primefaces.event.RowEditEvent;
@@ -47,6 +48,9 @@ public class AnalyseAllowedView implements Serializable {
 
     @ManagedProperty(value = "#{analyseAllowedController}")
     private AnalyseAllowedController analyseAllowedController;
+
+    @ManagedProperty(value = "#{analyseDataController}")
+    private AnalyseDataController analyseDataController;
 
     @ManagedProperty(value = "#{staffAuthController}")
     private StaffAuthController staffAuthController;
@@ -139,12 +143,14 @@ public class AnalyseAllowedView implements Serializable {
             }
             if (isAdd) { // En cas d'ajout
                 for (AnalyseType at : typeList) {
-                    List<AnalyseAllowed> laa = analyseAllowedController.getItemsByPointType(selected.getAaPoint(), at);
                     AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
                     aa.setAaPoint(selected.getAaPoint());
                     aa.setAaType(at);
+                    aa.setAaObservation("");
+                    aa.setAaCompany(staffAuthController.getCompany());
                     // restaure des liaison existante
-                    if(!laa.isEmpty()){
+                    List<AnalyseAllowed> laa = analyseAllowedController.getItemsByPointType(selected.getAaPoint(), at);
+                    if (laa != null && !laa.isEmpty()) {
                         aa = laa.get(0);
                     }
                     preset.add(aa);
@@ -171,20 +177,12 @@ public class AnalyseAllowedView implements Serializable {
         }
     }
 
-    /**
-     * Handle Point change allow to react over a Point sample selection while
-     * displayMode is 1
-     *
-     * @param event corresponding event when valuage changed occured
-     */
-    public void handleAnalysePointChanged(ValueChangeEvent event) {
-        AnalysePoint point = (AnalysePoint) event.getNewValue();
-        getSelected().setAaPoint(point);
+    private void onAnalysePointChange() {
         analyseTypeSource = analyseTypeController.getItems();
         analyseTypeTarget = new ArrayList<>();
-        if (point != null) {
+        if (getSelected().getAaPoint() != null) {
             // Recherche des données affectée et non affectée
-            List<AnalyseAllowed> lstPA = analyseAllowedController.getItemsByPoint(point);
+            List<AnalyseAllowed> lstPA = analyseAllowedController.getItemsByPoint(getSelected().getAaPoint());
             preset = lstPA;
 
             if (lstPA != null) {
@@ -199,19 +197,23 @@ public class AnalyseAllowedView implements Serializable {
     }
 
     /**
-     * handleAnalyseTypeChanged allow to react over a Type selection while
-     * displayMode is 2
+     * Handle Point change allow to react over a Point sample selection while
+     * displayMode is 1
      *
      * @param event corresponding event when valuage changed occured
      */
-    public void handleAnalyseTypeChanged(ValueChangeEvent event) {
-        AnalyseType type = (AnalyseType) event.getNewValue();
-        getSelected().setAaType(type);
+    public void handleAnalysePointChanged(ValueChangeEvent event) {
+        AnalysePoint point = (AnalysePoint) event.getNewValue();
+        getSelected().setAaPoint(point);
+        onAnalysePointChange();
+    }
+
+    private void onAnalyseTypeChange() {
         analysePointSource = analysePointController.getItems();
         analysePointTarget = new ArrayList<>();
-        if (type != null) {
+        if (getSelected().getAaType() != null) {
             // Recherche des données affectée et non affectée
-            List<AnalyseAllowed> lstPA = analyseAllowedController.getItemsByType(type);
+            List<AnalyseAllowed> lstPA = analyseAllowedController.getItemsByType(getSelected().getAaType());
             preset = lstPA;
             if (lstPA != null) {
                 for (AnalyseAllowed pa : lstPA) {
@@ -221,7 +223,18 @@ public class AnalyseAllowedView implements Serializable {
             }
         }
         analysePointModel = new DualListModel<>(analysePointSource, analysePointTarget);
+    }
 
+    /**
+     * handleAnalyseTypeChanged allow to react over a Type selection while
+     * displayMode is 2
+     *
+     * @param event corresponding event when valuage changed occured
+     */
+    public void handleAnalyseTypeChanged(ValueChangeEvent event) {
+        AnalyseType type = (AnalyseType) event.getNewValue();
+        getSelected().setAaType(type);
+        onAnalyseTypeChange();
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -235,6 +248,7 @@ public class AnalyseAllowedView implements Serializable {
     // /////////////////////////////////////////////////////////////////////////
     /**
      * Handle analyse point transfert event
+     *
      * @param event contains the transfert object
      */
     public void handleAnalysePointTransfer(TransferEvent event) {
@@ -294,14 +308,13 @@ public class AnalyseAllowedView implements Serializable {
             typeList.add((AnalyseType) item);
             transfered += " / " + (AnalyseType) item;
         }
-        
+
         /// Managing transfert Type
         manageTransfertFromPickList(typeList, null);
 
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Liste des type d'analyse transférée : ", transfered));
-    
-        
+
     }
 
     public void handleAnalyseTypeSelect(SelectEvent event) {
@@ -341,13 +354,13 @@ public class AnalyseAllowedView implements Serializable {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible désélectionnée : " + aa, null));
     }
-    
+
     public void onRowEdit(RowEditEvent event) {
         AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible édition ligne : " + aa, null));
     }
-     
+
     public void onRowCancel(RowEditEvent event) {
         AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
         FacesContext context = FacesContext.getCurrentInstance();
@@ -364,10 +377,62 @@ public class AnalyseAllowedView implements Serializable {
     // /////////////////////////////////////////////////////////////////////////
     // /////////////////////////////////////////////////////////////////////////
     /**
-     * Create
+     * Create is base on the current existing table which is going to be modify
+     *
+     * - A list of removed existing link will be create - if link was already
+     * used than the link is only delete in software, - otherwise link is remove
+     * from allowed link
+     *
+     * - Each row is going to be check if already exist, if - existing row are
+     * going to be modify,
+     *
      */
     public void create() {
 
+        // Mode point d'échantillonnage fixe
+        if (this.displayMode == 1) {
+            // Get list a allowed item to be removed
+            List<AnalyseAllowed> listOfLinkToBeRemoved = analyseAllowedController.getItemsByPoint(selected.getAaPoint());
+            listOfLinkToBeRemoved.removeAll(preset);
+
+            // Remove items without link and update as delete the one with link
+            for (AnalyseAllowed aa : listOfLinkToBeRemoved) {
+                analyseAllowedController.setSelected(aa);
+                if (!analyseDataController.contains(selected.getAaPoint(), aa.getAaType())) {
+                    analyseAllowedController.destroy();
+                } else {
+                    analyseAllowedController.getSelected().setAaDeleted(true);
+                    analyseAllowedController.update();
+                }
+            }
+
+            // Create new link from the preset table and update the id
+            List<AnalyseAllowed> listOfNewLinkToAdd = new ArrayList();
+            listOfNewLinkToAdd.addAll(preset);
+            listOfNewLinkToAdd.removeAll(analyseAllowedController.getItemsByPoint(selected.getAaPoint()));
+
+            for (AnalyseAllowed aa : listOfNewLinkToAdd) {
+                analyseAllowedController.setSelected(aa);
+                analyseAllowedController.create();
+                // Change the preset id
+                for (AnalyseAllowed aap : preset) {
+                    if (aap == aa) {
+                        aap.setAaId(analyseAllowedController.getItemsByPointType(selected.getAaPoint(), aa.getAaType()).get(0).getAaId());
+                    }
+                }
+            }
+
+            // Now update all the preset with new value
+            for (AnalyseAllowed aa : preset) {
+                analyseAllowedController.setSelected(aa);
+                analyseAllowedController.update();
+            }
+
+            // Recall init 
+            onAnalysePointChange();
+        } else if (this.displayMode == 2) {
+
+        }
     }
 
     /**
@@ -596,6 +661,10 @@ public class AnalyseAllowedView implements Serializable {
 
     public void setAnalyseAllowedController(AnalyseAllowedController analyseAllowedController) {
         this.analyseAllowedController = analyseAllowedController;
+    }
+
+    public void setAnalyseDataController(AnalyseDataController analyseDataController) {
+        this.analyseDataController = analyseDataController;
     }
 
     public void setStaffAuthController(StaffAuthController staffAuthController) {

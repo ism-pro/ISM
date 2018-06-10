@@ -56,6 +56,7 @@ import org.ism.entities.hr.Staff;
     @NamedQuery(name = "AnalyseData.findByAdSampler", query = "SELECT a FROM AnalyseData a WHERE a.adSampler = :adSampler"),
     @NamedQuery(name = "AnalyseData.findByAdValidator", query = "SELECT a FROM AnalyseData a WHERE a.adValidator = :adValidator"),
     @NamedQuery(name = "AnalyseData.findByAdPointType", query = "SELECT a FROM AnalyseData a WHERE a.adPoint = :adPoint AND a.adType = :adType"),
+    @NamedQuery(name = "AnalyseData.countByAdPointType", query = "SELECT count(a) FROM AnalyseData a WHERE a.adPoint = :adPoint AND a.adType = :adType"),
     @NamedQuery(name = "AnalyseData.findByAdPointTypeSampleTimeRange", query = "SELECT a FROM AnalyseData a WHERE a.adPoint = :adPoint AND a.adType = :adType AND a.adsampleTime >= :from AND a.adsampleTime <= :to"),
     @NamedQuery(name = "AnalyseData.findByAdObservation", query = "SELECT a FROM AnalyseData a WHERE a.adObservation = :adObservation"),
     @NamedQuery(name = "AnalyseData.findByAdBatch", query = "SELECT a FROM AnalyseData a WHERE a.adBatch = :adBatch"),

@@ -41,6 +41,7 @@ public class AnalyseDataFacade extends AbstractFacade<AnalyseData> {
     private final String FIND_BY_SAMPLER = "AnalyseData.findByAdSampler";
     private final String FIND_BY_VALIDATOR = "AnalyseData.findByAdValidator";
     private final String FIND_BY_POINT_AND_TYPE = "AnalyseData.findByAdPointType";
+    private final String COUNT_BY_POINT_AND_TYPE = "AnalyseData.countByAdPointType";
     private final String FIND_BY_POINT_AND_TYPE_SAMPLE_TIME_RANGE = "AnalyseData.findByAdPointTypeSampleTimeRange";
 
     @Override
@@ -141,7 +142,30 @@ public class AnalyseDataFacade extends AbstractFacade<AnalyseData> {
         }
         return null;
     }
-
+    
+    /**
+     * Allow to know if data was already defined on a point with a certain analyse
+     * @param adPoint point on which to check
+     * @param adType analyse type to be check
+     * @return true if found false otherwise
+     */
+    public Boolean contains(AnalysePoint adPoint, AnalyseType adType) {
+        em.flush();
+        Query q = em.createNamedQuery(COUNT_BY_POINT_AND_TYPE)
+                .setParameter("adPoint", adPoint)
+                .setParameter("adType", adType);
+        q.setHint("javax.persistence.cache.retrieveMode", CacheRetrieveMode.BYPASS);
+        Object counter = q.getSingleResult();
+        int count = 0;
+        if(counter!=null){
+            count = Integer.valueOf(counter.toString());
+        }
+        if(count!=0){
+            return true;
+        }
+        return false;
+    }
+    
     public List<AnalyseData> findByPointTypeSampleTimeRange(AnalysePoint point, AnalyseType type, Date from, Date to) {
         em.flush();
         Query q = em.createNamedQuery(FIND_BY_POINT_AND_TYPE_SAMPLE_TIME_RANGE)
@@ -239,5 +263,6 @@ public class AnalyseDataFacade extends AbstractFacade<AnalyseData> {
         }
         return p;
     }
+
 
 }

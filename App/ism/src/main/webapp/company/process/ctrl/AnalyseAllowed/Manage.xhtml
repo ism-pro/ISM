@@ -355,7 +355,7 @@
                                           sortBy="#{item.aalimitB}" filterBy="#{item.aalimitB}" 
                                           filterMatchMode="contains" >
                                     <div class="text-right">
-                                       <p:cellEditor>
+                                        <p:cellEditor>
                                             <f:facet name="output">
                                                 <h:outputText class="text-right" value="#{item.aalimitB}" >
                                                     <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
@@ -457,45 +457,7 @@
                             </p:dataTable>
                         </div>
 
-                        <script>
-                            $(function () {
-                                $(document).ready(function (e) {
-                                    var pickList = $('div[id*=analysePointPickList]');
-                                    var sourceWrapper = $('div[id*=analysePointPickList] > div:nth-child(1)');
-                                    var buttonsWrapper = $('div[id*=analysePointPickList] > div:nth-child(2)');
-                                    var targetWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
 
-
-                                    targetWrapper.addClass("is-state-hide");
-
-                                    var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
-                                    var selDiv = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box');
-
-                                    var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
-                                    selbox.removeClass('ui-icon-check');
-                                    selbox.addClass('ui-icon-blank');
-                                    sel.attr('aria-checked', false);
-                                    $(selbox.parentElement).removeClass('ui-state-active');
-
-                                    selDiv.click(function () {
-                                        //console.log("sel div click");
-                                        var p = $(this.parentElement.parentElement.parentElement);
-                                        // console.log(p);
-                                        var datari = p.attr('data-ri');
-                                        var datark = p.attr('data-rk');
-                                        var ariaselected = new Boolean(p.attr('aria-selected'));
-                                        if (ariaselected === true) {
-                                            $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
-                                        } else {
-                                            $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
-                                        }
-                                        //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
-                                    });
-
-                                });
-                            });
-
-                        </script>
 
                     </div>
 
@@ -504,29 +466,13 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h:panelGroup id="btn-crud-zone_id"  >
-                                <p:outputLabel  value="#{ism.CreateMultiple}" style="margin-right: 10px;"/>
-                                <p:selectBooleanButton  value="#{analyseAllowedController.isOnMultiCreation}" 
-                                                        onLabel="#{ism.Yes}" offLabel="#{ism.No}" 
-                                                        onIcon="ui-icon-check" offIcon="ui-icon-close" 
-                                                        styleClass="ui-btn"
-                                                        >
-                                    <p:ajax update=":bodyForm:btn-crud-zone_id,westGroup,:growl" listener="#{analyseAllowedController.toggleMultiCreationFake()}"  />
-                                </p:selectBooleanButton>
 
                                 <p:commandButton icon="ui-btn-Save"
                                                  styleClass="ui-btn"
                                                  value="#{ism.Save}" 
-                                                 actionListener="#{analyseAllowedController.create}" 
+                                                 actionListener="#{analyseAllowedView.create}" 
                                                  update=":bodyForm,:growl" 
-                                                 rendered="#{analyseAllowedController.isOnMultiCreation}"
-                                                 />
-                                <p:commandButton icon="ui-btn-SaveOne"
-                                                 styleClass="ui-btn"
-                                                 value="#{ism.Save}" 
-                                                 actionListener="#{analyseAllowedController.createUnReleasded()}" 
-                                                 update=":bodyForm,:growl"
-                                                 action="List.xhtml?faces-redirect=true"
-                                                 rendered="#{!analyseAllowedController.isOnMultiCreation}"
+                                                 rendered="true"
                                                  />
 
                                 <p:commandButton icon="ui-btn-Cancel"
@@ -544,12 +490,61 @@
 
                     <div  class="row">
                         <div class="col-md-12">
-                            <p:messages id="MsgDetail" showDetail="false" showSummary="true" escape="true"/>
+                            <p:messages id="MsgDetail" showDetail="true" showSummary="true" escape="true"/>
                         </div>
                     </div>
                 </div>
 
             </h:form>
+
+            <script>
+                $(function () {
+                    $(document).ready(function (e) {
+                        var pickList = $('div[id*=analysePointPickList]');
+                        var sourceWrapper = $('div[id*=analysePointPickList] > div:nth-child(1)');
+                        var buttonsWrapper = $('div[id*=analysePointPickList] > div:nth-child(2)');
+                        var targetWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
+                        targetWrapper.addClass("is-state-hide");
+                        var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
+                        var selDiv = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box');
+                        var selAllDiv = $('.ui-datatable thead tr  th:nth-child(1) .ui-chkbox .ui-chkbox-box');
+                        console.log(selDiv);
+                        $.ism = "";
+                        $.ism.selDiv = selDiv;
+                        $.selDiv = selDiv;
+                        var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
+                        selbox.removeClass('ui-icon-check');
+                        selbox.addClass('ui-icon-blank');
+                        sel.attr('aria-checked', false);
+                        $(selbox.parentElement).removeClass('ui-state-active');
+                        selDiv.click(function () {
+                            //console.log("sel div click");
+                            var p = $(this.parentElement.parentElement.parentElement);
+                            // console.log(p);
+                            var datari = p.attr('data-ri');
+                            var datark = p.attr('data-rk');
+                            var ariaselected = new Boolean(p.attr('aria-selected'));
+                            if (ariaselected === true) {
+                                $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
+                            } else {
+                                $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
+                            }
+                            //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
+                        });
+                        selAllDiv.click(function () { 
+                            console.log("All div click");
+                            var i = 0;
+                            var size = $.selDiv.length;
+                            console.log(size);
+                            $.selDiv.trigger("click");
+                            //console.log("first finished")
+                            //$.selDiv.trigger("click");
+                            console.log("click end")
+                        });
+                    });
+                });
+
+            </script>
 
         </ui:define>
 

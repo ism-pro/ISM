@@ -305,9 +305,8 @@ public class AnalyseDataController implements Serializable {
         return JsfUtil.dateRangeIn(value, filter, locale);
     }
 
-    
     public void handleTableChanges() {
-        
+
     }
 
     /**
@@ -697,6 +696,10 @@ public class AnalyseDataController implements Serializable {
         return this.visibleColMap.get(key);
     }
 
+    public Boolean contains(AnalysePoint point, AnalyseType type) {
+        return getFacade().contains(point, type);
+    }
+
     /// ////////////////////////////////////////////////////////////////////////
     ///
     ///
@@ -711,8 +714,6 @@ public class AnalyseDataController implements Serializable {
     public void setAnalyseTypeController(AnalyseTypeController analyseTypeController) {
         this.analyseTypeController = analyseTypeController;
     }
-
-
 
     /**
      * ************************************************************************
