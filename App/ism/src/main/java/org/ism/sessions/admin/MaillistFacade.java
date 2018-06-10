@@ -61,8 +61,8 @@ public class MaillistFacade extends AbstractFacade<Maillist> {
      * "Maillist.findByMlProcessus"
      * query = "SELECT m FROM Maillist m WHERE m.mlProcessus = :mlProcessus")
      * 
-     * @param processus 
-     * @return 
+     * @param processus the processus
+     * @return  the mail list corresponding to processus
      */
     public List<Maillist> findByProcessus(Processus processus) {
         em.flush();
@@ -72,7 +72,7 @@ public class MaillistFacade extends AbstractFacade<Maillist> {
     
     
     /**
-     * @NamedQuery(name = "Maillist.findByMlEvent", 
+     * NamedQuery(name = "Maillist.findByMlEvent", 
      * query = "SELECT m FROM Maillist m WHERE m.mlEvent = :mlEvent"),
     
      * @param code corresponding to event code
@@ -94,11 +94,11 @@ public class MaillistFacade extends AbstractFacade<Maillist> {
 
     
     /**
-     * @NamedQuery(name = "Maillist.findByMlGroupe", 
+     * NamedQuery(name = "Maillist.findByMlGroupe", 
      * query = "SELECT m FROM Maillist m WHERE m.mlGroupe = :mlGroupe"),
     
      * @param designation correspond to groupe
-     * @return 
+     * @return  the mail list corresponding to a designation
      */
     public List<Maillist> findByDesignation(String designation) {
         em.flush();

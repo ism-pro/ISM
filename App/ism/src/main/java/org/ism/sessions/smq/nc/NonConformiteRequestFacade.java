@@ -201,12 +201,6 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         return 0;
     }
 
-    /**
-     *
-     * @param fromInclude
-     * @param toExclude
-     * @return
-     */
     public List<NonConformiteRequest> itemsCreateInRange(Date fromInclude, Date toExclude) {
         em.flush();
         Query q = em.createNamedQuery(ITEMS_CREATE_IN_RANGE).setParameter("ncrFrom", fromInclude).setParameter("ncrTo", toExclude);
@@ -218,12 +212,6 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         return null;
     }
 
-    /**
-     *
-     * @param fromInclude
-     * @param toExclude
-     * @return
-     */
     public List<NonConformiteRequest> itemsApprouvedInRange(Date fromInclude, Date toExclude) {
         em.flush();
         Query q = em.createNamedQuery(ITEMS_APPROUVED_IN_RANGE).setParameter("ncrFrom", fromInclude).setParameter("ncrTo", toExclude);
@@ -239,9 +227,9 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
      *
      * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
      * solution, en cours, terminé, annulé)
-     * @param fromInclude
-     * @param toExclude
-     * @return
+     * @param fromInclude from include
+     * @param toExclude to exclude
+     * @return items state in range
      */
     public List<NonConformiteRequest> itemsStateInRange(String state, Date fromInclude, Date toExclude) {
         em.flush();
@@ -258,9 +246,9 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
      *
      * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
      * solution, en cours, terminé, annulé)
-     * @param fromInclude
-     * @param toExclude
-     * @return
+     * @param fromInclude from include 
+     * @param toExclude to exclude
+     * @return items state in change range
      */
     public List<NonConformiteRequest> itemsStateInChangeRange(String state, Date fromInclude, Date toExclude) {
         em.flush();
@@ -273,13 +261,6 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         return null;
     }
 
-    /**
-     *
-     * @param fromInclude
-     * @param toExclude
-     * @param processus
-     * @return
-     */
     public List<NonConformiteRequest> itemsCreateInRangeByProcessus(Date fromInclude, Date toExclude, Processus processus) {
         em.flush();
         Query q = em.createNamedQuery(ITEMS_CREATE_IN_RANGE_BY_PROCESSUS)
@@ -293,13 +274,6 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         return null;
     }
 
-    /**
-     *
-     * @param fromInclude
-     * @param toExclude
-     * @param processus
-     * @return
-     */
     public List<NonConformiteRequest> itemsApprouvedInRangeByProcessus(Date fromInclude, Date toExclude, Processus processus) {
         em.flush();
         Query q = em.createNamedQuery(ITEMS_APPROUVED_IN_RANGE_BY_PROCESSUS)
@@ -317,10 +291,10 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
      *
      * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
      * solution, en cours, terminé, annulé)
-     * @param fromInclude
-     * @param toExclude
-     * @param processus
-     * @return
+     * @param fromInclude from include
+     * @param toExclude to exclude
+     * @param processus the processus concerned
+     * @return items state in range by a processus
      */
     public List<NonConformiteRequest> itemsStateInRangeByProcessus(String state, Date fromInclude, Date toExclude, Processus processus) {
         em.flush();
@@ -335,15 +309,6 @@ public class NonConformiteRequestFacade extends AbstractFacade<NonConformiteRequ
         return null;
     }
 
-    /**
-     *
-     * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
-     * solution, en cours, terminé, annulé)
-     * @param fromInclude
-     * @param toExclude
-     * @param processus
-     * @return
-     */
     public List<NonConformiteRequest> itemsStateInChangeRangeByProcessus(String state, Date fromInclude, Date toExclude, Processus processus) {
         em.flush();
         Query q = em.createNamedQuery(ITEMS_STATE_IN_CHANGE_RANGE_BY_PROCESSUS)

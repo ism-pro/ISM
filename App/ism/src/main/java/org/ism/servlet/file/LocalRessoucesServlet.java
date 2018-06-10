@@ -7,7 +7,6 @@ package org.ism.servlet.file;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.nio.file.Files;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

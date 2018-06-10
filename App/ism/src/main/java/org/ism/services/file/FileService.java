@@ -71,7 +71,7 @@ public class FileService {
      * Image Temporarly Create allow to create a file image defined by
      * croppedImage. Note preview file is not remove !
      *
-     * @param croppedImage
+     * @param croppedImage  a cropped image type 
      */
     public static void imgCreate(CroppedImage croppedImage) {
         String path = TMP + SEP
@@ -105,8 +105,8 @@ public class FileService {
     /**
      * Renvoie le nom de fichier avec l'extension
      *
-     * @param croppedImage
-     * @return
+     * @param croppedImage a cropped image
+     * @return string corresponding to the cropped image
      */
     public static String filenameComplete(CroppedImage croppedImage) {
         return FilenameUtils.removeExtension(croppedImage.getOriginalFilename())
@@ -117,8 +117,8 @@ public class FileService {
      * Move a temporary file from the temporary directory to the new one at
      * absoluteDestination
      *
-     * @param croppedImage
-     * @param absoluteDestinationPath
+     * @param croppedImage a cropped image 
+     * @param absoluteDestinationPath an absolute destination path
      */
     public static void tmpMove(CroppedImage croppedImage, String absoluteDestinationPath) {
         try {
@@ -172,7 +172,7 @@ public class FileService {
     /**
      * Allow to move from temporary file to abasolute destination
      *
-     * @param croppedImage
+     * @param croppedImage a cropped image
      */
     public static void tmpMoveSmqNC(CroppedImage croppedImage) {
         tmpMove(croppedImage, NC_REQUEST);
@@ -181,16 +181,17 @@ public class FileService {
     /**
      * Allow to copy file to NC_REQUEST directory than delete it
      *
-     * @param croppedImage
+     * @param croppedImage a cropped image 
      */
     public static void tmpCopyDeleteToSmqNC(CroppedImage croppedImage) {
         tmpCopyDelete(croppedImage, NC_REQUEST);
     }
 
     /**
-     * Convert a path resource to système apth
+     * Convert a path resource to system path
      *
-     * @param path
+     * @param path a system path
+     * @return  convert to system path
      */
     public static String toSys(String path) {
         return SYS + path.replace("\\", "/");
@@ -306,7 +307,7 @@ public class FileService {
      * "img/ism/ism.png" for application logo in the resources directory
      * directories img and ism then you have the file
      * @param rewrite if true the file is neccessarly rewrite
-     * @param parentPath
+     * @param parentPath path of the parent
      * @return the full path name create
      */
     public static String writeResourceToFileSystem(String absoluteFilePathname, Boolean rewrite, String parentPath) {

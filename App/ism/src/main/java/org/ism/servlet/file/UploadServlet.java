@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,9 +18,10 @@ import org.ism.filters.NoCacheFilter;
  *
  * @author r.hendrick
  */
-//@WebServlet(name = "UploadServlet", urlPatterns = {"/UploadServlet"})
+/*//@WebServlet(name = "UploadServlet", urlPatterns = {"/UploadServlet"})
 //@WebServlet(urlPatterns = {"/upload"})
 //@MultipartConfig(location = "/ISM/rsc/tmp", maxFileSize = 10485760L) // 10MB.
+*/
 public class UploadServlet extends HttpServlet {
 
     /**

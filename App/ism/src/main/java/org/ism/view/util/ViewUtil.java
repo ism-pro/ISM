@@ -47,10 +47,7 @@ public class ViewUtil implements Serializable {
     public void init() {
     }
 
-    /**
-     *
-     * @return
-     */
+
     public Date getMaintenant() {
         return getNow();
     }

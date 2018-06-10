@@ -115,11 +115,7 @@ public class FileUploaderController implements Serializable {
     }
 
     
-    /**
-     * 
-     * @param event
-     * @throws IOException 
-     */
+
     public void handleUploadPointInfos(FileUploadEvent event) throws IOException {
         UploadedFile uploadedFile = event.getFile();
         //FileUpload fu = (FileUpload) event.getSource();

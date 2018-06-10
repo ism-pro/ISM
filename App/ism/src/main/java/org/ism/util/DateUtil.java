@@ -26,9 +26,9 @@ import java.util.Locale;
  */
 public class DateUtil {
     
-        /**
-     *
-     * @return
+    /**
+     * Return now in french
+     * @return return now
      */
     public static Date getMaintenant() {
         return getNow();

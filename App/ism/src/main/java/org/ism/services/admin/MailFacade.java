@@ -6,8 +6,6 @@
 package org.ism.services.admin;
 
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.Future;
@@ -15,7 +13,6 @@ import javax.ejb.AsyncResult;
 import javax.ejb.Asynchronous;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;

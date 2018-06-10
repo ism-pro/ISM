@@ -20,12 +20,12 @@ import javax.servlet.http.Part;
  */
 /**
  * This class represents a multipart request. It not only abstracts the
- * <code>{@link Part}</code> away, but it also provides direct access to the
- * <code>{@link MultipartMap}</code>, so that one can get the uploaded files out
+ * <code>{voir Part}</code> away, but it also provides direct access to the
+ * <code>{voir MultipartMap}</code>, so that one can get the uploaded files out
  * of it.
  *
  * @author BalusC
- * @link http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
+ * voir http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
  */
 public class MultipartRequest extends HttpServletRequestWrapper {
 
@@ -69,6 +69,9 @@ public class MultipartRequest extends HttpServletRequestWrapper {
     }
 
     /**
+     * Get file defined by string name
+     * @param name of the file 
+     * @return a file defined by name
      * @see MultipartMap#getFile(String)
      */
     public File getFile(String name) {

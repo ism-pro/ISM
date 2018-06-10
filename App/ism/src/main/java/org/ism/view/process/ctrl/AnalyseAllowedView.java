@@ -118,8 +118,8 @@ public class AnalyseAllowedView implements Serializable {
     /**
      * Manage transfert from pick list depending on display mode
      *
-     * @param typeList
-     * @param pointList
+     * @param typeList list of analyse type
+     * @param pointList list of sample point
      */
     private void manageTransfertFromPickList(List<AnalyseType> typeList, List<AnalysePoint> pointList) {
         // Finish running if none of the two list is defined
@@ -234,8 +234,8 @@ public class AnalyseAllowedView implements Serializable {
     // /////////////////////////////////////////////////////////////////////////
     // /////////////////////////////////////////////////////////////////////////
     /**
-     *
-     * @param event
+     * Handle analyse point transfert event
+     * @param event contains the transfert object
      */
     public void handleAnalysePointTransfer(TransferEvent event) {
         StringBuilder builder = new StringBuilder();
@@ -281,9 +281,9 @@ public class AnalyseAllowedView implements Serializable {
     // /////////////////////////////////////////////////////////////////////////
     // /////////////////////////////////////////////////////////////////////////
     /**
-     * Managing TYPE
+     * Handle analyse type on transfer event
      *
-     * @param event
+     * @param event contain type to be transfer
      */
     public void handleAnalyseTypeTransfer(TransferEvent event) {
         StringBuilder builder = new StringBuilder();
@@ -485,11 +485,6 @@ public class AnalyseAllowedView implements Serializable {
     // /////////////////////////////////////////////////////////////////////////
     // /////////////////////////////////////////////////////////////////////////
     // /////////////////////////////////////////////////////////////////////////
-    /**
-     * *
-     *
-     * @return selected
-     */
     public AnalyseAllowed getSelected() {
         if (selected == null) {
             selected = new AnalyseAllowed();

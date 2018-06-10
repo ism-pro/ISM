@@ -285,11 +285,6 @@ public class DocExplorerController implements Serializable {
     /// EXPORTER
     ///
     ////////////////////////////////////////////////////////////////////////////
-    /**
-     * Managing post processing document to be export in XLS
-     *
-     * @param document
-     */
     public void handlePostProcessXLS(Object document) {
         HSSFWorkbook wb = (HSSFWorkbook) document;
         HSSFSheet sheet = wb.getSheetAt(0);

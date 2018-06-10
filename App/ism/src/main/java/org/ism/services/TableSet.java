@@ -71,7 +71,7 @@ public class TableSet {
     private Boolean draggableColumns = true;                     //!< Activate draggable
 
     private String multiViewState = "true";
-    
+
     private Integer filterDelayMs = 1000;
 
     public TableSet() {
@@ -335,17 +335,13 @@ public class TableSet {
     public void setFilterDelayMs(Integer filterDelayMs) {
         this.filterDelayMs = filterDelayMs;
     }
-    
-    
 
     /**
-     * ************************************************************************
      * Evènement double click sur une ligne du tableau permet d'ouvrir l'édition
      * de la non conformité pour visualisation. Une initialisation des
      * paramètres par défaut vérification de selected et des booléenes
      *
-     * @throws IOException
-     * ***********************************************************************
+     * @throws IOException an exon file
      */
     public void handleRowDoubleClick() throws IOException {
         // PREPARATION DE LA PAGE DE CHARGEMENT
@@ -361,11 +357,9 @@ public class TableSet {
     }
 
     /**
-     * ************************************************************************
      * Gestion des document au format XLS
      *
-     * @param document
-     * ***********************************************************************
+     * @param document a document object
      */
     public void handlePostProcessXLS(Object document) {
         HSSFWorkbook wb = (HSSFWorkbook) document;

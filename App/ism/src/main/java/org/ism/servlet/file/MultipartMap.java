@@ -37,28 +37,28 @@ import javax.servlet.http.Part;
  * The MultipartMap. It simulates the
  * <code>HttpServletRequest#getParameterXXX()</code> methods to ease the
  * processing in <code>@MultipartConfig</code> servlets. You can access the
- * normal request parameters by <code>{@link #getParameter(String)}</code> and
+ * normal request parameters by <code>{voir #getParameter(String)}</code> and
  * you can access multiple request parameter values by
- * <code>{@link #getParameterValues(String)}</code>.
+ * <code>{voir #getParameterValues(String)}</code>.
  * <p>
  * On creation, the <code>MultipartMap</code> will put itself in the request
  * scope, identified by the attribute name <code>parts</code>, so that you can
  * access the parameters in EL by for example <code>${parts.fieldname}</code>
  * where you would have used <code>${param.fieldname}</code>. In case of file
  * fields, the <code>${parts.filefieldname}</code> returns a
- * <code>{@link File}</code>.
+ * <code>{voir File}</code>.
  * <p>
  * It was a design decision to extend <code>HashMap&lt;String, Object&gt;</code>
  * instead of having just <code>Map&lt;String, String[]&gt;</code> and
  * <code>Map&lt;String, File&gt;</code> properties, because of the accessibility
  * in Expression Language. Also, when the value is obtained by
- * <code>{@link #get(Object)}</code>, as will happen in EL, then multiple
+ * <code>{voir #get(Object)}</code>, as will happen in EL, then multiple
  * parameter values will be converted from <code>String[]</code> to
  * <code>List&lt;String&gt;</code>, so that you can use it in the JSTL
  * <code>fn:contains</code> function.
  *
  * @author BalusC
- * @link http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
+ * voir http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
  */
 public class MultipartMap extends HashMap<String, Object> {
 
@@ -147,6 +147,9 @@ public class MultipartMap extends HashMap<String, Object> {
     }
 
     /**
+     * Get the parameter by name
+     * @param name of the parameter to get
+     * @return  the parameter defined by name
      * @see ServletRequest#getParameter(String)
      */
     public String getParameter(String name) {
@@ -159,6 +162,9 @@ public class MultipartMap extends HashMap<String, Object> {
     }
 
     /**
+     * Get value defined by the parameter
+     * @param name of the parameter value
+     * @return the value defined by the name parameter
      * @see ServletRequest#getParameterValues(String)
      */
     public String[] getParameterValues(String name) {
@@ -169,7 +175,10 @@ public class MultipartMap extends HashMap<String, Object> {
         return (String[]) value;
     }
 
+
     /**
+     * Get list of all parameters
+     * @return an enumerated liste of all parameters
      * @see ServletRequest#getParameterNames()
      */
     public Enumeration<String> getParameterNames() {
@@ -177,6 +186,8 @@ public class MultipartMap extends HashMap<String, Object> {
     }
 
     /**
+     * Get a map of all parameter
+     * @return a map of all parameter
      * @see ServletRequest#getParameterMap()
      */
     public Map<String, String[]> getParameterMap() {

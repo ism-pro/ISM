@@ -86,16 +86,11 @@ public class NonConformiteFrequencyController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return prepared non conformite frequency
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteFrequency prepareCreate() {
         selected = new NonConformiteFrequency();
         return selected;
@@ -144,16 +139,11 @@ public class NonConformiteFrequencyController implements Serializable {
                         getString("NonConformiteFrequencyToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param e toggle event
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void handleColumnToggle(ToggleEvent e) {
         visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
@@ -181,12 +171,11 @@ public class NonConformiteFrequencyController implements Serializable {
 
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void create() {
         // Set time on creation action
         selected.setNcfChanged(new Date());
@@ -278,17 +267,11 @@ public class NonConformiteFrequencyController implements Serializable {
         persist(persistAction, detail, detail);
     }
 
-    /**
-     * ************************************************************************
-     * JPA
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param id non conformite frequency key
-     * @return corresponding non conformite frequency object
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteFrequency getNonConformiteFrequency(java.lang.Integer id) {
         return getFacade().find(id);
     }
@@ -327,16 +310,11 @@ public class NonConformiteFrequencyController implements Serializable {
         return getFacade().findAll();
     }
 
-    /**
-     * ************************************************************************
-     * GETTER / SETTER
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return selected non conformite frequency
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// GETTER / SETTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteFrequency getSelected() {
         if (selected == null) {
             selected = new NonConformiteFrequency();

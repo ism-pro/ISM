@@ -191,12 +191,7 @@ public class NonConformiteRequestService {
         return lst;
     }
 
-    /**
-     *
-     * @param state one of D or E
-     * @param year
-     * @return
-     */
+
     public List<Object> counterStateChange(String state, Integer year) {
         List<Object> lst = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {
@@ -218,18 +213,11 @@ public class NonConformiteRequestService {
         return lst;
     }
 
-    /**
-     * =========================================================================
-     *
-     *
-     * =========================================================================
-     */
-    /**
-     *
-     * @param year
-     * @param processus
-     * @return
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// ?
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public List<Integer> counterCreateByProcessus(Integer year, Processus processus) {
         List<Integer> lst = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {
@@ -322,12 +310,7 @@ public class NonConformiteRequestService {
         return lst;
     }
 
-    /**
-     *
-     * @param state one of D or E
-     * @param year
-     * @return
-     */
+   
     public List<Integer> counterStateChangeByProcessus(String state, Integer year, Processus processus) {
         List<Integer> lst = new ArrayList<>();
         for (int month = 1; month <= 12; month++) {

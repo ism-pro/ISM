@@ -13,8 +13,6 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.annotation.WebFilter;
-import javax.servlet.annotation.WebInitParam;
 import javax.servlet.http.HttpServletRequest;
 
 /**
@@ -24,21 +22,21 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * This filter detects <tt>multipart/form-data</tt> and <tt>multipart/mixed</tt>
  * POST requests and will then replace the <code>HttpServletRequest</code> by a
- * <code>{@link MultipartRequest}</code>.
+ * <code>{voir MultipartRequest}</code>.
  *
  * @author BalusC
- * @link http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
+ * voir http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
  */
 /**
  * This filter detects <tt>multipart/form-data</tt> and <tt>multipart/mixed</tt>
  * POST requests and will then replace the <code>HttpServletRequest</code> by a
- * <code>{@link MultipartRequest}</code>.
+ * <code>{voir MultipartRequest}</code>.
  *
  * @author BalusC
- * @link http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
+ * voir http://balusc.blogspot.com/2009/12/uploading-files-in-servlet-30.html
  */
-//@WebFilter(urlPatterns = {"/*"}, initParams = {
-//    @WebInitParam(name = "location", value = "/ISM/rsc/tmp")})
+/*@WebFilter(urlPatterns = {"/*"}, initParams = {
+//    @WebInitParam(name = "location", value = "/ISM/rsc/tmp")})*/
 public class MultipartFilter implements Filter {
 
     // Constants ----------------------------------------------------------------------------------

@@ -168,16 +168,11 @@ public class NonConformiteRequestController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return prepared non conformite request
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteRequest prepareCreate() {
         selected = new NonConformiteRequest();
         return selected;
@@ -226,16 +221,11 @@ public class NonConformiteRequestController implements Serializable {
                         getString("NonConformiteRequestToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param e toggle event
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void handleColumnToggle(ToggleEvent e) {
         visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
@@ -378,9 +368,9 @@ public class NonConformiteRequestController implements Serializable {
     }
 
     /**
-     *
+     * Gestion email sur actions
      * @param state 1: for action apply, 2: for review action
-     * @param ncas
+     * @param ncas non conformite actions
      */
     public void handleMailOnActions(Integer state, List<NonConformiteActions> ncas) {
         Maillist ml = maillistController.getItemsBy(MLGROUPE, onProgressed, 1, selected.getNcrProcessus());
@@ -494,12 +484,11 @@ public class NonConformiteRequestController implements Serializable {
         }
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void create() {
         // Set time on creation action
         selected.setNcrChanged(new Date());
@@ -635,17 +624,11 @@ public class NonConformiteRequestController implements Serializable {
         persist(persistAction, detail, detail);
     }
 
-    /**
-     * ************************************************************************
-     * JPA
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param id non conformite request key
-     * @return corresponding non conformite request object
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteRequest getNonConformiteRequest(java.lang.Integer id) {
         return getFacade().find(id);
     }
@@ -700,16 +683,11 @@ public class NonConformiteRequestController implements Serializable {
         return getFacade().findAll();
     }
 
-    /**
-     * ************************************************************************
-     * GETTER / SETTER
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return selected non conformite request
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// GETTER / SETTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteRequest getSelected() {
         if (selected == null) {
             selected = new NonConformiteRequest();
@@ -762,13 +740,6 @@ public class NonConformiteRequestController implements Serializable {
     /// Contrôle graphique renderer state
     ///
     /// ////////////////////////////////////////////////////////////////////////
-    /**
-     * *
-     *
-     * @param from
-     * @param to
-     * @return
-     */
     public Integer getCountItemsCreateInRange(Date from, Date to) {
         List<NonConformiteRequest> l = getFacade().itemsCreateInRange(from, to);
         if (l == null || l.isEmpty()) {
@@ -797,9 +768,9 @@ public class NonConformiteRequestController implements Serializable {
      *
      * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
      * solution, en cours, terminé, annulé)
-     * @param from
-     * @param to
-     * @return
+     * @param from from 
+     * @param to to
+     * @return counter of items state from to
      */
     public Integer getCountItemsStateFromTo(String state, Date from, Date to) {
         List<NonConformiteRequest> l = getFacade().itemsStateInRange(state, from, to);
@@ -817,9 +788,9 @@ public class NonConformiteRequestController implements Serializable {
      *
      * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
      * solution, en cours, terminé, annulé)
-     * @param from
-     * @param to
-     * @return
+     * @param from from
+     * @param to to
+     * @return counter items state change in the range
      */
     public Integer getCountItemsStateChangeInRange(String state, Date from, Date to) {
         List<NonConformiteRequest> l = getFacade().itemsStateInChangeRange(state, from, to);
@@ -833,14 +804,6 @@ public class NonConformiteRequestController implements Serializable {
         return getFacade().itemsStateInChangeRange(state, from, to);
     }
 
-    /**
-     * *
-     *
-     * @param from
-     * @param to
-     * @param processus
-     * @return
-     */
     public List<NonConformiteRequest> getItemsCreateInRangeByProcessus(Date from, Date to, Processus processus) {
         return getFacade().itemsCreateInRangeByProcessus(from, to, processus);
     }
@@ -853,24 +816,15 @@ public class NonConformiteRequestController implements Serializable {
      *
      * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
      * solution, en cours, terminé, annulé)
-     * @param from
-     * @param to
-     * @param processus
-     * @return
+     * @param from from
+     * @param to to
+     * @param processus concerned
+     * @return items state from to by processus
      */
     public List<NonConformiteRequest> getItemsStateFromToByProcessus(String state, Date from, Date to, Processus processus) {
         return getFacade().itemsStateInRangeByProcessus(state, from, to, processus);
     }
 
-    /**
-     *
-     * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
-     * solution, en cours, terminé, annulé)
-     * @param from
-     * @param to
-     * @param processus
-     * @return
-     */
     public List<NonConformiteRequest> getItemsStateChangeInRangeByProcessus(String state, Date from, Date to, Processus processus) {
         return getFacade().itemsStateInChangeRangeByProcessus(state, from, to, processus);
     }
@@ -903,10 +857,11 @@ public class NonConformiteRequestController implements Serializable {
         this.uploadedStringFile = uploadedStringFile;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    /// Injection
+    /// ////////////////////////////////////////////////////////////////////////
     ///
-    ////////////////////////////////////////////////////////////////////////////
+    /// INJECTION
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void setMailsenderController(MailsenderController mailsenderController) {
         this.mailsenderController = mailsenderController;
     }

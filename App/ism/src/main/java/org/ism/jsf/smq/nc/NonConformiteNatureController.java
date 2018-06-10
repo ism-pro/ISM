@@ -86,16 +86,11 @@ public class NonConformiteNatureController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return prepare selected non conformite nature
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteNature prepareCreate() {
         selected = new NonConformiteNature();
         return selected;
@@ -144,16 +139,11 @@ public class NonConformiteNatureController implements Serializable {
                         getString("NonConformiteNatureToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param e toggle event
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void handleColumnToggle(ToggleEvent e) {
         visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
@@ -181,12 +171,11 @@ public class NonConformiteNatureController implements Serializable {
 
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void create() {
         // Set time on creation action
         selected.setNcnChanged(new Date());
@@ -278,17 +267,11 @@ public class NonConformiteNatureController implements Serializable {
         persist(persistAction, detail, detail);
     }
 
-    /**
-     * ************************************************************************
-     * JPA
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param id non conformite nature key
-     * @return non conformite nature object
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteNature getNonConformiteNature(java.lang.Integer id) {
         return getFacade().find(id);
     }
@@ -327,16 +310,11 @@ public class NonConformiteNatureController implements Serializable {
         return getFacade().findAll();
     }
 
-    /**
-     * ************************************************************************
-     * GETTER / SETTER
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return selected non conformite nature
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// GETTER / SETTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteNature getSelected() {
         if (selected == null) {
             selected = new NonConformiteNature();

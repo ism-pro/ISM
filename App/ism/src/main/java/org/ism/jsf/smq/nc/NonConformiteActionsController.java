@@ -356,7 +356,7 @@ public class NonConformiteActionsController implements Serializable {
         nonConformiteRequestController.update();
         nonConformiteRequestController.handleMailOnActions(1, getItemsByNCLast(nonConformiteRequestController.getSelected()));
     }
-    
+
     /**
      * Update the non conformite when an action is created
      */
@@ -366,8 +366,6 @@ public class NonConformiteActionsController implements Serializable {
         nonConformiteRequestController.update();
         nonConformiteRequestController.handleMailOnActions(2, getItemsByNCLast(nonConformiteRequestController.getSelected()));
     }
-    
-    
 
     public void updateNonCOnformiteOnCloture() { // Passe en cours à terminé
         nonConformiteRequestController.getSelected().setNcrState(new IsmNcrstate(IsmNcrstate.FINISH_ID));
@@ -547,17 +545,15 @@ public class NonConformiteActionsController implements Serializable {
         return this.visibleColMap.get(key);
     }
 
-    /**
-     * =========================================================================
-     *
-     * =========================================================================
-     */
-    /**
-     *
-     * @param from
-     * @param to
-     * @return
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// VALIDATOR
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     public Integer getCountItemsCreateInRange(Date from, Date to) {
         List<NonConformiteActions> l = getFacade().itemsCreateInRange(from, to);
         if (l == null || l.isEmpty()) {
@@ -570,17 +566,6 @@ public class NonConformiteActionsController implements Serializable {
         return getFacade().itemsCreateInRange(from, to);
     }
 
-    /**
-     * *
-     *
-     */
-    /**
-     *
-     * @param from
-     * @param to
-     * @param processus
-     * @return
-     */
     public List<NonConformiteActions> getItemsCreateInRangeByProcessus(Date from, Date to, Processus processus) {
         return getFacade().itemsCreateInRange(from, to, processus);
     }

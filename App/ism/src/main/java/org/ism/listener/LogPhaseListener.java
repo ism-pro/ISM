@@ -12,15 +12,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
 import javax.faces.event.PhaseEvent;
 import javax.faces.event.PhaseId;
 import javax.faces.event.PhaseListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.ism.entities.hr.Staff;
 import org.ism.jsf.util.JsfUtil;
-import static org.ism.listener.SessionCounterListener.ATT_STAFF;
 import static org.ism.listener.SessionCounterListener.AUTHENTICATED;
 
 /**
@@ -28,7 +25,7 @@ import static org.ism.listener.SessionCounterListener.AUTHENTICATED;
  * This is a phase listener message which allow to compute rendering time when
  * developping.
  *
- * @see
+ * Voir
  * http://www.andygibson.net/blog/tutorial/timing-jsf-requests-using-a-phase-listener/
  * @author r.hendrick
  */

@@ -22,7 +22,7 @@ import javax.persistence.metamodel.Metamodel;
 /**
  *
  * @author r.hendrick
- * @param <T>
+ * @param <T> description object
  */
 public abstract class AbstractFacade<T> {
 
@@ -300,8 +300,8 @@ public abstract class AbstractFacade<T> {
 
     /**
      * 
-     * @param cb
-     * @param rt
+     * @param cb the critaria builder
+     * @param rt root field
      * @param field concerned field in the main process
      * @param code  corresponding to the code of the entities 
      * @param designation corresponding to the name field of the designation

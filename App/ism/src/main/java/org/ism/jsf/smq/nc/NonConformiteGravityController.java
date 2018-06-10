@@ -86,16 +86,11 @@ public class NonConformiteGravityController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return prepared non conformite gravity
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteGravity prepareCreate() {
         selected = new NonConformiteGravity();
         return selected;
@@ -144,16 +139,11 @@ public class NonConformiteGravityController implements Serializable {
                         getString("NonConformiteGravityToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param e toggle event
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void handleColumnToggle(ToggleEvent e) {
         visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
@@ -181,12 +171,11 @@ public class NonConformiteGravityController implements Serializable {
 
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void create() {
         // Set time on creation action
         selected.setNcgChanged(new Date());
@@ -278,17 +267,11 @@ public class NonConformiteGravityController implements Serializable {
         persist(persistAction, detail, detail);
     }
 
-    /**
-     * ************************************************************************
-     * JPA
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param id non conformite gravity key
-     * @return corresponding non conformite gravity object
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteGravity getNonConformiteGravity(java.lang.Integer id) {
         return getFacade().find(id);
     }
@@ -327,16 +310,11 @@ public class NonConformiteGravityController implements Serializable {
         return getFacade().findAll();
     }
 
-    /**
-     * ************************************************************************
-     * GETTER / SETTER
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return selected non conformite gravity.
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// GETTER / SETTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteGravity getSelected() {
         if (selected == null) {
             selected = new NonConformiteGravity();

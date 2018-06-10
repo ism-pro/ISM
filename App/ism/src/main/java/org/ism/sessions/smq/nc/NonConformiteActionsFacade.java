@@ -112,12 +112,6 @@ public class NonConformiteActionsFacade extends AbstractFacade<NonConformiteActi
         return null;
     }
 
-    /**
-     *
-     * @param fromInclude
-     * @param toExclude
-     * @return
-     */
     public List<NonConformiteActions> itemsCreateInRange(Date fromInclude, Date toExclude) {
         em.flush();
         Query q = em.createNamedQuery(ITEMS_CREATE_IN_RANGE).setParameter("ncaFrom", fromInclude).setParameter("ncaTo", toExclude);

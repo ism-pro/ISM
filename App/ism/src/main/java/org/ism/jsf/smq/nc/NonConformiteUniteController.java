@@ -24,7 +24,6 @@ import org.primefaces.model.Visibility;
 import javax.faces.bean.SessionScoped;
 import javax.faces.bean.ManagedBean;
 import org.ism.entities.admin.Company;
-import org.ism.entities.smq.Processus;
 
 @ManagedBean(name = "nonConformiteUniteController")
 @SessionScoped
@@ -87,16 +86,11 @@ public class NonConformiteUniteController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return prepared non conformite unite
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE CRUD
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteUnite prepareCreate() {
         selected = new NonConformiteUnite();
         return selected;
@@ -145,16 +139,11 @@ public class NonConformiteUniteController implements Serializable {
                         getString("NonConformiteUniteToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param e toggle event
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void handleColumnToggle(ToggleEvent e) {
         visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
@@ -182,12 +171,11 @@ public class NonConformiteUniteController implements Serializable {
 
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public void create() {
         // Set time on creation action
         selected.setNcuChanged(new Date());
@@ -279,17 +267,11 @@ public class NonConformiteUniteController implements Serializable {
         persist(persistAction, detail, detail);
     }
 
-    /**
-     * ************************************************************************
-     * JPA
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param id non conformite unite key
-     * @return corresponding non conformite unite object
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteUnite getNonConformiteUnite(java.lang.Integer id) {
         return getFacade().find(id);
     }
@@ -331,16 +313,11 @@ public class NonConformiteUniteController implements Serializable {
         return getFacade().findAll();
     }
 
-    /**
-     * ************************************************************************
-     * GETTER / SETTER
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @return selected non conformite unite
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// GETTER / SETTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
     public NonConformiteUnite getSelected() {
         if (selected == null) {
             selected = new NonConformiteUnite();

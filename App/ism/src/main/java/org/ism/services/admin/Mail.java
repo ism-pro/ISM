@@ -190,7 +190,7 @@ public class Mail {
 
     /**
      *
-     * @return
+     * @return content
      */
     public Multipart getContent() {
         if (htmlText != null) {
@@ -503,7 +503,7 @@ public class Mail {
      * <br>5	E	Annulé
      * @param ncaCounter if nonConformite this show number of occuring times
      *
-     * @return
+     * @return corresponding non conformite message
      */
     public static String msgNonConformite(Integer code, Integer ncaCounter) {
         String state = "";
