@@ -23,6 +23,7 @@ import org.ism.jsf.hr.StaffAuthController;
 import org.ism.jsf.process.ctrl.AnalyseAllowedController;
 import org.ism.jsf.process.ctrl.AnalysePointController;
 import org.ism.jsf.process.ctrl.AnalyseTypeController;
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.event.TransferEvent;
 import org.primefaces.event.UnselectEvent;
@@ -126,7 +127,7 @@ public class AnalyseAllowedView implements Serializable {
             return;
         }
 
-        Integer aaCount = analyseAllowedController.getCount();
+        Integer aaCount = analyseAllowedController.getNextKey() + 500;
 
         // Mode Point d'échantillonnage
         if (displayMode == 1) {
@@ -138,9 +139,14 @@ public class AnalyseAllowedView implements Serializable {
             }
             if (isAdd) { // En cas d'ajout
                 for (AnalyseType at : typeList) {
+                    List<AnalyseAllowed> laa = analyseAllowedController.getItemsByPointType(selected.getAaPoint(), at);
                     AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
                     aa.setAaPoint(selected.getAaPoint());
                     aa.setAaType(at);
+                    // restaure des liaison existante
+                    if(!laa.isEmpty()){
+                        aa = laa.get(0);
+                    }
                     preset.add(aa);
                 }
             } else { // En cas de suppression
@@ -218,6 +224,15 @@ public class AnalyseAllowedView implements Serializable {
 
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // 
+    // Gestion par Point d'échantillonage
+    // 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     /**
      *
      * @param event
@@ -243,19 +258,28 @@ public class AnalyseAllowedView implements Serializable {
 
     public void handleAnalysePointSelect(SelectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Point échant. sélectionné : ", event.getObject().toString()));
     }
 
     public void handleAnalysePointUnselect(UnselectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Point échant. désélectionné : ", event.getObject().toString()));
     }
 
     public void handleAnalysePointReorder() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Liste réordonnée", null));
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // 
+    // Gestion par Type d'echantillonage
+    // 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     /**
      * Managing TYPE
      *
@@ -264,51 +288,81 @@ public class AnalyseAllowedView implements Serializable {
     public void handleAnalyseTypeTransfer(TransferEvent event) {
         StringBuilder builder = new StringBuilder();
         List<AnalyseType> typeList = new ArrayList<>();
+        String transfered = "";
         for (Object item : event.getItems()) {
             builder.append(((AnalyseType) item).toString()).append("<br />");
             typeList.add((AnalyseType) item);
+            transfered += " / " + (AnalyseType) item;
         }
-
-        FacesMessage msg = new FacesMessage();
-        msg.setSeverity(FacesMessage.SEVERITY_INFO);
-        msg.setSummary("Items Transferred");
-        msg.setDetail(builder.toString());
-
-        FacesContext.getCurrentInstance().addMessage(null, msg);
-
+        
         /// Managing transfert Type
         manageTransfertFromPickList(typeList, null);
+
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Liste des type d'analyse transférée : ", transfered));
+    
+        
     }
 
     public void handleAnalyseTypeSelect(SelectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Selected", event.getObject().toString()));
+        AnalyseType at = (AnalyseType) event.getObject();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Type analyse sélectionnée : " + at, event.getObject().toString()));
     }
 
-    public void handlevUnselect(UnselectEvent event) {
+    public void handleAnalyseTypeUnSelect(UnselectEvent event) {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Item Unselected", event.getObject().toString()));
+        AnalyseType at = (AnalyseType) event.getObject();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Type analyse désélectionnée : " + at, event.getObject().toString()));
     }
 
     public void handleAnalyseTypeReorder() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "List Reordered", null));
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Liste de type d'analyse réordonnée", null));
     }
 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // 
+    // GESTION DE LA TABLE D'EDITION
+    // 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     public void handleTableSelect(SelectEvent event) {
+        AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Table Selected Row", null));
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible sélectionnée : " + aa, null));
     }
 
     public void handleTableUnSelect(UnselectEvent event) {
-
+        AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
         FacesContext context = FacesContext.getCurrentInstance();
-        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Table Selected Row", null));
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible désélectionnée : " + aa, null));
+    }
+    
+    public void onRowEdit(RowEditEvent event) {
+        AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible édition ligne : " + aa, null));
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+        AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible annulation edition ligne : " + aa, null));
     }
 
-    /* ========================================================================
-   
-    =========================================================================*/
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // 
+    // CRUD
+    // 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     /**
      * Create
      */
@@ -422,9 +476,15 @@ public class AnalyseAllowedView implements Serializable {
         return analyseTypeController.getAnalyseType(Integer.valueOf(sub));
     }
 
-    /* ========================================================================
-   
-    =========================================================================*/
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // 
+    // ASSESSEUR MUTATEUR
+    // 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     /**
      * *
      *
@@ -522,10 +582,15 @@ public class AnalyseAllowedView implements Serializable {
         this.selections = selections;
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    /// Manage Injection
-    ///
-    ////////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // 
+    // INJECTION
+    // 
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
+    // /////////////////////////////////////////////////////////////////////////
     public void setAnalysePointController(AnalysePointController analysePointController) {
         this.analysePointController = analysePointController;
     }

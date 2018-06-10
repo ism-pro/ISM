@@ -59,7 +59,8 @@ import org.ism.entities.admin.Company;
     @NamedQuery(name = "AnalyseAllowed.findByAaDeleted", query = "SELECT a FROM AnalyseAllowed a WHERE a.aaDeleted = :aaDeleted"),
     @NamedQuery(name = "AnalyseAllowed.findByAaCreated", query = "SELECT a FROM AnalyseAllowed a WHERE a.aaCreated = :aaCreated"),
     @NamedQuery(name = "AnalyseAllowed.findByAaChanged", query = "SELECT a FROM AnalyseAllowed a WHERE a.aaChanged = :aaChanged"),
-    @NamedQuery(name = "AnalyseAllowed.selectAllByLastChange", query = "SELECT a FROM AnalyseAllowed a ORDER BY a.aaChanged DESC")
+    @NamedQuery(name = "AnalyseAllowed.selectAllByLastChange", query = "SELECT a FROM AnalyseAllowed a ORDER BY a.aaChanged DESC"),
+    @NamedQuery(name = "AnalyseAllowe.findNextKey", query = "SELECT MAX(a.aa_id) FROM AnalyseAllowed a")
 })
 public class AnalyseAllowed implements Serializable {
 

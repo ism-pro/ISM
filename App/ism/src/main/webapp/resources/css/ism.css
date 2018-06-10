@@ -56,6 +56,11 @@ ipadding-bottom-50{ padding-bottom: 50px;}
 
 
 
+.is-state-hide {
+    display: none!important;
+}
+
+
 /*** TEAL            ************************************************** ***/
 .teal .card-header {
     padding: 0.125rem 0.25rem;

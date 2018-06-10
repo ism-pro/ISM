@@ -34,6 +34,7 @@ public class AnalyseAllowedFacade extends AbstractFacade<AnalyseAllowed> {
     private final String FIND_BY_TYPE = "AnalyseAllowed.findByAaType";
     private final String FIND_BY_POINT_TYPE = "AnalyseAllowed.findByAaPointType";
     private final String FIND_BY_POINT_TYPE_OF_COMPANY = "AnalyseAllowed.findByAaPointTypeOfCompany";
+    private final String FIND_NEXT_KEY = "AnalyseAllowed.findNextKey";
 
     @Override
     protected EntityManager getEntityManager() {
@@ -119,5 +120,11 @@ public class AnalyseAllowedFacade extends AbstractFacade<AnalyseAllowed> {
                 .setParameter("aaType", aaType)
                 .setParameter("aaCompany", company);
         return q.getResultList();
+    }
+
+    public Integer getNextKey() {
+        em.flush();
+        Query q = em.createNamedQuery(FIND_NEXT_KEY);
+        return Integer.valueOf(q.getSingleResult().toString()) + 1;
     }
 }

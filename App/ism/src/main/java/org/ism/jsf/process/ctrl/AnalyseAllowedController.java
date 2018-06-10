@@ -120,12 +120,15 @@ public class AnalyseAllowedController implements Serializable {
         return ejbFacade;
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     /**
      *
      * @return prepared Analyse Allowed
@@ -144,9 +147,9 @@ public class AnalyseAllowedController implements Serializable {
         selected = null;
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedReleaseSelectedSummary"),
+                        getString("AnalyseAllowedReleaseSelectedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedReleaseSelectedDetail"));
+                        getString("AnalyseAllowedReleaseSelectedDetail"));
     }
 
     /**
@@ -156,9 +159,9 @@ public class AnalyseAllowedController implements Serializable {
         isOnMultiCreation = !isOnMultiCreation;
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedToggleMultiCreationSummary"),
+                        getString("AnalyseAllowedToggleMultiCreationSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedToggleMultiCreationDetail") + isOnMultiCreation);
+                        getString("AnalyseAllowedToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
     /**
@@ -168,21 +171,20 @@ public class AnalyseAllowedController implements Serializable {
         /*isOnMultiCreation = !isOnMultiCreation;*/
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedToggleMultiCreationSummary"),
+                        getString("AnalyseAllowedToggleMultiCreationSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedToggleMultiCreationDetail") + isOnMultiCreation);
+                        getString("AnalyseAllowedToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
-    /**
-     *
-     * @param e toogle Event
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     public void handleColumnToggle(ToggleEvent e) {
         visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
@@ -210,12 +212,15 @@ public class AnalyseAllowedController implements Serializable {
 
     }
 
-    /**
-     * ************************************************************************
-     * CRUD OPTIONS
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     public void create() {
         // Set time on creation action
         selected.setAaChanged(new Date());
@@ -223,9 +228,9 @@ public class AnalyseAllowedController implements Serializable {
 
         persist(PersistAction.CREATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedPersistenceCreatedSummary"),
+                        getString("AnalyseAllowedPersistenceCreatedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedPersistenceCreatedDetail")
+                        getString("AnalyseAllowedPersistenceCreatedDetail")
                 + selected.getAaType().getAtType() + " <br > " + selected.getAaPoint().getApPoint());
 
         if (!JsfUtil.isValidationFailed()) {
@@ -255,18 +260,18 @@ public class AnalyseAllowedController implements Serializable {
 
         persist(PersistAction.UPDATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedPersistenceUpdatedSummary"),
+                        getString("AnalyseAllowedPersistenceUpdatedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedPersistenceUpdatedDetail")
+                        getString("AnalyseAllowedPersistenceUpdatedDetail")
                 + selected.getAaType().getAtType() + " <br > " + selected.getAaPoint().getApPoint());
     }
 
     public void destroy() {
         persist(PersistAction.DELETE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedPersistenceDeletedSummary"),
+                        getString("AnalyseAllowedPersistenceDeletedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("AnalyseAllowedPersistenceDeletedDetail")
+                        getString("AnalyseAllowedPersistenceDeletedDetail")
                 + selected.getAaType().getAtType() + " <br > " + selected.getAaPoint().getApPoint());
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -306,12 +311,15 @@ public class AnalyseAllowedController implements Serializable {
         persist(persistAction, detail, detail);
     }
 
-    /**
-     * ************************************************************************
-     * JPA
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     /**
      *
      * @param id integer id of analyse allowed
@@ -365,40 +373,55 @@ public class AnalyseAllowedController implements Serializable {
         items = getFacade().findByPointType(aPoint, aType);
         return items;
     }
-    
-    
+
     public List<AnalyseAllowed> getItemsByPointType(AnalysePoint aaPoint, AnalyseType aaType, Company company) {
         return getFacade().findByPointType(aaPoint, aaType, company);
     }
-    
-    public List<AnalyseType> getItemsTypeOnPoint(AnalysePoint point){
+
+    public List<AnalyseType> getItemsTypeOnPoint(AnalysePoint point) {
         List<AnalyseAllowed> lst = getItemsByPoint(point);
-        if(lst==null)return null;
-        if(lst.isEmpty())return null;
+        if (lst == null) {
+            return null;
+        }
+        if (lst.isEmpty()) {
+            return null;
+        }
         List<AnalyseType> types = new ArrayList<>();
-        for(AnalyseAllowed a : lst){
+        for (AnalyseAllowed a : lst) {
             types.add(a.getAaType());
         }
         return types;
     }
-    
-    
-    /**
-     * Count number of result int the allowed 
-     * @return 
-     */
-    public Integer getCount(){
-        return getFacade().count();
-    }
-    
 
     /**
-     * ************************************************************************
-     * GETTER / SETTER
+     * Count number of result int the allowed
      *
-     * ************************************************************************
+     * @return the number of result
      */
+    public Integer getCount() {
+        return getFacade().count();
+    }
+
     /**
+     * Identify the next key to be used which mean last one plus one
+     *
+     * @return the next key to be use
+     */
+    public Integer getNextKey() {
+        return getFacade().getNextKey();
+    }
+
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// ASSESSOR / MUTATOR
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /**
+     * The current analyse allowed on which apply CRUD
      *
      * @return selected analyse allowed
      */
@@ -441,16 +464,15 @@ public class AnalyseAllowedController implements Serializable {
         return this.visibleColMap.get(key);
     }
 
-
-
-
-    /**
-     * ************************************************************************
-     * VALIDATOR
-     *
-     *
-     * ************************************************************************
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// VALIDATOR
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     @FacesValidator(value = "AnalyseAllowed_AnalyseAllowedValidator")
     public static class AnalyseAllowed_AnalyseAllowedValidator implements Validator {
 
@@ -479,9 +501,9 @@ public class AnalyseAllowedController implements Serializable {
                 }
                 FacesMessage facesMsg = JsfUtil.addErrorMessage(uic.getClientId(fc),
                         ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_CODE_SUMMARY_ID),
+                                getString(P_DUPLICATION_CODE_SUMMARY_ID),
                         ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_CODE_DETAIL_ID)
+                                getString(P_DUPLICATION_CODE_DETAIL_ID)
                         + value);
                 throw new ValidatorException(facesMsg);
             }
@@ -516,9 +538,9 @@ public class AnalyseAllowedController implements Serializable {
                 }
                 FacesMessage facesMsg = JsfUtil.addErrorMessage(uic.getClientId(fc),
                         ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_DESIGNATION_SUMMARY_ID),
+                                getString(P_DUPLICATION_DESIGNATION_SUMMARY_ID),
                         ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_DESIGNATION_DETAIL_ID)
+                                getString(P_DUPLICATION_DESIGNATION_DETAIL_ID)
                         + value);
                 throw new ValidatorException(facesMsg);
             }

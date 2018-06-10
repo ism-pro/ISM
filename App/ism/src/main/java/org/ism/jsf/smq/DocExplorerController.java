@@ -69,12 +69,10 @@ public class DocExplorerController implements Serializable {
      */
     private TableSet tableSet = new TableSet();
 
-    
     /**
      * Define lazy model to load progressively data
      */
     private DocExplorerLazyModel lazyModel;
-
 
     public DocExplorerController() {
     }
@@ -136,14 +134,15 @@ public class DocExplorerController implements Serializable {
         return ejbFacade;
     }
 
-    /// ************************************************************************
-    //* CRUD OPTIONS
-    //*
-    /// * ************************************************************************
-    /**
-     *
-     * @return prepared doc explorer
-     */
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// BASE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     public DocExplorer prepareCreate() {
         selected = new DocExplorer();
         return selected;
@@ -163,9 +162,9 @@ public class DocExplorerController implements Serializable {
         selected = null;
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerReleaseSelectedSummary"),
+                        getString("DocExplorerReleaseSelectedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerReleaseSelectedDetail"));
+                        getString("DocExplorerReleaseSelectedDetail"));
     }
 
     /**
@@ -175,9 +174,9 @@ public class DocExplorerController implements Serializable {
         isOnMultiCreation = !isOnMultiCreation;
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerToggleMultiCreationSummary"),
+                        getString("DocExplorerToggleMultiCreationSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerToggleMultiCreationDetail") + isOnMultiCreation);
+                        getString("DocExplorerToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
     /**
@@ -187,17 +186,20 @@ public class DocExplorerController implements Serializable {
         /*isOnMultiCreation = !isOnMultiCreation;*/
         JsfUtil.addSuccessMessage(
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerToggleMultiCreationSummary"),
+                        getString("DocExplorerToggleMultiCreationSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerToggleMultiCreationDetail") + isOnMultiCreation);
+                        getString("DocExplorerToggleMultiCreationDetail") + isOnMultiCreation);
     }
 
-    /**
-     * ************************************************************************
-     * TABLE OPTIONS
-     *
-     * ************************************************************************
-     */
+        /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
+    /// ////////////////////////////////////////////////////////////////////////
     /**
      *
      * @param e toggle event
@@ -227,8 +229,7 @@ public class DocExplorerController implements Serializable {
         JsfUtil.addSuccessMessage("DocExplorer : Reorder Column",
                 "Columns : <br>" + columns);
     }
-    
-    
+
     /**
      * Handle Filter Date Range allow in a filter to manage a range sélection
      *
@@ -279,7 +280,6 @@ public class DocExplorerController implements Serializable {
         lazyModel.setMultiSortMeta(multiSortMeta);
     }
 
-
     ////////////////////////////////////////////////////////////////////////////
     ///
     /// EXPORTER
@@ -303,8 +303,6 @@ public class DocExplorerController implements Serializable {
         }
     }
 
-
-
     ////////////////////////////////////////////////////////////////////////////
     ///
     /// CRUD OPTIONS
@@ -317,9 +315,9 @@ public class DocExplorerController implements Serializable {
 
         persist(PersistAction.CREATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerPersistenceCreatedSummary"),
+                        getString("DocExplorerPersistenceCreatedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerPersistenceCreatedDetail")
+                        getString("DocExplorerPersistenceCreatedDetail")
                 + selected.getDcVersion() + " <br > " + selected.getDcDesignation());
 
         if (!JsfUtil.isValidationFailed()) {
@@ -349,18 +347,18 @@ public class DocExplorerController implements Serializable {
 
         persist(PersistAction.UPDATE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerPersistenceUpdatedSummary"),
+                        getString("DocExplorerPersistenceUpdatedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerPersistenceUpdatedDetail")
+                        getString("DocExplorerPersistenceUpdatedDetail")
                 + selected.getDcVersion() + " <br > " + selected.getDcDesignation());
     }
 
     public void destroy() {
         persist(PersistAction.DELETE,
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerPersistenceDeletedSummary"),
+                        getString("DocExplorerPersistenceDeletedSummary"),
                 ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                getString("DocExplorerPersistenceDeletedDetail")
+                        getString("DocExplorerPersistenceDeletedDetail")
                 + selected.getDcVersion() + " <br > " + selected.getDcDesignation());
         if (!JsfUtil.isValidationFailed()) {
             items = null;    // Invalidate list of items to trigger re-query.
@@ -427,7 +425,7 @@ public class DocExplorerController implements Serializable {
     public List<DocExplorer> getItemsByCode(String code) {
         return getFacade().findByCode(code);
     }
-    
+
     public List<DocExplorer> getItemsByCode(String code, Company company) {
         return getFacade().findByCode(code, company);
     }
@@ -435,16 +433,15 @@ public class DocExplorerController implements Serializable {
     public List<DocExplorer> getItemsByDesignation(String designation) {
         return getFacade().findByDesignation(designation);
     }
-    
+
     public List<DocExplorer> getItemsByDesignation(String designation, Company company) {
         return getFacade().findByDesignation(designation, company);
     }
-    
-    
+
     public List<DocExplorer> getItemsByLink(String link) {
         return getFacade().findByLink(link);
     }
-    
+
     public List<DocExplorer> getItemsByLink(String link, Company company) {
         return getFacade().findByLink(link, company);
     }
@@ -513,7 +510,6 @@ public class DocExplorerController implements Serializable {
         return this.visibleColMap.get(key);
     }
 
-        
     public TableSet getTableSet() {
         return tableSet;
     }
@@ -522,13 +518,10 @@ public class DocExplorerController implements Serializable {
         this.tableSet = tableSet;
     }
 
-
     ////////////////////////////////////////////////////////////////////////////
     /// Manage Injection
     ///
     ////////////////////////////////////////////////////////////////////////////
-    
-    
     /// ////////////////////////////////////////////////////////////////////////
     //
     /// LAZY

@@ -17,8 +17,9 @@
         <ui:define name="body">
 
             <style>
-                .ui-picklist-list-wrapper{width: 45%!important;}
-                .ui-picklist-buttons-cell{ max-width: 24px!important;}
+                .ui-picklist-list-wrapper{width: 100%!important;}
+                .ui-picklist-buttons-cell{ max-width: 32px!important;}
+                .ui-cell-editor-input input{ width: 100%!important; height: 1.7em!important;}
             </style>
 
             <h:form id="bodyForm">
@@ -52,7 +53,7 @@
                                         <p:outputLabel value="#{ism.AnalyseAllowedField_aaType}"  for="aaType" rendered="#{analyseAllowedView.displayMode==2?true:false}"/>
                                     </span>
                                 </div>
-                                
+
                                 <h:panelGrid columns="2" class="form-control pr-0 py-0 mr-0"  rendered="#{analyseAllowedView.displayMode==1?true:false}">                
                                     <p:selectOneMenu id="aaPoint"  widgetVar="aaPoint" style="width:410px;"
                                                      filter="true" filterMatchMode="contains"
@@ -95,7 +96,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <p:pickList id="analysePointPickList" value="#{analyseAllowedView.analyseTypeModel}" 
                                         var="type" effect="bounce"
                                         itemLabel="#{type}"
@@ -110,10 +111,10 @@
                                 <f:facet name="sourceCaption">#{ism.Unaffected}</f:facet>
                                 <f:facet name="targetCaption">#{ism.Affected}</f:facet>
 
-                                <p:ajax event="transfer" listener="#{analyseAllowedView.handleAnalyseTypeTransfer}" update="datalist,:growl" />
-                                <p:ajax event="select" listener="#{analyseAllowedView.handleAnalyseTypeSelect}" update=":growl" />
-                                <p:ajax event="unselect" listener="#{analyseAllowedView.handleAnalyseTypeUnselect}" update=":growl" />
-                                <p:ajax event="reorder" listener="#{analyseAllowedView.handleAnalyseTypeReorder}" update=":growl" />
+                                <p:ajax event="transfer" listener="#{analyseAllowedView.handleAnalyseTypeTransfer}" update="bodyForm, datalist,:growl" />
+                                <p:ajax event="select" listener="#{analyseAllowedView.handleAnalyseTypeSelect}" update="bodyForm:MsgDetail,  :growl" />
+                                <p:ajax event="unselect" listener="#{analyseAllowedView.handleAnalyseTypeUnSelect}" update="bodyForm:MsgDetail,  :growl" />
+                                <p:ajax event="reorder" listener="#{analyseAllowedView.handleAnalyseTypeReorder}" update="bodyForm:MsgDetail, bodyForm, datalist, :growl" />
 
                                 <p:column style="width:90%;">
                                     <h:outputText value="#{type}" style="font-size: 0.7em;" />
@@ -145,7 +146,7 @@
                         </div>   
 
 
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                             <p:dataTable id="datalist" widgetVar="datalist"
                                          var="item"
                                          value="#{analyseAllowedView.preset}"
@@ -156,13 +157,14 @@
                                          rendered="#{analyseAllowedView.preset!=null and !analyseAllowedView.preset.isEmpty()}"
                                          >
 
-                                <p:ajax event="rowSelect" listener="#{analyseAllowedView.handleTableSelect}" update="bodyForm, growl" />
-                                <p:ajax event="rowSelectCheckbox" listener="#{analyseAllowedView.handleTableSelect}" update="bodyForm, growl" />
-                                <p:ajax event="rowUnselectCheckbox" listener="#{analyseAllowedView.handleTableSelect}" update="bodyForm, growl" />
+                                <p:ajax event="rowEdit" listener="#{analyseAllowedView.onRowEdit}" update="bodyForm:MsgDetail,:growl" />
+                                <p:ajax event="rowEditCancel" listener="#{analyseAllowedView.onRowCancel}" update="bodyForm:MsgDetail,:growl" />
 
 
-                                <p:column selectionMode="multiple" style="text-align:center" width="48" 
+
+                                <p:column selectionMode="multiple" style="text-align:center" width="72" 
                                           selectRow="true" >
+                                    <p:rowEditor style="display:inline;"/>
                                 </p:column>
 
 
@@ -223,8 +225,19 @@
                                                             stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
                                     </f:facet>
                                     <div class="text-center">
-                                        <p:triStateCheckbox value="#{item.aaenlimitHH?1:2}" disabled="true"
-                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                        <p:cellEditor>
+                                            <f:facet name="output"><p:triStateCheckbox value="#{item.aaenlimitHH?1:2}" disabled="true"
+                                                                                       stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   /></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox id="aaenlimitHH"
+                                                                         value="#{item.aaenlimitHH}" 
+                                                                         required="true" 
+                                                                         requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaenlimitHH}" 
+                                                                         >
+                                                    <p:ajax event="change" update="aalimitHH" />
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column> 
 
@@ -234,9 +247,24 @@
                                           sortBy="#{item.aalimitHH}" filterBy="#{item.aalimitHH}" 
                                           filterMatchMode="contains" >
                                     <div class="text-right">
-                                        <h:outputText class="text-right" value="#{item.aalimitHH}" >
-                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
-                                        </h:outputText>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText class="text-right" value="#{item.aalimitHH}" >
+                                                    <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                                </h:outputText>
+                                            </f:facet>
+
+                                            <f:facet name="input">
+                                                <p:inputNumber id="aalimitHH" 
+                                                               value="#{item.aalimitHH}" 
+                                                               title="#{ism.AnalyseAllowedFieldInfo_aalimitHH}" 
+                                                               decimalPlaces="3"
+                                                               required="true" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aalimitHH}" 
+                                                               disabled="#{!item.aaenlimitHH}"
+                                                               lang="fr_FR"
+                                                               />
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column>
 
@@ -251,8 +279,19 @@
                                                             stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
                                     </f:facet>
                                     <div class="text-center">
-                                        <p:triStateCheckbox value="#{item.aaenlimitH?1:2}" disabled="true"
-                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                        <p:cellEditor>
+                                            <f:facet name="output"><p:triStateCheckbox value="#{item.aaenlimitH?1:2}" disabled="true"
+                                                                                       stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   /></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox id="aaenlimitH"
+                                                                         value="#{item.aaenlimitH}" 
+                                                                         required="true" 
+                                                                         requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaenlimitH}" 
+                                                                         >
+                                                    <p:ajax event="change" update="aalimitH" />
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column> 
 
@@ -262,9 +301,24 @@
                                           sortBy="#{item.aalimitH}" filterBy="#{item.aalimitH}" 
                                           filterMatchMode="contains" >
                                     <div class="text-right">
-                                        <h:outputText class="text-right" value="#{item.aalimitH}" >
-                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
-                                        </h:outputText>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText class="text-right" value="#{item.aalimitH}" >
+                                                    <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                                </h:outputText>
+                                            </f:facet>
+
+                                            <f:facet name="input">
+                                                <p:inputNumber id="aalimitH" 
+                                                               value="#{item.aalimitH}" 
+                                                               title="#{ism.AnalyseAllowedFieldInfo_aalimitH}" 
+                                                               decimalPlaces="3"
+                                                               required="true" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aalimitH}" 
+                                                               disabled="#{!item.aaenlimitH}"
+                                                               lang="fr_FR"
+                                                               />
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column>
 
@@ -279,8 +333,19 @@
                                                             stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
                                     </f:facet>
                                     <div class="text-center">
-                                        <p:triStateCheckbox value="#{item.aaenlimitB?1:2}" disabled="true"
-                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                        <p:cellEditor>
+                                            <f:facet name="output"><p:triStateCheckbox value="#{item.aaenlimitB?1:2}" disabled="true"
+                                                                                       stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   /></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox id="aaenlimitB"
+                                                                         value="#{item.aaenlimitB}" 
+                                                                         required="true" 
+                                                                         requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaenlimitB}" 
+                                                                         >
+                                                    <p:ajax event="change" update="aalimitB" />
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column> 
 
@@ -290,9 +355,24 @@
                                           sortBy="#{item.aalimitB}" filterBy="#{item.aalimitB}" 
                                           filterMatchMode="contains" >
                                     <div class="text-right">
-                                        <h:outputText class="text-right" value="#{item.aalimitB}" >
-                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
-                                        </h:outputText>
+                                       <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText class="text-right" value="#{item.aalimitB}" >
+                                                    <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                                </h:outputText>
+                                            </f:facet>
+
+                                            <f:facet name="input">
+                                                <p:inputNumber id="aalimitB" 
+                                                               value="#{item.aalimitB}" 
+                                                               title="#{ism.AnalyseAllowedFieldInfo_aalimitB}" 
+                                                               decimalPlaces="3"
+                                                               required="true" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aalimitB}" 
+                                                               disabled="#{!item.aaenlimitB}"
+                                                               lang="fr_FR"
+                                                               />
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column>
 
@@ -307,8 +387,19 @@
                                                             stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
                                     </f:facet>
                                     <div class="text-center">
-                                        <p:triStateCheckbox value="#{item.aaenlimitBB?1:2}" disabled="true"
-                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                        <p:cellEditor>
+                                            <f:facet name="output"><p:triStateCheckbox value="#{item.aaenlimitBB?1:2}" disabled="true"
+                                                                                       stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   /></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox id="aaenlimitBB"
+                                                                         value="#{item.aaenlimitBB}" 
+                                                                         required="true" 
+                                                                         requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaenlimitBB}" 
+                                                                         >
+                                                    <p:ajax event="change" update="aalimitBB" />
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column> 
 
@@ -318,44 +409,92 @@
                                           sortBy="#{item.aalimitBB}" filterBy="#{item.aalimitBB}" 
                                           filterMatchMode="contains" >
                                     <div class="text-right">
-                                        <h:outputText class="text-right" value="#{item.aalimitBB}" >
-                                            <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
-                                        </h:outputText>
+                                        <p:cellEditor>
+                                            <f:facet name="output">
+                                                <h:outputText class="text-right" value="#{item.aalimitBB}" >
+                                                    <f:convertNumber  locale="fr_FR" minFractionDigits="3" />
+                                                </h:outputText>
+                                            </f:facet>
+
+                                            <f:facet name="input">
+                                                <p:inputNumber id="aalimitBB" 
+                                                               value="#{item.aalimitBB}" 
+                                                               title="#{ism.AnalyseAllowedFieldInfo_aalimitBB}" 
+                                                               decimalPlaces="3"
+                                                               required="true" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aalimitBB}" 
+                                                               disabled="#{!item.aaenlimitBB}"
+                                                               lang="fr_FR"
+                                                               />
+                                            </f:facet>
+                                        </p:cellEditor>
                                     </div>
                                 </p:column>
+
+
+                                <p:column headerText="#{ism.AnalyseAllowedField_aaDeleted}" width="48"
+                                          sortBy="#{item.aaDeleted}" filterBy="#{item.aaDeleted}" 
+                                          filterMatchMode="equals" >
+                                    <f:facet name="filter">
+                                        <p:triStateCheckbox onchange="PF('datalist').filter()" 
+                                                            converter="#{triStateBooleanConverter}" 
+                                                            stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   />
+                                    </f:facet>
+                                    <div class="text-center">
+                                        <p:cellEditor>
+                                            <f:facet name="output"><p:triStateCheckbox value="#{item.aaDeleted?1:2}" disabled="true"
+                                                                                       stateOneTitle="#{ism.All}" stateTwoTitle="#{ism.Yes}" stateThreeTitle="#{ism.No}"   /></f:facet>
+                                            <f:facet name="input">
+                                                <p:selectBooleanCheckbox id="aaDeleted"
+                                                                         value="#{item.aaDeleted}" 
+                                                                         required="true" 
+                                                                         >
+                                                </p:selectBooleanCheckbox>
+                                            </f:facet>
+                                        </p:cellEditor>
+                                    </div>
+                                </p:column> 
+
                             </p:dataTable>
                         </div>
 
                         <script>
-                            //var rows = $('.ui-datatable tbody tr td.nchild(1) input[type="checkbox"]');
-                            var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
-                            var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
-                            //console.log(rows);
-                            console.log(selbox);
+                            $(function () {
+                                $(document).ready(function (e) {
+                                    var pickList = $('div[id*=analysePointPickList]');
+                                    var sourceWrapper = $('div[id*=analysePointPickList] > div:nth-child(1)');
+                                    var buttonsWrapper = $('div[id*=analysePointPickList] > div:nth-child(2)');
+                                    var targetWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
 
-                            selbox.removeClass('ui-icon-check');
-                            selbox.addClass('ui-icon-blank');
-                            sel.attr('aria-checked', false);
-                            $(selbox.parentElement).removeClass('ui-state-active');
- 
-  
 
-                            selbox.click(function () {
-                                var p = $(this.parentElement.parentElement.parentElement.parentElement);
-                                //console.log(p);
-                                var datari = p.attr('data-ri');
-                                var datark = p.attr('data-rk');
-                                var ariaselected = new Boolean(p.attr('aria-selected'));
-                                if (ariaselected === true) {
-                                    $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
-                                } else {
-                                    $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
-                                }
-                                //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
+                                    targetWrapper.addClass("is-state-hide");
+
+                                    var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
+                                    var selDiv = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box');
+
+                                    var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
+                                    selbox.removeClass('ui-icon-check');
+                                    selbox.addClass('ui-icon-blank');
+                                    sel.attr('aria-checked', false);
+                                    $(selbox.parentElement).removeClass('ui-state-active');
+
+                                    selDiv.click(function () {
+                                        //console.log("sel div click");
+                                        var p = $(this.parentElement.parentElement.parentElement);
+                                        // console.log(p);
+                                        var datari = p.attr('data-ri');
+                                        var datark = p.attr('data-rk');
+                                        var ariaselected = new Boolean(p.attr('aria-selected'));
+                                        if (ariaselected === true) {
+                                            $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
+                                        } else {
+                                            $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
+                                        }
+                                        //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
+                                    });
+
+                                });
                             });
-                            /*sel.click(function(){
-                             console.log('sel change');
-                             });*/
+
                         </script>
 
                     </div>
@@ -403,9 +542,9 @@
                         </div>
                     </div>
 
-                    <div class="row">
+                    <div  class="row">
                         <div class="col-md-12">
-                            <p:messages showDetail="true" showSummary="false" escape="false"/>
+                            <p:messages id="MsgDetail" showDetail="false" showSummary="true" escape="true"/>
                         </div>
                     </div>
                 </div>
