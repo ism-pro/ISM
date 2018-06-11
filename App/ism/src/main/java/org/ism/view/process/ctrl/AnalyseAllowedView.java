@@ -103,6 +103,11 @@ public class AnalyseAllowedView implements Serializable {
     private Integer progressValue = 0;
 
     private List<AnalyseAllowed> preset = new ArrayList<>();
+    /**
+     * Preset Index Marker contains corresponding index change from preset table
+     * allowing update only on line changed
+     */
+    private List<AnalyseAllowed> presetMarker = new ArrayList<>();
     private List<AnalyseAllowed> selections = new ArrayList<>();
 
     /**
@@ -161,29 +166,65 @@ public class AnalyseAllowedView implements Serializable {
                     for (AnalyseAllowed aa : preset) {
                         if (Objects.equals(at.getAtId(), aa.getAaType().getAtId())) {
                             preset.remove(aa);
+                            if (presetMarker.contains(aa)) {
+                                presetMarker.remove(aa);
+                            }
                             break;
                         }
                     }
                 }
             }
         } else {
-            for (AnalysePoint ap : pointList) {
-                AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
-                aa.setAaId(aaCount + preset.size());
-                aa.setAaPoint(ap);
-                aa.setAaType(selected.getAaType());
-                preset.add(aa);
+            Boolean isAdd = false; // Correspond à une suppression
+            if (analysePointModel.getTarget() != null) {
+                if (analysePointModel.getTarget().size() > preset.size()) { // add
+                    isAdd = true; // Correspond à un ajout 
+                }
+            }
+            if (isAdd) { // En cas d'ajout
+                for (AnalysePoint ap : pointList) {
+                    AnalyseAllowed aa = new AnalyseAllowed(aaCount + preset.size(), false, 0, false, 0, false, 0, false, 0, false, null, null);
+                    aa.setAaPoint(ap);
+                    aa.setAaType(selected.getAaType());
+                    aa.setAaObservation("");
+                    aa.setAaCompany(staffAuthController.getCompany());
+                    // restaure des liaison existante
+                    List<AnalyseAllowed> laa = analyseAllowedController.getItemsByPointType(ap, selected.getAaType());
+                    if (laa != null && !laa.isEmpty()) {
+                        aa = laa.get(0);
+                    }
+                    preset.add(aa);
+                }
+            } else { // En cas de suppression
+                List<Integer> index;
+                for (AnalysePoint ap : pointList) {
+                    for (AnalyseAllowed aa : preset) {
+                        if (Objects.equals(aa.getAaPoint().getApId(), ap.getApId())) {
+                            preset.remove(aa);
+                            if (presetMarker.contains(aa)) {
+                                presetMarker.remove(aa);
+                            }
+                            break;
+                        }
+                    }
+                }
             }
         }
     }
 
-    private void onAnalysePointChange() {
+    /**
+     * On analyse point changed method know what to do when selected point item
+     * change. <br>
+     * In particular, initialize source, target, preset, presetMarker
+     */
+    private void onAnalysePointChanged() {
         analyseTypeSource = analyseTypeController.getItems();
         analyseTypeTarget = new ArrayList<>();
         if (getSelected().getAaPoint() != null) {
             // Recherche des données affectée et non affectée
             List<AnalyseAllowed> lstPA = analyseAllowedController.getItemsByPoint(getSelected().getAaPoint());
             preset = lstPA;
+            presetMarker = new ArrayList<>();
 
             if (lstPA != null) {
                 for (AnalyseAllowed pa : lstPA) {
@@ -205,16 +246,23 @@ public class AnalyseAllowedView implements Serializable {
     public void handleAnalysePointChanged(ValueChangeEvent event) {
         AnalysePoint point = (AnalysePoint) event.getNewValue();
         getSelected().setAaPoint(point);
-        onAnalysePointChange();
+        onAnalysePointChanged();
     }
 
-    private void onAnalyseTypeChange() {
+    /**
+     * On analyse type changed method know what to do when selected type item
+     * change. <br>
+     * In particular, initialize source, target, preset, presetMarker
+     */
+    private void onAnalyseTypeChanged() {
         analysePointSource = analysePointController.getItems();
         analysePointTarget = new ArrayList<>();
         if (getSelected().getAaType() != null) {
             // Recherche des données affectée et non affectée
             List<AnalyseAllowed> lstPA = analyseAllowedController.getItemsByType(getSelected().getAaType());
             preset = lstPA;
+            presetMarker = new ArrayList<>();
+
             if (lstPA != null) {
                 for (AnalyseAllowed pa : lstPA) {
                     analysePointTarget.add(pa.getAaPoint());
@@ -234,7 +282,7 @@ public class AnalyseAllowedView implements Serializable {
     public void handleAnalyseTypeChanged(ValueChangeEvent event) {
         AnalyseType type = (AnalyseType) event.getNewValue();
         getSelected().setAaType(type);
-        onAnalyseTypeChange();
+        onAnalyseTypeChanged();
     }
 
     // /////////////////////////////////////////////////////////////////////////
@@ -357,6 +405,10 @@ public class AnalyseAllowedView implements Serializable {
 
     public void onRowEdit(RowEditEvent event) {
         AnalyseAllowed aa = (AnalyseAllowed) event.getObject();
+        // Add edited row on presetMarker if already exist in database for update
+        if (analyseAllowedController.contains(aa)) {
+            presetMarker.add(aa);
+        }
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Analyse possible édition ligne : " + aa, null));
     }
@@ -423,15 +475,55 @@ public class AnalyseAllowedView implements Serializable {
             }
 
             // Now update all the preset with new value
-            for (AnalyseAllowed aa : preset) {
+            for (AnalyseAllowed aa : presetMarker) {
                 analyseAllowedController.setSelected(aa);
                 analyseAllowedController.update();
             }
 
             // Recall init 
-            onAnalysePointChange();
-        } else if (this.displayMode == 2) {
+            onAnalysePointChanged();
 
+        } // Mode type échantillonage
+        else if (this.displayMode == 2) {
+            // Get list a allowed item to be removed
+            List<AnalyseAllowed> listOfLinkToBeRemoved = analyseAllowedController.getItemsByType(selected.getAaType());
+            listOfLinkToBeRemoved.removeAll(preset);
+
+            // Remove items without link and update as delete the one with link
+            for (AnalyseAllowed aa : listOfLinkToBeRemoved) {
+                analyseAllowedController.setSelected(aa);
+                if (!analyseDataController.contains(aa.getAaPoint(), selected.getAaType())) {
+                    analyseAllowedController.destroy();
+                } else {
+                    analyseAllowedController.getSelected().setAaDeleted(true);
+                    analyseAllowedController.update();
+                }
+            }
+
+            // Create new link from the preset table and update the id
+            List<AnalyseAllowed> listOfNewLinkToAdd = new ArrayList();
+            listOfNewLinkToAdd.addAll(preset);
+            listOfNewLinkToAdd.removeAll(analyseAllowedController.getItemsByType(selected.getAaType()));
+
+            for (AnalyseAllowed aa : listOfNewLinkToAdd) {
+                analyseAllowedController.setSelected(aa);
+                analyseAllowedController.create();
+                // Change the preset id
+                for (AnalyseAllowed aap : preset) {
+                    if (aap == aa) {
+                        aap.setAaId(analyseAllowedController.getItemsByPointType(aa.getAaPoint(), selected.getAaType()).get(0).getAaId());
+                    }
+                }
+            }
+
+            // Now update all the preset with new value
+            for (AnalyseAllowed aa : presetMarker) {
+                analyseAllowedController.setSelected(aa);
+                analyseAllowedController.update();
+            }
+
+            // Recall init 
+            onAnalyseTypeChanged();
         }
     }
 

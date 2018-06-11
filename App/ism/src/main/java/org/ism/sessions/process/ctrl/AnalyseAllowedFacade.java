@@ -35,6 +35,7 @@ public class AnalyseAllowedFacade extends AbstractFacade<AnalyseAllowed> {
     private final String FIND_BY_POINT_TYPE = "AnalyseAllowed.findByAaPointType";
     private final String FIND_BY_POINT_TYPE_OF_COMPANY = "AnalyseAllowed.findByAaPointTypeOfCompany";
     private final String FIND_NEXT_KEY = "AnalyseAllowed.findNextKey";
+    private final String COUNT_BY_ANALYSE_ALLOWED = "AnalyseAllowed.countByAnalyseAllowed";
 
     @Override
     protected EntityManager getEntityManager() {
@@ -126,5 +127,25 @@ public class AnalyseAllowedFacade extends AbstractFacade<AnalyseAllowed> {
         em.flush();
         Query q = em.createNamedQuery(FIND_NEXT_KEY);
         return Integer.valueOf(q.getSingleResult().toString()) + 1;
+    }
+
+    /**
+     * Check if the analyse allowed is already contains in the table 
+     * @param aa the analyse allowed to be checked
+     * @return true if already exist
+     */
+    public boolean contains(AnalyseAllowed aa) {
+        em.flush();
+        Query q = em.createNamedQuery(COUNT_BY_ANALYSE_ALLOWED)
+                .setParameter("aaId", aa.getAaId());
+        Object counter = q.getSingleResult();
+        int count = 0;
+        if(counter!=null){
+            count = Integer.valueOf(counter.toString());
+        }
+        if(count!=0){
+            return true;
+        }
+        return false;
     }
 }
