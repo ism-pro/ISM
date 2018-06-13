@@ -213,6 +213,17 @@ public class AnalyseAllowedView implements Serializable {
     }
 
     /**
+     * On display mode change the preset, the presetMarker have to be initialize
+     * as well as the corresponding picklist
+     */
+    public void onDisplayModeChanged(){
+        selected.setAaPoint(null);
+        selected.setAaType(null);
+        preset = new ArrayList<>();
+        presetMarker = new ArrayList<>();
+    }
+    
+    /**
      * On analyse point changed method know what to do when selected point item
      * change. <br>
      * In particular, initialize source, target, preset, presetMarker

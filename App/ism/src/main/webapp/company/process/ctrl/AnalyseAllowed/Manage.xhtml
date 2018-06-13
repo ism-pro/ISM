@@ -36,7 +36,7 @@
                                                    class="form-control pr-0 py-0 mr-0"
 
                                                    >
-                                    <p:ajax event="change" update=":bodyForm,:growl" />
+                                    <p:ajax event="change" update=":bodyForm, datalist, :growl" listener="#{analyseAllowedView.onDisplayModeChanged()}"/>
                                     <f:selectItem itemLabel="#{ism.AnalyseAllowedField_aaPoint}" itemValue="1"  />
                                     <f:selectItem itemLabel="#{ism.AnalyseAllowedField_aaType}" itemValue="2"/>
                                 </p:selectOneButton>
@@ -79,10 +79,10 @@
                                                      class="form-control pr-0 py-0 mr-0"
                                                      value="#{analyseAllowedView.selected.aaType}"
                                                      converter="#{analyseTypeConverter}"
-                                                     validator="#{analyseAllowedOnPointTypeValidator.validate}"
-                                                     required="true" 
-                                                     requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaType}" 
+                                                     required="false" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaType}" 
+                                                     valueChangeListener="#{analyseAllowedView.handleAnalyseTypeChanged}"
                                                      >
+                                        <p:ajax event="change"  update="westGroup @form, :growl" />
                                         <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
                                         <f:selectItems value="#{analyseTypeController.itemsAvailableSelectOne}"
                                                        var="aaTypeItem"
@@ -125,6 +125,7 @@
                                         var="point" effect="bounce"
                                         itemLabel="#{point}"
                                         itemValue="#{point}"
+
                                         showCheckbox="true" responsive="true"
                                         showSourceFilter="true" showTargetFilter="true"
                                         filterMatchMode="contains" converter="#{analysePointConverter}"
@@ -134,10 +135,10 @@
                                 <f:facet name="sourceCaption">#{ism.Unaffected}</f:facet>
                                 <f:facet name="targetCaption">#{ism.Affected}</f:facet>
 
-                                <p:ajax event="transfer" listener="#{analyseAllowedView.handleAnalysePointTransfer}" update=":growl" />
-                                <p:ajax event="select" listener="#{analyseAllowedView.handleAnalysePointSelect}" update=":growl" />
-                                <p:ajax event="unselect" listener="#{analyseAllowedView.handleAnalysePointUnselect}" update=":growl" />
-                                <p:ajax event="reorder" listener="#{analyseAllowedView.handleAnalysePointReorder}" update=":growl" />
+                                <p:ajax event="transfer" listener="#{analyseAllowedView.handleAnalysePointTransfer}" update="bodyForm, datalist,:growl" />
+                                <p:ajax event="select" listener="#{analyseAllowedView.handleAnalysePointSelect}" update="bodyForm:MsgDetail,  :growl" />
+                                <p:ajax event="unselect" listener="#{analyseAllowedView.handleAnalysePointUnselect}" update="bodyForm:MsgDetail,  :growl" />
+                                <p:ajax event="reorder" listener="#{analyseAllowedView.handleAnalysePointReorder}" update="bodyForm:MsgDetail, bodyForm, datalist, :growl" />
 
                                 <p:column style="width:90%;">
                                     <h:outputText value="#{point}" style="font-size: 0.7em;" />
@@ -454,57 +455,58 @@
                                     </div>
                                 </p:column> 
 
+                                <script>
+                                    $(function () {
+                                        $(document).ready(function (e) {
+                                            var pickList = $('div[id*=analysePointPickList]');
+                                            var sourceWrapper = $('div[id*=analysePointPickList] > div:nth-child(1)');
+                                            var buttonsWrapper = $('div[id*=analysePointPickList] > div:nth-child(2)');
+                                            var targetWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
+                                            targetWrapper.addClass("is-state-hide");
+                                            var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
+                                            var selDiv = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box');
+                                            var selAllDiv = $('.ui-datatable thead tr  th:nth-child(1) .ui-chkbox .ui-chkbox-box');
+                                            console.log(selDiv);
+                                            $.ism = "";
+                                            $.ism.selDiv = selDiv;
+                                            $.selDiv = selDiv;
+                                            var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
+                                            selbox.removeClass('ui-icon-check');
+                                            selbox.addClass('ui-icon-blank');
+                                            sel.attr('aria-checked', false);
+                                            $(selbox.parentElement).removeClass('ui-state-active');
+                                            selDiv.click(function () {
+                                                //console.log("sel div click");
+                                                var p = $(this.parentElement.parentElement.parentElement);
+                                                // console.log(p);
+                                                var datari = p.attr('data-ri');
+                                                var datark = p.attr('data-rk');
+                                                var ariaselected = new Boolean(p.attr('aria-selected'));
+                                                if (ariaselected === true) {
+                                                    $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
+                                                } else {
+                                                    $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
+                                                }
+                                                //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
+                                            });
+                                            selAllDiv.click(function () {
+                                                console.log("All div click");
+                                                var i = 0;
+                                                var size = $.selDiv.length;
+                                                console.log(size);
+                                                $.selDiv.trigger("click");
+                                                //console.log("first finished")
+                                                //$.selDiv.trigger("click");
+                                                console.log("click end")
+                                            });
+                                        });
+                                    });
+
+                                </script>
                             </p:dataTable>
                         </div>
 
-                        <script>
-                            $(function () {
-                                $(document).ready(function (e) {
-                                    var pickList = $('div[id*=analysePointPickList]');
-                                    var sourceWrapper = $('div[id*=analysePointPickList] > div:nth-child(1)');
-                                    var buttonsWrapper = $('div[id*=analysePointPickList] > div:nth-child(2)');
-                                    var targetWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
-                                    targetWrapper.addClass("is-state-hide");
-                                    var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
-                                    var selDiv = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box');
-                                    var selAllDiv = $('.ui-datatable thead tr  th:nth-child(1) .ui-chkbox .ui-chkbox-box');
-                                    console.log(selDiv);
-                                    $.ism = "";
-                                    $.ism.selDiv = selDiv;
-                                    $.selDiv = selDiv;
-                                    var selbox = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box span');
-                                    selbox.removeClass('ui-icon-check');
-                                    selbox.addClass('ui-icon-blank');
-                                    sel.attr('aria-checked', false);
-                                    $(selbox.parentElement).removeClass('ui-state-active');
-                                    selDiv.click(function () {
-                                        //console.log("sel div click");
-                                        var p = $(this.parentElement.parentElement.parentElement);
-                                        // console.log(p);
-                                        var datari = p.attr('data-ri');
-                                        var datark = p.attr('data-rk');
-                                        var ariaselected = new Boolean(p.attr('aria-selected'));
-                                        if (ariaselected === true) {
-                                            $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box span').trigger('click');
-                                        } else {
-                                            $('.ui-picklist-target li[data-item-label="' + datark + '"] .ui-chkbox-box').trigger('click');
-                                        }
-                                        //console.log(datari + ' / ' + datark + ' / ' + ariaselected);
-                                    });
-                                    selAllDiv.click(function () {
-                                        console.log("All div click");
-                                        var i = 0;
-                                        var size = $.selDiv.length;
-                                        console.log(size);
-                                        $.selDiv.trigger("click");
-                                        //console.log("first finished")
-                                        //$.selDiv.trigger("click");
-                                        console.log("click end")
-                                    });
-                                });
-                            });
 
-                        </script>
 
                     </div>
 

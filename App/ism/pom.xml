@@ -9,7 +9,7 @@
     
     <groupId>org.ism</groupId>
     <artifactId>app</artifactId>
-    <version>1805.01</version>
+    <version>1806.01</version>
     <packaging>war</packaging>
 
     <name>ism-app</name>
