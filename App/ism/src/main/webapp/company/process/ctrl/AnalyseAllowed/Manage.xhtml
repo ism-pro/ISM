@@ -63,7 +63,7 @@
                                                      required="false" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaPoint}"
                                                      valueChangeListener="#{analyseAllowedView.handleAnalysePointChanged}"
                                                      >
-                                        <p:ajax event="change"  update="westGroup @form, :growl" />
+                                        <p:ajax event="change"  update="westGroup @form,ScriptGroup, :growl" />
                                         <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
                                         <f:selectItems value="#{analysePointController.itemsAvailableSelectOne}"
                                                        var="aaPointItem"
@@ -82,7 +82,7 @@
                                                      required="false" requiredMessage="#{ism.AnalyseAllowedRequiredMsg_aaType}" 
                                                      valueChangeListener="#{analyseAllowedView.handleAnalyseTypeChanged}"
                                                      >
-                                        <p:ajax event="change"  update="westGroup @form, :growl" />
+                                        <p:ajax event="change"  update="westGroup @form, ScriptGroup, :growl" />
                                         <f:selectItem itemLabel="#{ism.SelectList}" itemValue="#{null}"/>
                                         <f:selectItems value="#{analyseTypeController.itemsAvailableSelectOne}"
                                                        var="aaTypeItem"
@@ -455,14 +455,20 @@
                                     </div>
                                 </p:column> 
 
+
+                            </p:dataTable> 
+
+                            <h:panelGroup id="ScriptGroup">
                                 <script>
                                     $(function () {
                                         $(document).ready(function (e) {
                                             var pickList = $('div[id*=analysePointPickList]');
                                             var sourceWrapper = $('div[id*=analysePointPickList] > div:nth-child(1)');
                                             var buttonsWrapper = $('div[id*=analysePointPickList] > div:nth-child(2)');
-                                            var targetWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
-                                            targetWrapper.addClass("is-state-hide");
+                                            var targetPointWrapper = $('div[id*=analysePointPickList] > div:nth-child(3)');
+                                            var targetTypeWrapper = $('div[id*=analyseTypePickList] > div:nth-child(3)');
+                                            targetPointWrapper.addClass("is-state-hide");
+                                            targetTypeWrapper.addClass("is-state-hide");
                                             var sel = $('.ui-datatable tbody tr td .ui-helper-hidden-accessible input');
                                             var selDiv = $('.ui-datatable tbody tr td:first-child .ui-chkbox .ui-chkbox-box');
                                             var selAllDiv = $('.ui-datatable thead tr  th:nth-child(1) .ui-chkbox .ui-chkbox-box');
@@ -503,7 +509,7 @@
                                     });
 
                                 </script>
-                            </p:dataTable>
+                            </h:panelGroup>
                         </div>
 
 

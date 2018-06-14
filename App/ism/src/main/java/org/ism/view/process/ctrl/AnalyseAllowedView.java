@@ -132,9 +132,7 @@ public class AnalyseAllowedView implements Serializable {
      */
     private void manageTransfertFromPickList(List<AnalyseType> typeList, List<AnalysePoint> pointList) {
         // Finish running if none of the two list is defined
-        if (typeList.isEmpty() && pointList.isEmpty()) {
-            return;
-        }
+        if(typeList==null && pointList==null)   return;
 
         Integer aaCount = analyseAllowedController.getNextKey() + 500;
 
