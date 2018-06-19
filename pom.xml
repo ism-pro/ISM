@@ -3,16 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org</groupId>
     <artifactId>ISM</artifactId>
-    <version>1712.15</version>
+    <version>1806.15</version>
     <packaging>pom</packaging>
     <modules>
         
         <module>Charts</module>
         <module>App</module>
-  </modules>
+        
+    </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <description>My Token
-fb7556ab06346ce05b9c970299cbaac2bf719ef1</description>
+        fb7556ab06346ce05b9c970299cbaac2bf719ef1</description>
 </project>

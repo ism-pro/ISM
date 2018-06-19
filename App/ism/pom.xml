@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    
     <parent>
-        <groupId>org</groupId>
-        <artifactId>ISM</artifactId>
-        <version>1712.15</version>
+        <groupId>org.ism</groupId>
+        <artifactId>App</artifactId>
+        <version>1806.15</version>
     </parent>
     
     <groupId>org.ism</groupId>
     <artifactId>app</artifactId>
-    <version>1806.01</version>
+    <version>1806.18</version>
     <packaging>war</packaging>
 
     <name>ism-app</name>
@@ -375,12 +376,12 @@
         
         
         <!-- GOOGLE MAP 
-        <dependency>
-            <groupId>com.googlecode.gmaps4jsf</groupId>
-            <artifactId>gmaps4jsf-core</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-         End GOOGLE MAP -->
+       <dependency>
+           <groupId>com.googlecode.gmaps4jsf</groupId>
+           <artifactId>gmaps4jsf-core</artifactId>
+           <version>3.0.0</version>
+       </dependency>
+        End GOOGLE MAP -->
         
         
         
@@ -466,8 +467,8 @@
     </repositories>
     <description>Industrial System Manager - ISM
 
-- Possibilité de configurer l'envoi d'email pour les non conformités
-- Envoi des email en fonction des différents états.
+        - Possibilité de configurer l'envoi d'email pour les non conformités
+        - Envoi des email en fonction des différents états.
 
-    c80e3077c6243c81dba2854b6950dd14b3cba6c3</description>
+        c80e3077c6243c81dba2854b6950dd14b3cba6c3</description>
 </project>
