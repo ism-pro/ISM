@@ -155,7 +155,7 @@
                                          selection="#{analyseAllowedView.selections}"
                                          rowSelectMode="checkbox"
                                          editable="true"
-                                         rendered="#{analyseAllowedView.preset!=null and !analyseAllowedView.preset.isEmpty()}"
+                                         rendered="#{analyseAllowedView.selected.aaPoint!=null or analyseAllowedView.selected.aaPoint!=null}"
                                          >
 
                                 <p:ajax event="rowEdit" listener="#{analyseAllowedView.onRowEdit}" update="bodyForm:MsgDetail,:growl" />
