@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition template="/tmpl/MainWindow.xhtml">
+
+        <ui:define name="body">
+            <h1><h:outputText value="#{ism.ScolaNiveauTitleEdit}"/></h1>
+
+            <h:form id="bodyForm">
+
+                <p:panelGrid id="panelForm" columns="2" columnClasses="columnFieldClass, columnContentClass" styleClass="panelGridClass"
+                             rendered="#{scolaNiveauController.selected != null}">
+
+
+                    <p:outputLabel value="#{ism.ScolaNiveauField_snId}" rendered="true" for="snId" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" rendered="true">                
+                        <p:outputLabel id="snId"
+                                       style="margin-left: 5px;"
+                                       value="#{scolaNiveauController.selected.snId}"  />
+                        <p:message for="snId" rendered="false" />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.ScolaNiveauField_snNiveau}"  for="snNiveau" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:inputText id="snNiveau" 
+                                     value="#{scolaNiveauController.selected.snNiveau}" 
+                                     title="#{ism.ScolaNiveauFieldInfo_snNiveau}" 
+                                     required="true" requiredMessage="#{ism.ScolaNiveauRequiredMsg_snNiveau}" 
+                                     />
+                        <p:message for="snNiveau"  />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.ScolaNiveauField_snDesignation}"  for="snDesignation" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:inputText id="snDesignation" 
+                                     value="#{scolaNiveauController.selected.snDesignation}" 
+                                     title="#{ism.ScolaNiveauFieldInfo_snDesignation}" 
+                                     required="true" requiredMessage="#{ism.ScolaNiveauRequiredMsg_snDesignation}" 
+                                     />
+                        <p:message for="snDesignation"  />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.ScolaNiveauField_snDeleted}"  for="snDeleted" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:selectBooleanCheckbox id="snDeleted"
+                                                 value="#{scolaNiveauController.selected.snDeleted}" 
+                                                 required="true" 
+                                                 requiredMessage="#{ism.ScolaNiveauRequiredMsg_snDeleted}" 
+                                                 />
+                        <p:message for="snDeleted"  />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.ScolaNiveauField_snCreated}"  for="snCreated" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:calendar id="snCreated" pattern="dd/MM/yyyy" rendered="true"
+                                    value="#{scolaNiveauController.selected.snCreated}" 
+                                    title="#{ism.ScolaNiveauFieldInfo_snCreated}" 
+                                    required="true" 
+                                    requiredMessage="#{ism.ScolaNiveauRequiredMsg_snCreated}" 
+                                    showOn="button"/>
+                        <p:message for="snCreated"  />
+                    </h:panelGrid>
+
+
+                    <p:outputLabel value="#{ism.ScolaNiveauField_snChanged}"  for="snChanged" />
+                    <h:panelGrid columns="2" cellpadding="0px" cellspacing="0px" style="margin:0px; padding:0px;" >                
+                        <p:calendar id="snChanged" pattern="dd/MM/yyyy" rendered="true"
+                                    value="#{scolaNiveauController.selected.snChanged}" 
+                                    title="#{ism.ScolaNiveauFieldInfo_snChanged}" 
+                                    required="true" 
+                                    requiredMessage="#{ism.ScolaNiveauRequiredMsg_snChanged}" 
+                                    showOn="button"/>
+                        <p:message for="snChanged"  />
+                    </h:panelGrid>
+
+
+                </p:panelGrid>
+
+
+
+
+
+
+
+
+                <h:panelGroup id="btn-crud-zone_id"  >
+                    <p:commandButton icon="ui-btn-Save"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Change}" 
+                                     actionListener="#{scolaNiveauController.update}" 
+                                     onstart="#{p:widgetVar('bodyForm:')}.enable();"
+                                     update=":bodyForm,:growl" 
+                                     action="List.xhtml?faces-redirect=true"
+                                     />
+                    <p:commandButton icon="ui-btn-Cancel"
+                                     styleClass="ui-btn"
+                                     value="#{ism.Cancel}" 
+                                     update=":bodyForm,:growl"
+                                     actionListener="#{scolaNiveauController.prepareCreate()}"
+                                     action="./List.xhtml?faces-redirect=true"
+                                     immediate="true"
+                                     />
+
+                </h:panelGroup>
+
+                <p:messages showDetail="true" showSummary="false"
+                            escape="false"/>
+
+
+            </h:form>
+
+        </ui:define>
+
+
+
+
+
+        <ui:define name="west" id="west">
+            <h:panelGroup id="westGroup">
+                <p:commandButton icon="ui-btn-Save"
+                                 styleClass="options-btn"
+                                 value="#{ism.Change}" 
+                                 actionListener="#{scolaNiveauController.update}" 
+                                 update=":bodyForm,:growl"
+                                 action="List.xhtml?faces-redirect=true"
+                                 form="bodyForm"
+                                 />
+                <p:commandButton icon="ui-btn-Cancel"
+                                 styleClass="options-btn"
+                                 value="#{ism.Cancel}" 
+                                 actionListener="#{scolaNiveauController.prepareCreate()}"
+                                 action="./List.xhtml?faces-redirect=true"
+                                 update=":bodyForm,:growl"
+                                 immediate="true"
+                                 />
+
+            </h:panelGroup>
+        </ui:define>
+    </ui:composition>
+</html>

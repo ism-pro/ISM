@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="ScolaNiveauCreateDlg" widgetVar="ScolaNiveauCreateDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.CreateScolaNiveauTitle}">
+            <h:form id="ScolaNiveauCreateForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{scolaNiveauController.selected != null}">
+                        <p:outputLabel value="#{bundle.CreateScolaNiveauLabel_snId}" for="snId" />
+                        <p:inputText id="snId" value="#{scolaNiveauController.selected.snId}" title="#{bundle.CreateScolaNiveauTitle_snId}" required="true" requiredMessage="#{bundle.CreateScolaNiveauRequiredMessage_snId}"/>
+                        <p:outputLabel value="#{bundle.CreateScolaNiveauLabel_snNiveau}" for="snNiveau" />
+                        <p:inputText id="snNiveau" value="#{scolaNiveauController.selected.snNiveau}" title="#{bundle.CreateScolaNiveauTitle_snNiveau}" required="true" requiredMessage="#{bundle.CreateScolaNiveauRequiredMessage_snNiveau}"/>
+                        <p:outputLabel value="#{bundle.CreateScolaNiveauLabel_snDesignation}" for="snDesignation" />
+                        <p:inputText id="snDesignation" value="#{scolaNiveauController.selected.snDesignation}" title="#{bundle.CreateScolaNiveauTitle_snDesignation}" required="true" requiredMessage="#{bundle.CreateScolaNiveauRequiredMessage_snDesignation}"/>
+                        <p:outputLabel value="#{bundle.CreateScolaNiveauLabel_snDeleted}" for="snDeleted" />
+                        <p:selectBooleanCheckbox id="snDeleted" value="#{scolaNiveauController.selected.snDeleted}" />
+                        <p:outputLabel value="#{bundle.CreateScolaNiveauLabel_snCreated}" for="snCreated" />
+                        <p:calendar id="snCreated" pattern="MM/dd/yyyy HH:mm:ss" value="#{scolaNiveauController.selected.snCreated}" title="#{bundle.EditScolaNiveauTitle_snCreated}" required="true" requiredMessage="#{bundle.EditScolaNiveauRequiredMessage_snCreated}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.CreateScolaNiveauLabel_snChanged}" for="snChanged" />
+                        <p:calendar id="snChanged" pattern="MM/dd/yyyy HH:mm:ss" value="#{scolaNiveauController.selected.snChanged}" title="#{bundle.EditScolaNiveauTitle_snChanged}" required="true" requiredMessage="#{bundle.EditScolaNiveauRequiredMessage_snChanged}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{scolaNiveauController.create}" value="#{bundle.Save}" update="display,:ScolaNiveauListForm:datalist,:growl" oncomplete="handleSubmit(args,'ScolaNiveauCreateDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="ScolaNiveauCreateDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>

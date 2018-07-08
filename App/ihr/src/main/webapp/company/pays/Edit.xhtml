@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <ui:composition>
+
+        <p:dialog id="PaysEditDlg" widgetVar="PaysEditDialog" modal="true" resizable="false" appendTo="@(body)" header="#{bundle.EditPaysTitle}">
+            <h:form id="PaysEditForm">
+                <h:panelGroup id="display">
+                    <p:panelGrid columns="2" rendered="#{paysController.selected != null}">
+                        <p:outputLabel value="#{bundle.EditPaysLabel_PId}" for="PId" />
+                        <p:inputText id="PId" value="#{paysController.selected.PId}" title="#{bundle.EditPaysTitle_PId}" required="true" requiredMessage="#{bundle.EditPaysRequiredMessage_PId}"/>
+                        <p:outputLabel value="#{bundle.EditPaysLabel_PPays}" for="PPays" />
+                        <p:inputText id="PPays" value="#{paysController.selected.PPays}" title="#{bundle.EditPaysTitle_PPays}" required="true" requiredMessage="#{bundle.EditPaysRequiredMessage_PPays}"/>
+                        <p:outputLabel value="#{bundle.EditPaysLabel_PDesignation}" for="PDesignation" />
+                        <p:inputText id="PDesignation" value="#{paysController.selected.PDesignation}" title="#{bundle.EditPaysTitle_PDesignation}" required="true" requiredMessage="#{bundle.EditPaysRequiredMessage_PDesignation}"/>
+                        <p:outputLabel value="#{bundle.EditPaysLabel_PDeleted}" for="PDeleted" />
+                        <p:selectBooleanCheckbox id="PDeleted" value="#{paysController.selected.PDeleted}" />
+                        <p:outputLabel value="#{bundle.EditPaysLabel_PCreated}" for="PCreated" />
+                        <p:calendar id="PCreated" pattern="MM/dd/yyyy HH:mm:ss" value="#{paysController.selected.PCreated}" title="#{bundle.EditPaysTitle_PCreated}" required="true" requiredMessage="#{bundle.EditPaysRequiredMessage_PCreated}" showOn="button"/>
+                        <p:outputLabel value="#{bundle.EditPaysLabel_PChanged}" for="PChanged" />
+                        <p:calendar id="PChanged" pattern="MM/dd/yyyy HH:mm:ss" value="#{paysController.selected.PChanged}" title="#{bundle.EditPaysTitle_PChanged}" required="true" requiredMessage="#{bundle.EditPaysRequiredMessage_PChanged}" showOn="button"/>
+                    </p:panelGrid>
+                    <p:commandButton actionListener="#{paysController.update}" value="#{bundle.Save}" update="display,:PaysListForm:datalist,:growl" oncomplete="handleSubmit(args, 'PaysEditDialog');"/>
+                    <p:commandButton value="#{bundle.Cancel}" onclick="PaysEditDialog.hide()"/>
+                </h:panelGroup>
+            </h:form>
+        </p:dialog>
+
+    </ui:composition>
+</html>
