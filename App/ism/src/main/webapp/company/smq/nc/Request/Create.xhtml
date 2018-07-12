@@ -12,12 +12,15 @@
     <ui:composition template="/tmpl/MainWindow.xhtml">
 
         <ui:define name="breadcrumblist">
+            <f:metadata>
+                <f:viewAction action="#{nonConformiteRequestController.releaseSelected}" />
+            </f:metadata>
             <li class="breadcrumb-item"><p:link value="#{ism.CrumbNCRequest}" outcome="/company/smq/nc/Request/List.xhtml?faces-redirect=true"/></li>
             <li class="breadcrumb-item active" aria-current="page">#{ism.CrumbCreate}</li>
         </ui:define>
 
         <ui:define name="body">
-            
+
             <style>.ui-accordion .ui-accordion-content {    padding: 1em 0.2em;}</style>
 
             <h:form id="bodyForm" enctype="multipart/form-data"> 
@@ -136,7 +139,7 @@
                                     <p:inputText id="ncrProduct" 
                                                  value="#{nonConformiteRequestController.selected.ncrProduct}"
                                                  title="#{ism.NonConformiteRequestFieldInfo_ncrProduct}" 
-                                                 
+
                                                  />
                                     <p:message for="ncrProduct"   />
                                 </h:panelGrid>
@@ -147,7 +150,7 @@
                                     <p:inputText id="ncrTrace" 
                                                  value="#{nonConformiteRequestController.selected.ncrTrace}"
                                                  title="#{ism.NonConformiteRequestFieldInfo_ncrTrace}" 
-                                                 
+
                                                  />
                                     <p:message for="ncrTrace"   />
                                 </h:panelGrid>

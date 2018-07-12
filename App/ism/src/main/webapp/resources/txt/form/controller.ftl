@@ -81,10 +81,35 @@ public class ${controllerClassName} implements Serializable {
 private List<${entityClassName}> items = null;
 private ${entityClassName} selected;
 private Boolean isReleaseSelected;              //!< Spécifie si oui ou non l'élément selection doit rester en mémoire après création
-private Boolean isOnMultiCreation;              //!< Spécifie si le mode de création multiple est activé
+private Boolean isOnMultiCreation;     
 
-private Map<Integer, String> headerTextMap;     //!< map header in order to manage reodering
+    //!< Spécifie si le mode de création multiple est activé
+    private Map<Integer, String> headerTextMap;     //!< map header in order to manage reodering
     private Map<String, Boolean> visibleColMap;     //!< Allow to keep 
+
+
+    /**
+     * Multi Sort Meta save table sorting
+     */
+    private List<SortMeta> multiSortMeta = null;
+    /**
+     * filters save table filters
+     */
+    private Map<String, Object> filters = null;
+
+    /**
+     * Define table setups include with Analyse data controller
+     */
+    private TableSet tableSet = new TableSet();
+
+    /**
+     * Define lazy model to load progressively data
+     */
+    private ${entityClassName}LazyModel lazyModel;
+
+    
+
+
 
         public ${controllerClassName}() {
         }
@@ -114,61 +139,94 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
         String src_18 = "src_xx";
         String src_19 = "src_xx";
         String src_20 = "src_xx";
+        String src_21 = "src_xx";
+        String src_22 = "src_xx";
+        String src_23 = "src_xx";
+        String src_24 = "src_xx";
+        String src_25 = "src_xx";
+        String src_26 = "src_xx";
+        String src_27 = "src_xx";
+        String src_28 = "src_xx";
+        String src_29 = "src_xx";
+        String src_30 = "src_xx";
 
 
         // Setup initial visibility
         headerTextMap = new HashMap<Integer, String>();
-            headerTextMap.put(0, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"));
-            headerTextMap.put(1, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_01));
-            headerTextMap.put(2, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_02));
-            headerTextMap.put(3, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_03));
-            headerTextMap.put(4, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_04));
-            headerTextMap.put(5, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_05));
-            headerTextMap.put(6, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_06));
-            headerTextMap.put(7, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_07));
-            headerTextMap.put(8, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_08));
-            headerTextMap.put(9, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_09));
-            headerTextMap.put(10, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_10));
-            headerTextMap.put(11, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_11));
-            headerTextMap.put(12, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_12));
-            headerTextMap.put(13, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_13));
-            headerTextMap.put(14, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_14));
-            headerTextMap.put(15, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_15));
-            headerTextMap.put(16, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_16));
-            headerTextMap.put(17, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_17));
-            headerTextMap.put(18, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_18));
-            headerTextMap.put(19, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_19));
-            headerTextMap.put(20, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_20));
+        headerTextMap.put(0, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"));
+        headerTextMap.put(1, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_01));
+        headerTextMap.put(2, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_02));
+        headerTextMap.put(3, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_03));
+        headerTextMap.put(4, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_04));
+        headerTextMap.put(5, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_05));
+        headerTextMap.put(6, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_06));
+        headerTextMap.put(7, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_07));
+        headerTextMap.put(8, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_08));
+        headerTextMap.put(9, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_09));
+        headerTextMap.put(10, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_10));
+        headerTextMap.put(11, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_11));
+        headerTextMap.put(12, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_12));
+        headerTextMap.put(13, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_13));
+        headerTextMap.put(14, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_14));
+        headerTextMap.put(15, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_15));
+        headerTextMap.put(16, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_16));
+        headerTextMap.put(17, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_17));
+        headerTextMap.put(18, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_18));
+        headerTextMap.put(19, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_19));
+        headerTextMap.put(20, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_20));
+        headerTextMap.put(11, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_21));
+        headerTextMap.put(12, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_22));
+        headerTextMap.put(13, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_23));
+        headerTextMap.put(14, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_24));
+        headerTextMap.put(15, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_25));
+        headerTextMap.put(16, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_26));
+        headerTextMap.put(17, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_27));
+        headerTextMap.put(18, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_28));
+        headerTextMap.put(19, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_29));
+        headerTextMap.put(20, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_30));
 
-            visibleColMap = new HashMap<String, Boolean>();
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_01), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_02), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_03), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_04), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_05), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_06), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_07), true);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_08), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_09), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_10), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_11), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_12), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_13), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_14), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_15), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_16), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_17), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_18), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_19), false);
-                visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_20), false);
+        visibleColMap = new HashMap<String, Boolean>();
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_01), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_02), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_03), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_04), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_05), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_06), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_07), true);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_08), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_09), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_10), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_11), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_12), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_13), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_14), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_15), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_16), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_17), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_18), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_19), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_20), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_21), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_22), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_23), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_24), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_25), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_26), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_27), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_28), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_29), false);
+        visibleColMap.put(ResourceBundle.getBundle(JsfUtil.BUNDLE).getString(src_30), false);
 
-                }
+        // Initialize lazy model
+        lazyModel = new ${entityClassName}LazyModel(ejbFacade);
+
+        }
 
 <#if ejbClassName??>
-                private ${ejbClassName} getFacade() {
-                return ejbFacade;
-                }
+            private ${ejbClassName} getFacade() {
+            return ejbFacade;
+            }
 <#elseif jpaControllerClassName??>
                 private ${jpaControllerClassName} getJpaController() {
                 if (jpaController == null) {
@@ -182,12 +240,11 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
                 }
 </#if>
 
-                /**
-                * ************************************************************************
-                * CRUD OPTIONS
-                *
-                * ************************************************************************
-                */
+                /// ////////////////////////////////////////////////////////////////////////
+                ///
+                /// BASE OPTIONS
+                ///
+                /// ////////////////////////////////////////////////////////////////////////
                 public ${entityClassName} prepareCreate() {
                 selected = new ${entityClassName}();
                 return selected;
@@ -231,17 +288,13 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
                 getString("${entityClassName}ToggleMultiCreationDetail") + isOnMultiCreation);
                 }
 
-                /**
-                * ************************************************************************
-                * TABLE OPTIONS
-                *
-                * ************************************************************************
-                */
-                /**
-                *
-                * @param e
-                */
-                public void handleColumnToggle(ToggleEvent e) {
+                
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// TABLE OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    public void handleColumnToggle(ToggleEvent e) {
                 visibleColMap.replace(headerTextMap.get((Integer) e.getData()),
                 e.getVisibility() == Visibility.VISIBLE);
 
@@ -268,13 +321,13 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
 
                 }
 
-                /**
-                * ************************************************************************
-                * CRUD OPTIONS
-                *
-                * ************************************************************************
-                */
-                public void create() {
+                
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// CRUD OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    public void create() {
                 // Set time on creation action
                 selected.set${entityClassName?substring(0,3)}Changed(new Date());
                 selected.set${entityClassName?substring(0,3)}Created(new Date());
@@ -366,18 +419,13 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
                 persist(persistAction, detail, detail);
                 }
 
-                /**
-                * ************************************************************************
-                * JPA
-                *
-                * ************************************************************************
-                */
-                /**
-                *
-                * @param id
-                * @return
-                */
-                public ${entityClassName} get${entityClassName}(java.lang.Integer id) {
+                
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// JPA OPTIONS
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    public ${entityClassName} get${entityClassName}(java.lang.Integer id) {
                 return getFacade().find(id);
                 }
 
@@ -407,17 +455,13 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
                 return getFacade().findAll();
                 }
 
-                /**
-                * ************************************************************************
-                * GETTER / SETTER
-                *
-                * ************************************************************************
-                */
-                /**
-                *
-                * @return
-                */
-                public ${entityClassName} getSelected() {
+                
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// GETTER / SETTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    public ${entityClassName} getSelected() {
                 if (selected == null) {
                 selected = new ${entityClassName}();
                 }
@@ -456,148 +500,341 @@ private Map<Integer, String> headerTextMap;     //!< map header in order to mana
                         return this.visibleColMap.get(key);
                         }
 
-                        /**
-                        * ************************************************************************
-                        * CONVERTER
-                        *
-                        *
-                        * ************************************************************************
-                        */
-                        @FacesConverter(forClass=${entityClassName}.class)
-                        public static class ${controllerClassName}Converter implements Converter {
-<#if keyEmbedded>
 
-                        private static final String SEPARATOR = "#";
-                        private static final String SEPARATOR_ESCAPED = "\\#";
-</#if>
-
-                        @Override
-                        public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
-                        if (value == null || value.length() == 0) {
-                        return null;
-                        }
-            ${controllerClassName} controller = (${controllerClassName})facesContext.getApplication().getELResolver().
-                        getValue(facesContext.getELContext(), null, "${managedBeanName}");
-<#if ejbClassName??>
-<#if cdiEnabled?? && cdiEnabled>
-                        return controller.get${entityClassName}(getKey(value));
-<#else>
-                        return controller.getFacade().find(getKey(value));
-</#if>
-<#elseif jpaControllerClassName??>
-                        return controller.getJpaController().find${entityClassName}(getKey(value));
-</#if>
-                        }
-
-        ${keyType} getKey(String value) {
-            ${keyType} key;
-${keyBody}
-                        return key;
-                        }
-
-                        String getStringKey(${keyType} value) {
-                        StringBuilder sb = new StringBuilder();
-${keyStringBody}
-                        return sb.toString();
-                        }
-
-                        @Override
-                        public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
-                        if (object == null) {
-                        return null;
-                        }
-                        if (object instanceof ${entityClassName}) {
-                ${entityClassName} o = (${entityClassName}) object;
-                        return getStringKey(o.${keyGetter}());
-                        } else {
-                        Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), ${entityClassName}.class.getName()});
-                        return null;
-                        }
-                        }
-
-                        }
+    /// ////////////////////////////////////////////////////////////////////////
+    ///
+    /// INJECTION
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    
 
 
 
 
-                        /**
-                        * ************************************************************************
-                        * VALIDATOR
-                        *
-                        *
-                        * ************************************************************************
-                        */
-                        @FacesValidator(value = "${entityClassName}_${entityClassName}Validator")
-                        public static class ${entityClassName}_${entityClassName}Validator implements Validator {
+    /// ////////////////////////////////////////////////////////////////////////
+    //
+    /// LAZY
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    public ${entityClassName}LazyModel getLazyModel() {
+        return lazyModel;
+    }
 
-                        public static final String P_DUPLICATION_CODE_SUMMARY_ID = "${entityClassName}DuplicationSummary_####";
-                        public static final String P_DUPLICATION_CODE_DETAIL_ID = "${entityClassName}DuplicationDetail_###";
+    public void setLazyModel(${entityClassName}LazyModel lazyModel) {
+        this.lazyModel = lazyModel;
+    }
 
-                        @EJB
-                        private org.ism.sessions.${entityClassName}Facade ejbFacade;
 
-                        @Override
-                        public void validate(FacesContext fc, UIComponent uic, Object o) throws ValidatorException {
-                        String value = o.toString();
-                        if ((fc == null) || (uic == null)) {
-                        throw new NullPointerException();
-                        }
-                        if (!(uic instanceof InputText)) {
-                        return;
-                        }
-                        InputText input = (InputText) uic;
-                        List<${entityClassName}> lst = ejbFacade.findByCode(value);
-                        if (lst != null) {
-                        if (input.getValue() != null) {
-                        if (value.matches((String) input.getValue())) {
-                        return;
-                        }
-                        }
-                        FacesMessage facesMsg = JsfUtil.addErrorMessage(uic.getClientId(fc),
-                        ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_CODE_SUMMARY_ID),
-                        ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_CODE_DETAIL_ID)
-                        + value);
-                        throw new ValidatorException(facesMsg);
-                        }
-                        }
-                        }
 
-                        @FacesValidator(value = "${entityClassName}_DesignationValidator")
-                        public static class ${entityClassName}DesignationValidator implements Validator {
 
-                        public static final String P_DUPLICATION_DESIGNATION_SUMMARY_ID = "${entityClassName}DuplicationSummary_#####";
-                        public static final String P_DUPLICATION_DESIGNATION_DETAIL_ID = "${entityClassName}DuplicationDetail_#####";
 
-                        @EJB
-                        private org.ism.sessions.${entityClassName}Facade ejbFacade;
 
-                        @Override
-                        public void validate(FacesContext fc, UIComponent uic, Object o) throws ValidatorException {
-                        String value = o.toString();
-                        if ((fc == null) || (uic == null)) {
-                        throw new NullPointerException();
-                        }
-                        if (!(uic instanceof InputText)) {
-                        return;
-                        }
-                        InputText input = (InputText) uic;
-                        List<${entityClassName}> lst = ejbFacade.findByDesignation(value);
-                        if (lst != null) {
-                        if (input.getValue() != null) {
-                        if (value.matches((String) input.getValue())) {
-                        return;
-                        }
-                        }
-                        FacesMessage facesMsg = JsfUtil.addErrorMessage(uic.getClientId(fc),
-                        ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_DESIGNATION_SUMMARY_ID),
-                        ResourceBundle.getBundle(JsfUtil.BUNDLE).
-                        getString(P_DUPLICATION_DESIGNATION_DETAIL_ID)
-                        + value);
-                        throw new ValidatorException(facesMsg);
-                        }
-                        }
-                        }
-                        }
+
+    /// ////////////////////////////////////////////////////////////////////////
+    //
+    /// CONVERTER
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+import java.io.Serializable;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIComponent;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.convert.FacesConverter;
+import org.ism.entities.smq.${entityClassName};
+
+import org.ism.jsf.smq.${entityClassName}Controller;
+import org.ism.jsf.util.JsfUtil;
+
+/**
+ * <h1>${entityClassName}Converter</h1><br>
+ * ${entityClassName}Converter class
+ *
+ * @author r.hendrick
+ *
+ */
+@ManagedBean
+@SessionScoped
+@FacesConverter(value = "docExplorerConverter")
+public class ${entityClassName}Converter implements Converter, Serializable {
+    
+    @ManagedProperty(value = "#{${entityClassName}Controller}")
+    ${entityClassName}Controller ${entityClassName}Controller;
+    
+    @Override
+    public Object getAsObject(FacesContext facesContext, UIComponent component, String value) {
+        if (value == null || value.length() == 0) {
+            return null;
+        }
+        
+        
+        try {
+            Integer.valueOf(value);
+        } catch (NumberFormatException ex) {
+            JsfUtil.out("${entityClassName}Converter :  Impossible de convertir la valeur " + value + " en entier ! Erreur : " + ex.getLocalizedMessage());
+            return null;
+        }
+
+        return docExplorerController.get${entityClassName}(getKey(value));
+    }
+
+    java.lang.Integer getKey(String value) {
+        java.lang.Integer key;
+        key = Integer.valueOf(value);
+        return key;
+    }
+
+    String getStringKey(java.lang.Integer value) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(value);
+        return sb.toString();
+    }
+
+    @Override
+    public String getAsString(FacesContext facesContext, UIComponent component, Object object) {
+        if (object == null) {
+            return null;
+        }
+        if (object instanceof ${entityClassName}) {
+            ${entityClassName} o = (${entityClassName}) object;
+            return getStringKey(o.getDcId());
+        } else {
+            Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "object {0} is of type {1}; expected type: {2}", new Object[]{object, object.getClass().getName(), DocExplorer.class.getName()});
+            return null;
+        }
+    }
+    
+    
+    public void set${entityClassName}Controller(${entityClassName}Controller docExplorerController){
+        this.docExplorerController = docExplorerController;
+    }
+
+}
+
+
+
+    /// ////////////////////////////////////////////////////////////////////////
+    //
+    /// LAZY
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import ${entityFullClassName};
+import ${ejbFullClassName};
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortMeta;
+import org.primefaces.model.SortOrder;
+
+/**
+ * <h1>${entityClassName}LazyModel</h1>
+ *
+ * @author r.hendrick
+ */
+public class ${entityClassName}LazyModel extends LazyDataModel<${entityClassName}> implements Serializable {
+
+    private ${entityClassName}Facade ejbFacade;
+
+    /**
+     * data source save current data value of the page
+     */
+    private List<${entityClassName}> datasource;
+    private List<SortMeta> multiSortMeta = null;
+    private Map<String, Object> filters = null;
+    
+    public static final String DEFAULT_SORT_ORDER = "dcChanged";
+
+    /**
+     * Retained filtre value of table
+     */
+    private List<${entityClassName}> filtredValue;
+
+    public ${entityClassName}LazyModel() {
+    }
+
+    /**
+     * Default lazy model constructor
+     *
+     * @param facade facade to make request
+     */
+    public ${entityClassName}LazyModel(${entityClassName}Facade facade) {
+        ejbFacade = facade;
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    //
+    //
+    // Loading request
+    //
+    //
+    // /////////////////////////////////////////////////////////////////////////
+    /**
+     * This load method intend to load data only with one sort order specify on
+     * one field. <br>
+     * Data will be load from facade from specified first page calculate over
+     * page row size
+     *
+     * @param first specified from which row to start getting items
+     * @param pageSize specified numbers of items to read which correspond to
+     * page size
+     * @param sortField field to be sorted
+     * @param sortOrder sort order value
+     * @param filters is a map defining a couple of field and criteria of
+     * filters
+     * @return list of analyse data corresponding to defined criteria
+     *
+     */
+    @Override
+    public List<${entityClassName}> load(int first, int pageSize, String sortField, SortOrder sortOrder, Map<String, Object> filters) {
+
+        // Create sort order Map
+        //Map<String, Object> 
+        return ejbFacade.findByCriterias(first, pageSize, null, filters);
+
+    }
+
+    /**
+     * This load method intend to load data only with multi sort order specify
+     * on multiple fields. <br>
+     * Data will be load from facade from specified first page calculate over
+     * page row size
+     *
+     * @param first specified from which row to start getting items
+     * @param pageSize specified numbers of items to read which correspond to
+     * page size
+     * @param multiSortMeta is a map defining a couple of field sort order way
+     * @param filters is a map defining a couple of field and criteria of
+     * filters
+     * @return list of analyse data corresponding to defined criteria
+     */
+    @Override
+    public List<${entityClassName}> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+
+        // Restore filter if required
+        if (multiSortMeta == null) {
+            if (this.multiSortMeta == null) {
+                // Sorting default by date d'échantillonnage
+                multiSortMeta = new ArrayList<>();
+                SortMeta metaSort = new SortMeta(null, DEFAULT_SORT_ORDER, SortOrder.DESCENDING, null);
+                multiSortMeta.add(metaSort);
+                this.multiSortMeta = multiSortMeta;
+            }
+        }else{
+            this.multiSortMeta = multiSortMeta;
+        }
+
+        if (this.filters != null && this.filters != filters) {
+            filters = this.filters;
+        }
+        // Get data
+        datasource = ejbFacade.findByCriterias(first, pageSize, convertSortMeta(this.multiSortMeta), filters);
+        // Count rows
+        this.setRowCount(ejbFacade.countByCriterias(filters));
+
+        return datasource;
+    }
+
+    /**
+     * Convert SortMeta is usefuel in order to change from List<SortMeta> to Map
+     * key and sortway.
+     *
+     * @return HashMap of the sortMeta
+     */
+    private Map<String, String> convertSortMeta(List<SortMeta> multiSortMeta) {
+        Map<String, String> sorts = null;
+        if (multiSortMeta != null) {
+            for (SortMeta e : multiSortMeta) {
+                if (sorts == null) {
+                    sorts = new HashMap<>();
+                }
+                sorts.put(e.getSortField(), e.getSortOrder().toString());
+            }
+        }
+        return sorts;
+    }
+
+    // /////////////////////////////////////////////////////////////////////////
+    //
+    //
+    // Getters / Setters
+    //
+    //
+    // /////////////////////////////////////////////////////////////////////////
+    /**
+     * Read facade used for request
+     *
+     * @return analyse data facade to make jpa request
+     */
+    private ${entityClassName}Facade getFacade() {
+        return ejbFacade;
+    }
+
+    /**
+     * Read row data from specified key.
+     *
+     * @param rowKey the corresponding key of current data
+     * @return corresponding data
+     */
+    @Override
+    public ${entityClassName} getRowData(String rowKey) {
+        for (${entityClassName} data : datasource) {
+            if (data.getDcId().equals(Integer.valueOf(rowKey))) {
+                return data;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Read row key of current data
+     *
+     * @param data current data
+     * @return corresponding id key
+     */
+    @Override
+    public Object getRowKey(${entityClassName} data) {
+        return data.getDcId();
+    }
+
+    public List<SortMeta> getMultiSortMeta() {
+        return multiSortMeta;
+    }
+
+    public void setMultiSortMeta(List<SortMeta> multiSortMeta) {
+        this.multiSortMeta = multiSortMeta;
+    }
+
+    public Map<String, Object> getFilters() {
+        return filters;
+    }
+
+    public void setFilters(Map<String, Object> filters) {
+        this.filters = filters;
+    }
+
+    public List<${entityClassName}> getFiltredValue() {
+        return filtredValue;
+    }
+
+    public void setFiltredValue(List<${entityClassName}> filtredValue) {
+        this.filtredValue = filtredValue;
+    }
+
+}
+
+
+    /// ////////////////////////////////////////////////////////////////////////
+    //
+    /// VALIDATOR
+    ///
+    /// ////////////////////////////////////////////////////////////////////////
+    
+
+}

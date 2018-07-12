@@ -77,8 +77,8 @@ public class NonConformiteRequestController implements Serializable {
     private List<NonConformiteRequest> items = null;
     private NonConformiteRequest selected;
     private NonConformiteRequest edited;
-    private Boolean isReleaseSelected;              //!< Spécifie si oui ou non l'élément selection doit rester en mémoire après création
-    private Boolean isOnMultiCreation;              //!< Spécifie si le mode de création multiple est activé
+    private Boolean isReleaseSelected;              //!< SpÃ©cifie si oui ou non l'Ã©lÃ©ment selection doit rester en mÃ©moire aprÃ¨s crÃ©ation
+    private Boolean isOnMultiCreation;              //!< SpÃ©cifie si le mode de crÃ©ation multiple est activÃ©
 
     private Map<Integer, String> headerTextMap;     //!< map header in order to manage reodering
     private Map<String, Boolean> visibleColMap;     //!< Allow to keep 
@@ -116,7 +116,7 @@ public class NonConformiteRequestController implements Serializable {
     @PostConstruct
     protected void initialize() {
         isReleaseSelected = true;   //!< by default, after a crud event select element is release (null)
-        isOnMultiCreation = false;  //!< Par défaut, la création multiple n'est pas permise
+        isOnMultiCreation = false;  //!< Par dÃ©faut, la crÃ©ation multiple n'est pas permise
 
         headerTextMap = new HashMap<>();
         headerTextMap.put(0, ResourceBundle.getBundle(JsfUtil.BUNDLE).getString("CtrlShort"));
@@ -231,7 +231,7 @@ public class NonConformiteRequestController implements Serializable {
                 e.getVisibility() == Visibility.VISIBLE);
 
         JsfUtil.addSuccessMessage("NonConformiteRequest : Toggle Column",
-                "Column n° " + e.getData() + " is now " + e.getVisibility());
+                "Column nÂ° " + e.getData() + " is now " + e.getVisibility());
 
     }
 
@@ -254,7 +254,7 @@ public class NonConformiteRequestController implements Serializable {
     }
 
     /**
-     * Handle Filter Date Range allow in a filter to manage a range sélection
+     * Handle Filter Date Range allow in a filter to manage a range sÃ©lection
      *
      * @param value a value is the corresponding filter
      * @param filter a object filtred
@@ -319,11 +319,11 @@ public class NonConformiteRequestController implements Serializable {
                 || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
                 || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
 
-        // Préparation du message
-        String sujet = selected.getNcrId() + " - création - " + selected.getNcrTitle();
+        // PrÃ©paration du message
+        String sujet = selected.getNcrId() + " - crÃ©ation - " + selected.getNcrTitle();
         String title = selected.getNcrId() + " : " + selected.getNcrTitle();
 
-        // Préparation mail
+        // PrÃ©paration mail
         Mail mail = new Mail();
         mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
         mail.addCC(currentStaffMail + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
@@ -352,11 +352,11 @@ public class NonConformiteRequestController implements Serializable {
                 || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
                 || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
 
-        // Préparation du message
-        String sujet = selected.getNcrId() + (selected.getNcrApprouved() == true ? " - En attente de solution - " : " - Annulée - ") + selected.getNcrTitle();
+        // PrÃ©paration du message
+        String sujet = selected.getNcrId() + (selected.getNcrApprouved() == true ? " - En attente de solution - " : " - AnnulÃ©e - ") + selected.getNcrTitle();
         String title = selected.getNcrId() + " " + (selected.getNcrApprouved() == true ? "<span style=\"color:green\"> - [APPROUVEE] - </span>" : "<span style=\"color:red\"> - [REFUSEE] - </span>") + " : " + selected.getNcrTitle();
 
-        // Préparation mail
+        // PrÃ©paration mail
         Mail mail = new Mail();
         mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
         mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
@@ -393,7 +393,7 @@ public class NonConformiteRequestController implements Serializable {
                 strState = "(Action)";
                 break;
             case 2:
-                strState = "(Ajournée)";
+                strState = "(AjournÃ©e)";
                 break;
             default:
                 strState = "";
@@ -401,11 +401,11 @@ public class NonConformiteRequestController implements Serializable {
 
         }
 
-        // Préparation du message
+        // PrÃ©paration du message
         String sujet = selected.getNcrId() + " - En Cours - " + selected.getNcrTitle();
         String title = selected.getNcrId() + "<span style=\"color:green\"> - [EN COURS " + strState + "] - </span>" + selected.getNcrTitle();
 
-        // Préparation mail
+        // PrÃ©paration mail
         Mail mail = new Mail();
         mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
         mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
@@ -430,11 +430,11 @@ public class NonConformiteRequestController implements Serializable {
                 || (selected.getNcrClientphone() == null ? false : !selected.getNcrClientphone().trim().isEmpty())
                 || (selected.getNcrClienttype() == null ? false : !selected.getNcrClienttype().trim().isEmpty());
 
-        // Préparation du message
+        // PrÃ©paration du message
         String sujet = selected.getNcrId() + " - CLOTUREE - " + selected.getNcrTitle();
         String title = selected.getNcrId() + "<span style=\"color:green\"> - [CLOTUREE] - </span>" + selected.getNcrTitle();
 
-        // Préparation mail
+        // PrÃ©paration mail
         Mail mail = new Mail();
         mail.addTo((isClient == false ? (ml != null ? ";" + ml.getMlTos() : "") : (mlr != null ? ";" + mlr.getMlTos() : "")));
         mail.addCC(currentStaffMail + emetteurStaffMail + ";" + (isClient == false ? (ml != null ? ";" + ml.getMlCcs() : "") : (mlr != null ? ";" + mlr.getMlCcs() : "")));
@@ -449,7 +449,7 @@ public class NonConformiteRequestController implements Serializable {
 
         croppedImage = (CroppedImage) event.getCroppedImage();
         if (croppedImage == null) {
-            JsfUtil.addErrorMessage("Aucune image n'a été rognée !");
+            JsfUtil.addErrorMessage("Aucune image n'a Ã©tÃ© rognÃ©e !");
             return;
         }
         FileService.tmpRemoveOld(croppedImage);
@@ -515,7 +515,7 @@ public class NonConformiteRequestController implements Serializable {
                 + selected.getNcrTitle());
 
         if (!JsfUtil.isValidationFailed()) {
-            // Récupère l'élément nouvellement crée
+            // RÃ©cupÃ¨re l'Ã©lÃ©ment nouvellement crÃ©e
             selected = getLast();
             handleCreateCroppedImage();
             handleMailOnCreate();
@@ -737,7 +737,7 @@ public class NonConformiteRequestController implements Serializable {
 
     /// ////////////////////////////////////////////////////////////////////////
     ///
-    /// Contrôle graphique renderer state
+    /// ContrÃ´le graphique renderer state
     ///
     /// ////////////////////////////////////////////////////////////////////////
     public Integer getCountItemsCreateInRange(Date from, Date to) {
@@ -766,8 +766,8 @@ public class NonConformiteRequestController implements Serializable {
 
     /**
      *
-     * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
-     * solution, en cours, terminé, annulé)
+     * @param state is one of (A, B, C, D, E) respectively (CrÃ©Ã©, en attente de
+     * solution, en cours, terminÃ©, annulÃ©)
      * @param from from 
      * @param to to
      * @return counter of items state from to
@@ -786,8 +786,8 @@ public class NonConformiteRequestController implements Serializable {
 
     /**
      *
-     * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
-     * solution, en cours, terminé, annulé)
+     * @param state is one of (A, B, C, D, E) respectively (CrÃ©Ã©, en attente de
+     * solution, en cours, terminÃ©, annulÃ©)
      * @param from from
      * @param to to
      * @return counter items state change in the range
@@ -814,8 +814,8 @@ public class NonConformiteRequestController implements Serializable {
 
     /**
      *
-     * @param state is one of (A, B, C, D, E) respectively (Créé, en attente de
-     * solution, en cours, terminé, annulé)
+     * @param state is one of (A, B, C, D, E) respectively (CrÃ©Ã©, en attente de
+     * solution, en cours, terminÃ©, annulÃ©)
      * @param from from
      * @param to to
      * @param processus concerned
